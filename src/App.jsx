@@ -3,6 +3,7 @@ import {
   SandpackProvider,
   SandpackLayout,
   SandpackCodeEditor,
+  SandpackPreview,
   SandpackTests,
 } from '@codesandbox/sandpack-react'
 
@@ -46,6 +47,13 @@ const SHIM_FILES = {
   '/node_modules/vitest/index.js': VITEST_SHIM,
 }
 
+const NO_DEMO = `export default () => (
+  <p style={{ font: '14px system-ui', opacity: 0.6, padding: 16 }}>
+    No preview for this one. Drop a <code>demo.jsx</code> in the challenge
+    folder that renders it, and it shows up here.
+  </p>
+)`
+
 const DEPS = {
   '@testing-library/react': '^16.0.0',
   // peer dep of react/user-event — Sandpack will not pull it in on its own
@@ -65,7 +73,13 @@ export default function App() {
   }
 
   const files = challenges[name]
-  const stub = Object.keys(files).find((f) => !f.includes('.test.'))
+  const stub = Object.keys(files).find(
+    (f) => !f.includes('.test.') && f !== '/demo.jsx',
+  )
+
+  // A challenge only previews if its folder has a demo.jsx saying how to render
+  // it — props differ per challenge, and the hook ones have no UI of their own.
+  const app = files['/demo.jsx'] ?? NO_DEMO
 
   return (
     <>
@@ -92,13 +106,16 @@ export default function App() {
         key={name}
         template="react"
         theme="dark"
-        files={{ ...files, ...SHIM_FILES }}
+        files={{ ...files, ...SHIM_FILES, '/App.js': app }}
         options={{ activeFile: stub, visibleFiles: [stub] }}
         customSetup={{ dependencies: DEPS }}
       >
         <SandpackLayout>
           <SandpackCodeEditor showLineNumbers style={{ height: '88vh' }} />
-          <SandpackTests watchMode verbose style={{ height: '88vh' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+            <SandpackPreview style={{ height: '44vh' }} />
+            <SandpackTests watchMode verbose style={{ height: '44vh' }} />
+          </div>
         </SandpackLayout>
       </SandpackProvider>
     </>
