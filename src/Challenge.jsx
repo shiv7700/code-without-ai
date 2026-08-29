@@ -38,6 +38,9 @@ const DEPS = {
   '@testing-library/jest-dom': '^6.4.0',
 }
 
+const BTN =
+  'rounded-md border border-line bg-panel px-3 py-1 hover:border-dim'
+
 const note = (text) => `export default () => (
   <p style={{ font: '14px system-ui', opacity: 0.6, padding: 16 }}>${text}</p>
 )`
@@ -65,15 +68,22 @@ export default function Challenge({ challenge, onBack, onResult }) {
 
   return (
     <>
-      <header className="bar">
-        <button onClick={onBack}>← all challenges</button>
+      <header className="flex items-center gap-4 px-4 py-2">
+        <button onClick={onBack} className={BTN}>
+          ← all challenges
+        </button>
         <strong>
           {String(challenge.level).padStart(2, '0')} — {title}
         </strong>
-        <button onClick={() => setView(view === 'tests' ? 'preview' : 'tests')}>
+        <button
+          onClick={() => setView(view === 'tests' ? 'preview' : 'tests')}
+          className={BTN}
+        >
           show {view === 'tests' ? 'UI' : 'tests'}
         </button>
-        <span className="hint">first load takes ~20s — deps come from a CDN</span>
+        <span className="ml-auto text-sm text-dim">
+          first load takes ~20s — deps come from a CDN
+        </span>
       </header>
 
       {/* ponytail: remounting per challenge re-installs deps (~20s). Swapping
