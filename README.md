@@ -92,13 +92,28 @@ appearance, that is the one to go back and read about.
 - [ ] 18 optimistic-update
 - [ ] 19 use-undoable
 - [ ] 20 error-boundary
+- [ ] 21 use-ref-focus
+- [ ] 22 char-counter
+- [ ] 23 star-rating
+- [ ] 24 use-debounced-value
+- [ ] 25 search-highlight
+- [ ] 26 sortable-list
+- [ ] 27 checkbox-group
+- [ ] 28 countdown
+- [ ] 29 use-clipboard
+- [ ] 30 accordion
+- [ ] 31 use-media-query
+- [ ] 32 tag-input
+- [ ] 33 password-strength
+- [ ] 34 use-event-listener
+- [ ] 35 load-more
 
 ## Notes
 
 Every challenge has been verified solvable — reference solutions pass all 135
 tests. They are deliberately not in this repo.
 
-Three tests pass against an empty stub (`renders nothing when closed` and
+Four tests pass against an empty stub (`renders nothing when closed` and
 friends). They are negative assertions, so nothing can make them fail early —
 ignore them as a progress signal.
 

@@ -49,13 +49,18 @@ Vitest + Testing Library + jsdom. Config lives in `vite.config.js` under `test`.
 15 use-pagination · 16 data-table · 17 wizard · 18 optimistic-update ·
 19 use-undoable · 20 error-boundary
 
+21 use-ref-focus · 22 char-counter · 23 star-rating · 24 use-debounced-value ·
+25 search-highlight · 26 sortable-list · 27 checkbox-group · 28 countdown ·
+29 use-clipboard · 30 accordion · 31 use-media-query · 32 tag-input ·
+33 password-strength · 34 use-event-listener · 35 load-more
+
 Progress checkboxes are in `README.md` — tick them off as he finishes.
 
-All 135 tests were verified passable by reference solutions before the stubs went
+All 243 tests were verified passable by reference solutions before the stubs went
 back in. If something looks unsolvable, it is far more likely a misread of the
 doc comment than a broken test.
 
-Three tests pass against an empty stub — they are negative assertions
+Four tests pass against an empty stub — they are negative assertions
 (`renders nothing when closed` and similar). Not a bug, and not progress either.
 
 `src/setupTests.js` replaces Node 25's stub `localStorage` global with a real
