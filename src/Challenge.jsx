@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router'
 import {
   SandpackProvider,
@@ -42,6 +42,8 @@ const DEPS = {
   '@testing-library/jest-dom': '^6.4.0',
 }
 
+const SETUP = { dependencies: DEPS }
+
 const note = (text) => `export default () => (
   <p style={{ font: '14px system-ui', opacity: 0.6, padding: 16 }}>${text}</p>
 )`
@@ -53,22 +55,42 @@ const allTests = (node) => [
   ...Object.values(node.describes ?? {}).flatMap(allTests),
 ]
 
+const shallowEqual = (a, b) => {
+  const keys = Object.keys(a)
+  return (
+    keys.length === Object.keys(b).length && keys.every((k) => a[k] === b[k])
+  )
+}
+
 const MARK = { pass: '✓', fail: '✗' }
 const MARK_COLOR = { pass: 'text-primary', fail: 'text-destructive' }
 
 export default function Challenge({ challenge }) {
   const [view, setView] = useState('tests')
   const [status, setStatus] = useState({})
-  const { name, title, level, stub, files, needsUi, tests } = challenge
+  const { name, title, summary, level, stub, files, needsUi, tests } = challenge
 
-  const app = !needsUi
-    ? note('No UI is required here — this one is a hook. Tests only.')
-    : (files['/demo.jsx'] ??
-      note('Add a demo.jsx to this challenge folder and it shows up here.'))
+  // Sandpack treats a new `files` object as a file change and re-bundles. Built
+  // inline it was a fresh object every render, so recording a test result
+  // re-triggered the run that produced it — an endless rebuild loop.
+  const sandpackFiles = useMemo(() => {
+    const app = !needsUi
+      ? note('No UI is required here — this one is a hook. Tests only.')
+      : (files['/demo.jsx'] ??
+        note('Add a demo.jsx to this challenge folder and it shows up here.'))
+    return { ...files, ...SHIM_FILES, '/App.js': app }
+  }, [files, needsUi])
+
+  const options = useMemo(
+    () => ({ activeFile: stub, visibleFiles: [stub] }),
+    [stub],
+  )
 
   const handleComplete = (specs) => {
     const ran = Object.values(specs ?? {}).flatMap(allTests)
-    setStatus(Object.fromEntries(ran.map((t) => [t.name, t.status])))
+    const next = Object.fromEntries(ran.map((t) => [t.name, t.status]))
+    // watchMode reports after every rerun; only touch state on a real change.
+    setStatus((prev) => (shallowEqual(prev, next) ? prev : next))
     saveDone(name, ran.length > 0 && ran.every((t) => t.status === 'pass'))
   }
 
@@ -81,11 +103,12 @@ export default function Challenge({ challenge }) {
           ← all challenges
         </Button>
 
-        <span className="text-sm font-medium">
+        <span className="flex items-baseline gap-2 text-sm">
           <span className="text-muted-foreground tabular-nums">
             {String(level).padStart(2, '0')}
-          </span>{' '}
-          {title}
+          </span>
+          <span className="font-mono font-medium">{title}</span>
+          <span className="text-muted-foreground">{summary}</span>
         </span>
 
         <Badge variant={passed === tests.length ? 'default' : 'secondary'}>
@@ -109,9 +132,9 @@ export default function Challenge({ challenge }) {
         key={name}
         template="react"
         theme="dark"
-        files={{ ...files, ...SHIM_FILES, '/App.js': app }}
-        options={{ activeFile: stub, visibleFiles: [stub] }}
-        customSetup={{ dependencies: DEPS }}
+        files={sandpackFiles}
+        options={options}
+        customSetup={SETUP}
       >
         <SandpackLayout>
           <SandpackCodeEditor showLineNumbers style={{ height: '88vh' }} />

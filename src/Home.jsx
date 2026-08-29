@@ -62,12 +62,15 @@ export default function Home() {
           const isDone = done.has(c.name)
           return (
             <li key={c.name}>
-              <Link to={`/${c.name}`} className="group block h-full">
+              <Link
+                to={`/${c.name}`}
+                className="group block h-full rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
                 <Card
-                  className={`h-full gap-3 transition-colors ${
+                  className={`h-full gap-3 transition duration-150 group-hover:-translate-y-0.5 group-hover:bg-accent group-hover:shadow-lg group-hover:shadow-black/40 ${
                     isDone
-                      ? 'border-primary/60'
-                      : 'group-hover:border-muted-foreground/40'
+                      ? 'border-primary/60 group-hover:border-primary'
+                      : 'group-hover:border-muted-foreground'
                   }`}
                 >
                   <CardHeader className="flex items-center justify-between text-xs tabular-nums text-muted-foreground">
@@ -75,7 +78,14 @@ export default function Home() {
                     {isDone && <span className="text-primary">✓ done</span>}
                   </CardHeader>
 
-                  <CardContent className="font-medium">{c.title}</CardContent>
+                  <CardContent>
+                    <p className="font-mono font-medium group-hover:text-primary">
+                      {c.title}
+                    </p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {c.summary}
+                    </p>
+                  </CardContent>
 
                   <CardFooter className="mt-auto flex flex-wrap gap-1.5">
                     {c.topics.map((t) => (

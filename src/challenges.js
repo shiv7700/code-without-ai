@@ -42,7 +42,11 @@ export const challenges = Object.values(byName)
         (m) => m[2],
       ),
       level: Number(c.name.slice(0, 2)),
-      title: doc.match(/LEVEL \d+ — (.+)/)?.[1] ?? c.name,
+      // What you are actually building — Counter, useToggle, todoReducer. The
+      // LEVEL line reads as a topic ("useState + event handlers"), which makes
+      // a poor card heading, so it becomes the subtitle instead.
+      title: stub.replace(/^\/|\.jsx?$/g, ''),
+      summary: doc.match(/LEVEL \d+ — (.+)/)?.[1] ?? '',
       topics: doc.match(/Topics:\s*(.+)/)?.[1].split(' · ') ?? [],
       needsUi: !NO_UI.includes(c.name),
       hasDemo: '/demo.jsx' in c.files,
