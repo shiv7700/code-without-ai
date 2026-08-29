@@ -1,7 +1,13 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/geist';
 
-/* Sandpack's editor is dark, so the shell around it is too. Named here rather
-   than repeated as arbitrary values across the components. */
+@custom-variant dark (&:is(.dark *));
+
+/* Sandpack's editor is dark and fills half of every screen, so the shell is
+   dark too and shadcn's tokens are pointed at the same six colours. One
+   palette, not two fighting each other. */
 @theme {
   --color-ink: #16161a;
   --color-panel: #1f1f25;
@@ -13,14 +19,71 @@
 
 :root {
   color-scheme: dark;
+  --radius: 0.625rem;
 }
 
-body {
-  background: var(--color-ink);
-  color: var(--color-chalk);
+/* The app ships dark-only — <html class="dark"> is hardcoded. A light theme
+   would mean filling in :root here and dropping that class. */
+.dark {
+  --background: var(--color-ink);
+  --foreground: var(--color-chalk);
+  --card: var(--color-panel);
+  --card-foreground: var(--color-chalk);
+  --popover: var(--color-panel);
+  --popover-foreground: var(--color-chalk);
+  --primary: var(--color-go);
+  --primary-foreground: var(--color-ink);
+  --secondary: var(--color-panel);
+  --secondary-foreground: var(--color-chalk);
+  --muted: var(--color-panel);
+  --muted-foreground: var(--color-dim);
+  --accent: var(--color-panel);
+  --accent-foreground: var(--color-chalk);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: var(--color-line);
+  --input: var(--color-line);
+  --ring: var(--color-dim);
 }
 
-/* Preflight strips the pointer, and every button here is clickable. */
-button {
-  cursor: pointer;
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: 'Geist Variable', sans-serif;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* Preflight strips the pointer, and every button here is clickable. */
+  button {
+    @apply cursor-pointer;
+  }
 }

@@ -8,6 +8,8 @@ import {
   SandpackTests,
 } from '@codesandbox/sandpack-react'
 import { saveDone } from './store'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 // The specs `import { test, expect, vi } from 'vitest'`, but Sandpack runs Jest.
 // A virtual node_modules/vitest maps one onto the other so the spec files stay
@@ -40,8 +42,6 @@ const DEPS = {
   '@testing-library/jest-dom': '^6.4.0',
 }
 
-const BTN = 'rounded-md border border-line bg-panel px-3 py-1 hover:border-dim'
-
 const note = (text) => `export default () => (
   <p style={{ font: '14px system-ui', opacity: 0.6, padding: 16 }}>${text}</p>
 )`
@@ -54,7 +54,7 @@ const allTests = (node) => [
 ]
 
 const MARK = { pass: '✓', fail: '✗' }
-const MARK_COLOR = { pass: 'text-go', fail: 'text-red-400' }
+const MARK_COLOR = { pass: 'text-primary', fail: 'text-destructive' }
 
 export default function Challenge({ challenge }) {
   const [view, setView] = useState('tests')
@@ -76,17 +76,31 @@ export default function Challenge({ challenge }) {
 
   return (
     <>
-      <header className="flex items-center gap-4 px-4 py-2">
-        <Link to="/" className={BTN}>
+      <header className="flex items-center gap-3 border-b border-border px-4 py-2.5">
+        <Button variant="outline" size="sm" render={<Link to="/" />}>
           ← all challenges
-        </Link>
-        <strong>
-          {String(level).padStart(2, '0')} — {title}
-        </strong>
-        <button onClick={() => setView(view === 'tests' ? 'preview' : 'tests')} className={BTN}>
+        </Button>
+
+        <span className="text-sm font-medium">
+          <span className="text-muted-foreground tabular-nums">
+            {String(level).padStart(2, '0')}
+          </span>{' '}
+          {title}
+        </span>
+
+        <Badge variant={passed === tests.length ? 'default' : 'secondary'}>
+          {passed}/{tests.length}
+        </Badge>
+
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setView(view === 'tests' ? 'preview' : 'tests')}
+        >
           show {view === 'tests' ? 'UI' : 'tests'}
-        </button>
-        <span className="ml-auto text-sm text-dim">
+        </Button>
+
+        <span className="ml-auto text-xs text-muted-foreground">
           first load takes ~20s — deps come from a CDN
         </span>
       </header>
@@ -104,17 +118,23 @@ export default function Challenge({ challenge }) {
 
           <div className="flex flex-1 flex-col" style={{ height: '88vh' }}>
             {/* What the spec checks, readable before a single test has run. */}
-            <div className="max-h-[35%] overflow-auto border-b border-line bg-panel px-4 py-3">
-              <p className="mb-2 text-xs tracking-wide text-dim uppercase">
-                what the tests check — {passed} of {tests.length} passing
+            <div className="max-h-[35%] overflow-auto border-b border-border bg-card px-4 py-3">
+              <p className="mb-2 text-xs tracking-wide text-muted-foreground uppercase">
+                what the tests check
               </p>
               <ul className="space-y-1 text-sm">
                 {tests.map((t) => (
                   <li key={t} className="flex gap-2">
-                    <span className={MARK_COLOR[status[t]] ?? 'text-dim'}>
+                    <span
+                      className={MARK_COLOR[status[t]] ?? 'text-muted-foreground'}
+                    >
                       {MARK[status[t]] ?? '○'}
                     </span>
-                    <span className={status[t] === 'pass' ? 'text-dim' : ''}>
+                    <span
+                      className={
+                        status[t] === 'pass' ? 'text-muted-foreground' : ''
+                      }
+                    >
                       {t}
                     </span>
                   </li>
