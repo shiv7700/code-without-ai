@@ -47,12 +47,27 @@ const SHIM_FILES = {
   '/node_modules/vitest/index.js': VITEST_SHIM,
 }
 
-const NO_DEMO = `export default () => (
-  <p style={{ font: '14px system-ui', opacity: 0.6, padding: 16 }}>
-    No preview for this one. Drop a <code>demo.jsx</code> in the challenge
-    folder that renders it, and it shows up here.
-  </p>
+// Hooks and reducers render nothing on their own, so there is no UI to preview.
+// Everything not listed here is a component and gets a preview pane.
+const NEEDS_UI = (name) =>
+  ![
+    '04-use-toggle',
+    '06-use-interval',
+    '07-todo-reducer',
+    '11-use-local-storage',
+    '12-use-outside-click',
+    '15-use-pagination',
+    '19-use-undoable',
+  ].includes(name)
+
+const note = (text) => `export default () => (
+  <p style={{ font: '14px system-ui', opacity: 0.6, padding: 16 }}>${text}</p>
 )`
+
+const NO_UI = note('No UI is required here — this one is a hook. Tests only.')
+const NO_DEMO = note(
+  'Add a demo.jsx to this challenge folder and it shows up here.',
+)
 
 const DEPS = {
   '@testing-library/react': '^16.0.0',
@@ -66,6 +81,7 @@ export default function App() {
   const [name, setName] = useState(
     () => localStorage.getItem('challenge') ?? names[0],
   )
+  const [view, setView] = useState('tests')
 
   const pick = (next) => {
     setName(next)
@@ -77,9 +93,9 @@ export default function App() {
     (f) => !f.includes('.test.') && f !== '/demo.jsx',
   )
 
-  // A challenge only previews if its folder has a demo.jsx saying how to render
-  // it — props differ per challenge, and the hook ones have no UI of their own.
-  const app = files['/demo.jsx'] ?? NO_DEMO
+  // A component challenge only previews if its folder has a demo.jsx saying how
+  // to render it — props differ per challenge.
+  const app = !NEEDS_UI(name) ? NO_UI : (files['/demo.jsx'] ?? NO_DEMO)
 
   return (
     <>
@@ -94,8 +110,14 @@ export default function App() {
           </option>
         ))}
       </select>
-      <span style={{ opacity: 0.6 }}>
-        tests take ~20s to appear — Sandpack installs deps from the CDN first
+      {/* Preview and Tests share one Sandpack client, so a failing assertion
+          surfaces in the preview's error overlay. Showing one at a time keeps
+          them out of each other's way. */}
+      <button onClick={() => setView(view === 'tests' ? 'preview' : 'tests')}>
+        show {view === 'tests' ? 'UI' : 'tests'}
+      </button>
+      <span style={{ opacity: 0.6, marginLeft: '0.5rem' }}>
+        first load takes ~20s — Sandpack installs deps from the CDN
       </span>
 
       {/* ponytail: remounting on every pick re-installs deps (~20s). Swapping
@@ -112,10 +134,11 @@ export default function App() {
       >
         <SandpackLayout>
           <SandpackCodeEditor showLineNumbers style={{ height: '88vh' }} />
-          <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-            <SandpackPreview style={{ height: '44vh' }} />
-            <SandpackTests watchMode verbose style={{ height: '44vh' }} />
-          </div>
+          {view === 'tests' ? (
+            <SandpackTests watchMode verbose style={{ height: '88vh' }} />
+          ) : (
+            <SandpackPreview style={{ height: '88vh' }} />
+          )}
         </SandpackLayout>
       </SandpackProvider>
     </>
