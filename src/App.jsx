@@ -1,33 +1,29 @@
-import { useState } from 'react'
+import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router'
 import { challenges } from './challenges'
-import { load, saveDone, saveUser } from './store'
 import Home from './Home'
 import Challenge from './Challenge'
 import './app.css'
 
-export default function App() {
-  const [{ user, done }, setState] = useState(load)
-  const [open, setOpen] = useState(null)
+function ChallengeRoute() {
+  const { name } = useParams()
+  const challenge = challenges.find((c) => c.name === name)
 
-  const rename = () => {
-    const next = prompt('Your name', user)
-    if (next === null) return // cancelled — keep the name we had
-    saveUser(next)
-    setState((s) => ({ ...s, user: next }))
-  }
-
-  const record = (name) => (passed) =>
-    setState((s) => ({ ...s, done: saveDone(name, passed) }))
-
-  const challenge = challenges.find((c) => c.name === open)
-
+  // A stale or hand-typed link should land on the list, not a blank screen.
   return challenge ? (
-    <Challenge
-      challenge={challenge}
-      onBack={() => setOpen(null)}
-      onResult={record(challenge.name)}
-    />
+    <Challenge challenge={challenge} />
   ) : (
-    <Home user={user} done={done} onPick={setOpen} onRename={rename} />
+    <Navigate to="/" replace />
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/:name" element={<ChallengeRoute />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   )
 }

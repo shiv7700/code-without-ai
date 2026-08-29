@@ -1,7 +1,20 @@
+import { useState } from 'react'
+import { Link } from 'react-router'
 import { challenges } from './challenges'
+import { load, saveUser } from './store'
 
-export default function Home({ user, done, onPick, onRename }) {
+export default function Home() {
+  // Read on mount rather than lifting state — routing unmounts this screen, so
+  // coming back from a challenge picks up whatever it recorded.
+  const [{ user, done }, setState] = useState(load)
   const pct = (done.size / challenges.length) * 100
+
+  const rename = () => {
+    const next = prompt('Your name', user)
+    if (next === null) return // cancelled — keep the name we had
+    saveUser(next)
+    setState((s) => ({ ...s, user: next }))
+  }
 
   return (
     <main className="mx-auto max-w-4xl px-6 pt-12 pb-16">
@@ -27,7 +40,7 @@ export default function Home({ user, done, onPick, onRename }) {
           {user && ' — '}
           {done.size} of {challenges.length} done
           <button
-            onClick={onRename}
+            onClick={rename}
             className="ml-3 underline underline-offset-4 hover:text-chalk"
           >
             {user ? 'change name' : 'set your name'}
@@ -45,12 +58,10 @@ export default function Home({ user, done, onPick, onRename }) {
       <ul className="mt-8 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3">
         {challenges.map((c) => (
           <li key={c.name}>
-            <button
-              onClick={() => onPick(c.name)}
-              className={`flex h-full w-full flex-col gap-2 rounded-xl border bg-panel p-4 text-left ${
-                done.has(c.name)
-                  ? 'border-go'
-                  : 'border-line hover:border-dim'
+            <Link
+              to={`/${c.name}`}
+              className={`flex h-full flex-col gap-2 rounded-xl border bg-panel p-4 ${
+                done.has(c.name) ? 'border-go' : 'border-line hover:border-dim'
               }`}
             >
               <span className="flex justify-between text-xs tabular-nums text-dim">
@@ -75,7 +86,7 @@ export default function Home({ user, done, onPick, onRename }) {
                   </span>
                 )}
               </span>
-            </button>
+            </Link>
           </li>
         ))}
       </ul>

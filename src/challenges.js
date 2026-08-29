@@ -32,9 +32,15 @@ export const challenges = Object.values(byName)
       (f) => !f.includes('.test.') && f !== '/demo.jsx',
     )
     const doc = c.files[stub]
+    const spec = c.files[Object.keys(c.files).find((f) => f.includes('.test.'))]
     return {
       ...c,
       stub,
+      // The spec is the brief. Listing what it checks up front beats making
+      // someone run the suite to find out what they are aiming at.
+      tests: [...spec.matchAll(/^\s*(?:test|it)\(\s*(['"`])(.*?)\1/gm)].map(
+        (m) => m[2],
+      ),
       level: Number(c.name.slice(0, 2)),
       title: doc.match(/LEVEL \d+ — (.+)/)?.[1] ?? c.name,
       topics: doc.match(/Topics:\s*(.+)/)?.[1].split(' · ') ?? [],
