@@ -54,13 +54,34 @@ Vitest + Testing Library + jsdom. Config lives in `vite.config.js` under `test`.
 29 use-clipboard · 30 accordion · 31 use-media-query · 32 tag-input ·
 33 password-strength · 34 use-event-listener · 35 load-more
 
+**JS toolbox (no React).** 36 curry · 37 debounce · 38 throttle · 39 deep-clone ·
+40 deep-equal · 41 flatten · 42 promise-all · 43 promise-any · 44 promisify ·
+45 memoize · 46 event-emitter · 47 retry · 48 map-async-limit · 49 get-path ·
+50 classnames · 51 lru-cache · 52 group-by · 53 dedupe-requests ·
+54 immutable-set · 55 create-store
+
+**Machine coding.** 56 traffic-light · 57 stopwatch · 58 image-carousel ·
+59 file-explorer · 60 transfer-list · 61 tic-tac-toe · 62 nested-checkboxes ·
+63 autocomplete · 64 infinite-scroll · 65 use-query · 66 progress-bars ·
+67 digital-clock · 68 use-step · 69 memory-game · 70 form-validation ·
+71 dropdown-menu · 72 poll-widget · 73 use-set · 74 calendar ·
+75 use-controllable-state
+
+**Hard.** 76 focus-trap · 77 server-table · 78 wordle · 79 selectable-grid ·
+80 virtual-list · 81 use-store · 82 nested-comments · 83 spreadsheet ·
+84 imperative-player · 85 use-machine · 86 cascading-select · 87 markdown-lite ·
+88 tic-tac-toe-n · 89 use-resizable · 90 use-router
+
+Sections are derived from the level number in `src/challenges.js` (`TIERS`).
+Adding a folder is still all it takes — the tier follows from its number.
+
 Progress checkboxes are in `README.md` — tick them off as he finishes.
 
-All 243 tests were verified passable by reference solutions before the stubs went
+All 782 tests were verified passable by reference solutions before the stubs went
 back in. If something looks unsolvable, it is far more likely a misread of the
 doc comment than a broken test.
 
-Four tests pass against an empty stub — they are negative assertions
+Fourteen tests pass against an empty stub — they are negative assertions
 (`renders nothing when closed` and similar). Not a bug, and not progress either.
 
 `src/setupTests.js` replaces Node 25's stub `localStorage` global with a real
@@ -71,9 +92,11 @@ jsdom's, which breaks challenge 11. Do not remove it.
 
 His gap is not syntax. It is **spotting which code runs once versus on every
 render or call** — closure layers, stale closures, effect cleanup. Challenges 05,
-06, 08 and 09 all aim at exactly that. Before this repo he solved `debounce` and
-`useDebouncedCallback` in `~/Documents/trash/indepentedmind/challenge/`, and the
-same confusion showed up in both.
+06, 08 and 09 all aim at exactly that, and 36–38, 45, 48, 75, 84 and 89 are the
+same idea in plain JS or with a ref holding the latest value. Before this repo
+he solved `debounce` and `useDebouncedCallback` in
+`~/Documents/trash/indepentedmind/challenge/`, and the same confusion showed up
+in both.
 
 When he gets something working, the useful follow-up is *why* it works — not a
 list of further improvements.

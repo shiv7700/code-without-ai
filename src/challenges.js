@@ -6,15 +6,14 @@ const raw = import.meta.glob('./challenges/*/*.{js,jsx}', {
   eager: true,
 })
 
-// Hooks and reducers render nothing on their own, so there is no UI to preview.
-const NO_UI = [
-  '04-use-toggle',
-  '06-use-interval',
-  '07-todo-reducer',
-  '11-use-local-storage',
-  '12-use-outside-click',
-  '15-use-pagination',
-  '19-use-undoable',
+// Sections of the ladder, by level. A challenge belongs to the last tier whose
+// `from` it clears.
+const TIERS = [
+  { from: 1, name: 'Fundamentals', blurb: 'state, effects, the core hooks' },
+  { from: 21, name: 'Everyday components', blurb: 'the widgets every app ships' },
+  { from: 36, name: 'JS toolbox', blurb: 'no React — closures, promises, data' },
+  { from: 56, name: 'Machine coding', blurb: 'interview-sized components' },
+  { from: 76, name: 'Hard', blurb: 'the ones that need a plan first' },
 ]
 
 const byName = {}
@@ -32,24 +31,43 @@ export const challenges = Object.values(byName)
       (f) => !f.includes('.test.') && f !== '/demo.jsx',
     )
     const doc = c.files[stub]
+    const level = Number(c.name.slice(0, 2))
     const spec = c.files[Object.keys(c.files).find((f) => f.includes('.test.'))]
+    const tests = [...spec.matchAll(/^\s*(?:test|it)\(\s*(['"`])(.*?)\1/gm)].map(
+      (m) => m[2],
+    )
     return {
       ...c,
       stub,
       // The spec is the brief. Listing what it checks up front beats making
       // someone run the suite to find out what they are aiming at.
-      tests: [...spec.matchAll(/^\s*(?:test|it)\(\s*(['"`])(.*?)\1/gm)].map(
-        (m) => m[2],
-      ),
-      level: Number(c.name.slice(0, 2)),
+      tests,
+      level,
+      tier: TIERS.findLast((t) => level >= t.from),
       // What you are actually building — Counter, useToggle, todoReducer. The
       // LEVEL line reads as a topic ("useState + event handlers"), which makes
       // a poor card heading, so it becomes the subtitle instead.
       title: stub.replace(/^\/|\.jsx?$/g, ''),
       summary: doc.match(/LEVEL \d+ — (.+)/)?.[1] ?? '',
       topics: doc.match(/Topics:\s*(.+)/)?.[1].split(' · ') ?? [],
-      needsUi: !NO_UI.includes(c.name),
+      // A `.js` stub is a hook, a reducer or a plain function — nothing to
+      // preview. Only `.jsx` renders something on its own.
+      needsUi: stub.endsWith('.jsx'),
       hasDemo: '/demo.jsx' in c.files,
     }
   })
+  .map((c) => ({
+    // One lowercased string to search against. The test names are in here too,
+    // so "stale closure" or "wraps around" finds the challenge that drills it.
+    ...c,
+    search: [c.name, c.title, c.summary, ...c.topics, ...c.tests]
+      .join(' ')
+      .toLowerCase(),
+  }))
   .sort((a, b) => a.level - b.level)
+
+// The same list, cut into sections for the home screen.
+export const tiers = TIERS.map((tier) => ({
+  ...tier,
+  challenges: challenges.filter((c) => c.tier === tier),
+}))
