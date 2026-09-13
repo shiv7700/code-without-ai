@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 .claude/settings.local.json
+
+# Supabase keys — the anon key is public, but the file is still local config
+.env
+.env.local

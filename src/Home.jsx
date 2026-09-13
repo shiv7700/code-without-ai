@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { challenges, tiers } from './challenges'
-import { load, saveUser } from './store'
+import { loadProgress } from './store'
+import { signOut, useProfile } from './auth'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
@@ -14,20 +15,23 @@ const STATUSES = [
 ]
 
 export default function Home() {
-  // Read on mount rather than lifting state — routing unmounts this screen, so
+  const { handle, avatar } = useProfile()
+
+  // Fetched on mount rather than lifted — routing unmounts this screen, so
   // coming back from a challenge picks up whatever it recorded.
-  const [{ user, done }, setState] = useState(load)
+  const [done, setDone] = useState(() => new Set())
+
+  useEffect(() => {
+    let live = true
+    loadProgress().then((next) => live && setDone(next))
+    return () => {
+      live = false
+    }
+  }, [])
 
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('all')
   const [section, setSection] = useState('all')
-
-  const rename = () => {
-    const next = prompt('Your name', user)
-    if (next === null) return // cancelled — keep the name we had
-    saveUser(next)
-    setState((s) => ({ ...s, user: next }))
-  }
 
   // Derived during render — three inputs in, one list out. Nothing to keep in
   // sync, and no effect to forget.
@@ -60,27 +64,27 @@ export default function Home() {
         </h1>
 
         <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-          {/* The name doubles as a GitHub handle. Anything with a space in it
-              is a display name, not a handle, so it stays plain text. */}
-          {user &&
-            (/^[\w-]+$/.test(user) ? (
+          {avatar && (
+            <img src={avatar} alt="" className="size-5 rounded-full" />
+          )}
+          {handle && (
+            <>
               <a
-                href={`https://github.com/${user}`}
+                href={`https://github.com/${handle}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-foreground underline-offset-4 hover:underline"
               >
-                {user}
+                {handle}
               </a>
-            ) : (
-              <span className="font-medium text-foreground">{user}</span>
-            ))}
-          {user && <span aria-hidden>·</span>}
+              <span aria-hidden>·</span>
+            </>
+          )}
           <span>
             {done.size} of {challenges.length} done
           </span>
-          <Button variant="link" size="xs" onClick={rename}>
-            {user ? 'change name' : 'set your name'}
+          <Button variant="link" size="xs" onClick={signOut}>
+            sign out
           </Button>
         </p>
 
