@@ -13,6 +13,7 @@ import {
 } from '@codesandbox/sandpack-react'
 import { toast } from 'sonner'
 import { loadSolution, saveCode, saveDone, saveSolution } from './store'
+import { sandpackTheme } from './sandpackTheme'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,8 +25,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 
 // The specs `import { test, expect, vi } from 'vitest'`, but Sandpack runs Jest.
 // A virtual node_modules/vitest maps one onto the other so the spec files stay
@@ -302,39 +303,60 @@ export default function Challenge({ challenge }) {
     <SandpackProvider
       key={name}
       template="react"
-      theme="dark"
+      theme={sandpackTheme}
       files={sandpackFiles}
       options={options}
       customSetup={SETUP}
     >
-      <header className="flex items-center gap-3 border-b border-border px-4 py-2.5">
-        <Button variant="outline" size="sm" render={<Link to="/" />}>
-          ← all challenges
+      {/* Three zones: where you are, how you are doing, what you can do. */}
+      <header className="flex items-center gap-4 border-b border-border px-4 py-2.5">
+        <Button
+          variant="ghost"
+          size="sm"
+          render={<Link to="/" />}
+          className="font-mono text-xs"
+        >
+          ← ladder
         </Button>
 
-        <span className="flex items-baseline gap-2 text-sm">
-          <span className="text-muted-foreground tabular-nums">
+        <Separator orientation="vertical" className="h-5" />
+
+        <span className="flex min-w-0 items-baseline gap-2.5">
+          <span className="font-mono text-sm text-muted-foreground tabular-nums">
             {String(level).padStart(2, '0')}
           </span>
-          <span className="font-mono font-medium">{title}</span>
-          <span className="text-muted-foreground">{summary}</span>
+          <span className="truncate font-mono text-sm font-medium">
+            {title}
+          </span>
+          <span className="hidden truncate text-xs text-muted-foreground sm:block">
+            {summary}
+          </span>
         </span>
 
-        <Badge variant={passed === tests.length ? 'default' : 'secondary'}>
-          {passed}/{tests.length}
-        </Badge>
+        <span className="ml-auto flex items-center gap-3">
+          <span
+            className={`font-mono text-xs tabular-nums ${
+              passed === tests.length ? 'text-primary' : 'text-muted-foreground'
+            }`}
+          >
+            {passed}/{tests.length} passing
+          </span>
 
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => setView(view === 'tests' ? 'preview' : 'tests')}
-        >
-          show {view === 'tests' ? 'UI' : 'tests'}
-        </Button>
+          <Separator orientation="vertical" className="h-5" />
 
-        {view === 'tests' && <RunTests />}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="font-mono text-xs"
+            onClick={() => setView(view === 'tests' ? 'preview' : 'tests')}
+          >
+            {view === 'tests' ? 'UI' : 'tests'}
+          </Button>
 
-        <ResetToStub name={name} path={stub} stubCode={files[stub]} />
+          <ResetToStub name={name} path={stub} stubCode={files[stub]} />
+
+          {view === 'tests' && <RunTests />}
+        </span>
       </header>
 
       <SaveCode name={name} stubCode={files[stub]} />
@@ -342,19 +364,25 @@ export default function Challenge({ challenge }) {
       <SandpackLayout>
         <SandpackCodeEditor showLineNumbers style={{ height: '88vh' }} />
 
-        <div className="flex flex-1 flex-col" style={{ height: '88vh' }}>
+        <div
+          className="flex flex-1 flex-col border-l border-border"
+          style={{ height: '88vh' }}
+        >
           {/* What the spec checks, readable before a single test has run. */}
-          <div className="max-h-[35%] overflow-auto border-b border-border bg-card px-4 py-3">
-            <p className="mb-2 text-xs tracking-wide text-muted-foreground uppercase">
-              what the tests check
+          <div className="max-h-[35%] overflow-auto border-b border-border bg-card px-4 py-3.5">
+            <p className="mb-2.5 font-mono text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">
+              the spec
             </p>
-            <ul className="space-y-1 text-sm">
-              {tests.map((t) => (
-                <li key={t} className="flex gap-2">
+            <ul className="space-y-1.5">
+              {tests.map((t, i) => (
+                <li key={t} className="flex items-baseline gap-2.5 text-sm">
+                  <span className="font-mono text-[0.625rem] text-muted-foreground tabular-nums">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
                   <span
-                    className={MARK_COLOR[status[t]] ?? 'text-muted-foreground'}
+                    className={`w-3 shrink-0 font-mono ${MARK_COLOR[status[t]] ?? 'text-muted-foreground'}`}
                   >
-                    {MARK[status[t]] ?? '○'}
+                    {MARK[status[t]] ?? '·'}
                   </span>
                   <span
                     className={

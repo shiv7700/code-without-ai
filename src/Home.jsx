@@ -3,16 +3,65 @@ import { Link } from 'react-router'
 import { challenges, tiers } from './challenges'
 import { loadProgress } from './store'
 import { signOut, useProfile } from './auth'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 const STATUSES = [
   ['all', 'All'],
   ['todo', 'To do'],
   ['done', 'Done'],
 ]
+
+const pad = (n) => String(n).padStart(2, '0')
+
+function Rung({ challenge, index, isDone }) {
+  const { name, level, title, summary, needsUi } = challenge
+
+  return (
+    <li className="rung" style={{ '--i': index }}>
+      <Link
+        to={`/${name}`}
+        className={`group grid grid-cols-[2.25rem_1fr_auto] items-baseline gap-4 border-l-2 py-1.5 pr-3 pl-4 transition-colors outline-none hover:bg-card focus-visible:bg-card ${
+          isDone
+            ? 'border-primary/50 hover:border-primary'
+            : 'border-border/40 hover:border-muted-foreground'
+        }`}
+      >
+        <span
+          className={`font-mono text-xs tabular-nums ${
+            isDone ? 'text-primary' : 'text-muted-foreground'
+          }`}
+        >
+          {pad(level)}
+        </span>
+
+        <span className="flex min-w-0 items-baseline gap-2.5">
+          <span className="shrink-0 font-mono text-sm font-medium group-hover:text-primary">
+            {title}
+          </span>
+          {!needsUi && (
+            <span className="shrink-0 font-mono text-[0.5625rem] tracking-[0.15em] text-muted-foreground uppercase">
+              hook
+            </span>
+          )}
+          <span className="truncate text-xs text-muted-foreground">
+            {summary}
+          </span>
+        </span>
+
+        <span
+          className={`font-mono text-[0.625rem] tracking-[0.15em] uppercase ${
+            isDone ? 'text-primary' : 'text-transparent'
+          }`}
+        >
+          done
+        </span>
+      </Link>
+    </li>
+  )
+}
 
 export default function Home() {
   const { handle, avatar } = useProfile()
@@ -56,91 +105,105 @@ export default function Home() {
   const shown = visible.reduce((n, tier) => n + tier.challenges.length, 0)
   const filtering = needle !== '' || status !== 'all' || section !== 'all'
 
-  return (
-    <main className="mx-auto max-w-5xl px-6 pt-14 pb-20">
-      <header className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          React practice ladder
-        </h1>
+  // One running count across sections, so the stagger reads as a single list.
+  let rung = 0
 
-        <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-          {avatar && (
-            <img src={avatar} alt="" className="size-5 rounded-full" />
-          )}
-          {handle && (
-            <>
+  return (
+    <main className="mx-auto max-w-3xl px-6 pt-16 pb-24">
+      <header className="mb-10">
+        <div className="flex items-start justify-between gap-6">
+          <div>
+            <h1 className="font-mono text-xl font-semibold tracking-tight">
+              react practice ladder
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Ninety reps. Hand-written, every one.
+            </p>
+          </div>
+
+          <div className="flex shrink-0 items-center gap-2">
+            {avatar && (
+              <img src={avatar} alt="" className="size-6 rounded-full" />
+            )}
+            {handle && (
               <a
                 href={`https://github.com/${handle}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-foreground underline-offset-4 hover:underline"
+                className="font-mono text-xs underline-offset-4 hover:underline"
               >
                 {handle}
               </a>
-              <span aria-hidden>·</span>
-            </>
-          )}
-          <span>
-            {done.size} of {challenges.length} done
-          </span>
-          <Button variant="link" size="xs" onClick={signOut}>
-            sign out
-          </Button>
-        </p>
+            )}
+            <Button variant="ghost" size="xs" onClick={signOut}>
+              sign out
+            </Button>
+          </div>
+        </div>
 
+        <div className="mt-8 flex items-baseline gap-2">
+          <span className="font-mono text-5xl font-semibold tabular-nums">
+            {pad(done.size)}
+          </span>
+          <span className="font-mono text-lg text-muted-foreground tabular-nums">
+            / {challenges.length}
+          </span>
+          <span className="ml-auto font-mono text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">
+            climbed
+          </span>
+        </div>
         <Progress
           value={(done.size / challenges.length) * 100}
-          className="mt-4"
+          className="mt-3 h-1"
         />
       </header>
 
-      <div className="mb-10 flex flex-wrap items-center gap-2">
-        <input
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <Input
           type="search"
           aria-label="Search challenges"
           placeholder="Search name, topic, or what the spec checks…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="h-8 min-w-64 flex-1 rounded-lg border border-border bg-background px-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:border-input dark:bg-input/30"
+          className="h-8 min-w-56 flex-1 font-mono text-xs"
         />
-
-        <div className="flex gap-1">
+        <ToggleGroup
+          size="sm"
+          value={[status]}
+          onValueChange={([next]) => setStatus(next ?? 'all')}
+        >
           {STATUSES.map(([value, label]) => (
-            <Button
-              key={value}
-              size="sm"
-              variant={status === value ? 'secondary' : 'ghost'}
-              onClick={() => setStatus(value)}
-            >
+            <ToggleGroupItem key={value} value={value} className="text-xs">
               {label}
-            </Button>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroup>
       </div>
 
-      <div className="mb-8 flex flex-wrap gap-1">
-        <Button
+      <div className="mb-8 flex flex-wrap items-center gap-2">
+        <ToggleGroup
           size="sm"
-          variant={section === 'all' ? 'secondary' : 'ghost'}
-          onClick={() => setSection('all')}
+          value={[section]}
+          onValueChange={([next]) => setSection(next ?? 'all')}
         >
-          Every section
-        </Button>
-        {tiers.map((tier) => (
-          <Button
-            key={tier.name}
-            size="sm"
-            variant={section === tier.name ? 'secondary' : 'ghost'}
-            onClick={() => setSection(tier.name)}
-          >
-            {tier.name}
-          </Button>
-        ))}
+          <ToggleGroupItem value="all" className="text-xs">
+            Every section
+          </ToggleGroupItem>
+          {tiers.map((tier) => (
+            <ToggleGroupItem
+              key={tier.name}
+              value={tier.name}
+              className="text-xs"
+            >
+              {tier.name}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
 
         {filtering && (
-          <span className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
+          <span className="ml-auto flex items-center gap-2 font-mono text-xs text-muted-foreground">
             <span className="tabular-nums">
-              {shown} of {challenges.length}
+              {shown}/{challenges.length}
             </span>
             <Button
               variant="link"
@@ -164,62 +227,29 @@ export default function Home() {
       )}
 
       {visible.map((tier) => (
-        <section key={tier.name} className="mb-12">
-          <div className="mb-4 flex items-baseline gap-3 border-b pb-2">
-            <h2 className="text-lg font-semibold tracking-tight">{tier.name}</h2>
-            <p className="text-sm text-muted-foreground">{tier.blurb}</p>
-            <span className="ml-auto text-xs tabular-nums text-muted-foreground">
-              {tier.all.filter((c) => done.has(c.name)).length} / {tier.all.length}
+        <section key={tier.name} className="mb-9">
+          <div className="mb-1 flex items-baseline gap-3 border-b border-border pb-2 pl-4">
+            <h2 className="font-mono text-[0.6875rem] tracking-[0.2em] uppercase">
+              {tier.name}
+            </h2>
+            <p className="truncate text-xs text-muted-foreground">
+              {tier.blurb}
+            </p>
+            <span className="ml-auto font-mono text-xs tabular-nums text-muted-foreground">
+              {tier.all.filter((c) => done.has(c.name)).length}/
+              {tier.all.length}
             </span>
           </div>
 
-          <ul className="grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-4">
-            {tier.challenges.map((c) => {
-              const isDone = done.has(c.name)
-              return (
-                <li key={c.name}>
-                  <Link
-                    to={`/${c.name}`}
-                    className="group block h-full rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                  >
-                    <Card
-                      className={`h-full gap-3 transition duration-150 group-hover:-translate-y-0.5 group-hover:bg-accent group-hover:shadow-lg group-hover:shadow-black/40 ${
-                        isDone
-                          ? 'border-primary/60 group-hover:border-primary'
-                          : 'group-hover:border-muted-foreground'
-                      }`}
-                    >
-                      <CardHeader className="flex items-center justify-between text-xs tabular-nums text-muted-foreground">
-                        <span>{String(c.level).padStart(2, '0')}</span>
-                        {isDone && <span className="text-primary">✓ done</span>}
-                      </CardHeader>
-
-                      <CardContent>
-                        <p className="font-mono font-medium group-hover:text-primary">
-                          {c.title}
-                        </p>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          {c.summary}
-                        </p>
-                      </CardContent>
-
-                      <CardFooter className="mt-auto flex flex-wrap gap-1.5">
-                        {c.topics.map((t) => (
-                          <Badge key={t} variant="outline">
-                            {t}
-                          </Badge>
-                        ))}
-                        {!c.needsUi && (
-                          <Badge variant="ghost" className="border-dashed">
-                            no UI
-                          </Badge>
-                        )}
-                      </CardFooter>
-                    </Card>
-                  </Link>
-                </li>
-              )
-            })}
+          <ul>
+            {tier.challenges.map((c) => (
+              <Rung
+                key={c.name}
+                challenge={c}
+                index={rung++}
+                isDone={done.has(c.name)}
+              />
+            ))}
           </ul>
         </section>
       ))}

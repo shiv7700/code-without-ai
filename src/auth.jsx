@@ -45,19 +45,31 @@ export function Login() {
   }
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center gap-6 px-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          React practice ladder
+    <main className="flex min-h-dvh items-center justify-center px-6">
+      <div className="w-full max-w-sm">
+        {/* The ladder, drawn. Ninety rungs, none of them climbed yet. */}
+        <div className="mb-10 flex h-16 items-end gap-[3px]" aria-hidden>
+          {Array.from({ length: 90 }, (_, i) => (
+            <span
+              key={i}
+              className="rung flex-1 bg-line"
+              style={{ '--i': i, height: `${8 + (i % 7) * 3}%` }}
+            />
+          ))}
+        </div>
+
+        <h1 className="font-mono text-xl font-semibold tracking-tight">
+          react practice ladder
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Ninety challenges. Your code and progress follow you.
+          Ninety reps, hand-written. Sign in and your code and progress follow
+          you to whatever machine you sit down at.
         </p>
-      </div>
 
-      <Button size="lg" onClick={signIn} disabled={busy}>
-        {busy ? 'Redirecting…' : 'Continue with GitHub'}
-      </Button>
+        <Button className="mt-8 w-full" onClick={signIn} disabled={busy}>
+          {busy ? 'Redirecting…' : 'Continue with GitHub'}
+        </Button>
+      </div>
     </main>
   )
 }
