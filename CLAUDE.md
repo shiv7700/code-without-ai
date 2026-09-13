@@ -86,7 +86,7 @@ maps one onto the other). A change that helps one must not break the other.
 
 ## The ladder
 
-119 challenges today, being filled out towards 500. Eight sections:
+208 challenges today, being filled out towards 500. Eight sections:
 
 Describing the UI · State & events · Async & data · Hooks · Components ·
 JS toolbox · Machine coding · Hard
@@ -102,11 +102,11 @@ just a position worked out at load. Nothing is stored against a number.
 
 **Every new spec gets a reference solution first.** Write the spec, write a
 solution, watch it go green, then put the stub back. A spec that has never
-passed is not a spec. All 922 current tests were verified that way, so if
+passed is not a spec. All 1,439 current challenge tests were verified that way, so if
 something looks unsolvable it is far more likely a misread of the doc comment
 than a broken test.
 
-31 tests pass against an empty stub — negative assertions (`renders nothing when
+27 tests pass against an empty stub — negative assertions (`renders nothing when
 closed` and similar). Not a bug, and not progress either.
 
 Progress is not a file. A challenge flips to solved in Supabase the moment its

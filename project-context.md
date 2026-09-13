@@ -79,7 +79,7 @@ the bottom — visible, not silently missing. `src/challenges.test.js` fails on 
 ### The bar for a new spec
 
 Write the spec, write a reference solution, watch it go green, **then** put the
-stub back. A spec that has never passed is not a spec. All 922 current tests
+stub back. A spec that has never passed is not a spec. All 1,439 current challenge tests
 were verified this way.
 
 Mock nothing global. A challenge that needs data takes the async function as a
@@ -94,10 +94,13 @@ function controllable() {
 ```
 
 Nothing resolves until the test says so, which is the only way to write the
-out-of-order and unmount cases at all. It also avoids fake timers and
-`vi.mock`, neither of which can be relied on inside Sandpack's Jest — so the
-spec runs identically in both places. Where a challenge needs a delay, the
-delay is a prop too.
+out-of-order and unmount cases at all. Where a challenge needs a delay, a tick
+or a clock, that is a prop too.
+
+The reason to inject rather than fake is that it cannot go wrong in either
+runner. **Whether Sandpack's Jest supports `vi.useFakeTimers` has not been
+tested** — see the open question below — and injecting sidesteps the whole
+subject. `vi.mock` is not used anywhere and should stay that way.
 
 ### Working rhythm
 
@@ -216,8 +219,25 @@ Not enforced, but true:
   `solutions.challenge` stores it. Renaming a folder orphans saved work and
   breaks every link to it. If it ever has to happen:
   `update solutions set challenge = 'new' where challenge = 'old';`
-- 24 of the 922 tests pass against an empty stub. They are negative assertions
+- 27 of the tests pass against an empty stub. They are negative assertions
   (`renders nothing when closed` and friends) — not a bug, and not progress.
+
+## Open question: fake timers in the browser runner
+
+Fourteen of the older specs call `vi.useFakeTimers()` — `debounce`, `throttle`,
+`retry`, `use-interval`, `use-debounced-value`, `use-clipboard`, `countdown`,
+`digital-clock`, `stopwatch`, `traffic-light`, `progress-bars`, `memory-game`,
+`toast-system`, `imperative-player`.
+
+They pass under Vitest. **Nobody has checked whether they pass inside Sandpack**,
+which is a different runner, and the shim already has to reroute `setTimeout` to
+dodge Chrome's throttling in a hidden iframe. Either they work and this is
+nothing, or those fourteen cannot be solved in the browser at all — which is the
+only place the challenges are actually used.
+
+Checking it is one manual run: open one of them, paste a known-good solution,
+press Run. Until someone does, do not assume either way, and keep writing new
+specs with injected time.
 
 ## Stack
 
