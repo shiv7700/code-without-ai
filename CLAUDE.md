@@ -56,8 +56,10 @@ src/challenges/NN-name/
   Thing.jsx        ← stub, rules in the doc comment. He writes this.
   Thing.test.jsx   ← the spec. Off limits.
   demo.jsx         ← optional; mounts the stub with props for the preview pane
-src/challenges.js  ← globs those folders in as raw strings. Title, topics, tier
-                     and the test list all come from the files themselves.
+src/ladder.js      ← the order. Sections, each an ordered list of folder names.
+src/challenges.js  ← globs the folders in as raw strings and walks the ladder.
+                     Title, summary, topics and the test list come from the files.
+src/challenges.test.js ← keeps those two honest. Not a challenge, editable.
 src/Challenge.jsx  ← the runner: Sandpack editor, spec list, tests, preview
 src/Home.jsx       ← the ladder — eight sections, searchable, progress per card
 src/auth.jsx       ← GitHub OAuth, session gate in front of every route
@@ -67,7 +69,7 @@ src/setupTests.js  ← `npm test` only. The browser runner has its own setup.
 
 ```bash
 npm run dev             # the app — write and run challenges in the browser
-npm run test:watch 030  # one challenge in the terminal, by folder-name substring
+npm run test:watch keys # one challenge in the terminal, by folder-name substring
 npm test                # all of them
 ```
 
@@ -80,29 +82,31 @@ maps one onto the other). A change that helps one must not break the other.
 
 ## The ladder
 
-105 challenges today, being filled out towards 500. Eight sections, by number:
+105 challenges today, being filled out towards 500. Eight sections:
 
-| Range | Section |
-|---|---|
-| 001–080 | Describing the UI — props, destructuring, children, conditionals, keys, purity |
-| 081–160 | State & events — handlers, `useState`, updater form, immutable updates |
-| 161–240 | Async & data — fetch, loading/error/empty, abort, races, retry |
-| 241–300 | Hooks — the ones you rebuild every project, and their closure traps |
-| 301–420 | Components — the widgets, and the same widget a notch harder |
-| 421–500 | JS toolbox — no React |
-| 501–560 | Machine coding |
-| 561–600 | Hard |
+Describing the UI · State & events · Async & data · Hooks · Components ·
+JS toolbox · Machine coding · Hard
 
-**Numbers are three digits and deliberately sparse.** Each section owns a wide
-range and its folders sit spaced apart inside it, so a new challenge takes the
-gap next to the one it belongs beside. Nothing is ever renumbered — the Supabase
-rows are keyed on the folder name, so a rename orphans saved work.
+**A folder is named after what you build — `list-keys`, `use-router` — and
+nothing else.** The name is an identity: Supabase keys the saved code on it, so
+renaming a folder orphans his work. Never rename one.
 
-Growth goes into the low numbers first. The gap was never the hard end of the
-ladder; it was that 100-counter had nothing underneath it.
+**Order lives in `src/ladder.js` and nowhere else.** Sections, each an ordered
+list of folder names. Rearrange by moving a line, delete by removing one, insert
+anywhere. The number on a card is that position, worked out at load — so
+inserting at the top shifts every number below it and breaks nothing, because
+nothing is stored against a number.
 
-Sections are derived from the level number in `src/challenges.js` (`TIERS`).
-Adding a folder is still all it takes — the tier follows from its number.
+A folder missing from `ladder.js` still shows up, in an Unsorted section at the
+bottom. `src/challenges.test.js` fails on it, and on a slug in the ladder with
+no folder behind it.
+
+Growth goes into the front of the list first. The gap was never the hard end of
+the ladder; it was that `counter` had nothing underneath it.
+
+Each stub's doc comment is the other half: first line is the summary, then
+`Topics:` and two `Read:` links. There is no level number in it — that was a
+second copy of the position, and it went stale the first time anything moved.
 
 Progress is not a file. A challenge flips to solved in Supabase the moment its
 suite goes green in the browser, and the home screen reads that. Nothing to tick
@@ -118,15 +122,17 @@ never passed is not a spec.
 
 `src/setupTests.js` replaces Node 25's stub `localStorage` global with a real
 in-memory Storage. Node's version has no `clear`/`key`/`length` and shadows
-jsdom's, which breaks 260-use-local-storage. Do not remove it.
+jsdom's, which breaks `use-local-storage`. Do not remove it.
 
 ## What he is actually working on
 
 Keeping the syntax in his fingers is why the app exists at all — but the thing
 he actually gets wrong is **spotting which code runs once versus on every
-render or call** — closure layers, stale closures, effect cleanup. Challenges 200,
-255, 140 and 150 aim at exactly that, and 433, 436, 457, 466, 558, 581 and 591
-are the same idea in plain JS or with a ref holding the latest value. Before this
+render or call** — closure layers, stale closures, effect cleanup. `fetch-user`,
+`use-interval`, `theme-context` and `memo-list` aim at exactly that, and
+`debounce`, `throttle`, `memoize`, `map-async-limit`, `use-controllable-state`,
+`imperative-player` and `use-resizable` are the same idea in plain JS or with a
+ref holding the latest value. Before this
 repo he solved `debounce` and `useDebouncedCallback` in
 `~/Documents/trash/indepentedmind/challenge/`, and the same confusion showed up
 in both.

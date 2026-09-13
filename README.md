@@ -3,8 +3,8 @@
 Challenges and somewhere to write them, so hand-writing React stays in the
 fingers. Built for one user. No AI in the loop — that is the whole point.
 
-105 of them today, being filled out towards 500. The low numbers are where the
-new ones are going: props, destructuring, conditional rendering, keys, fetch.
+105 of them today, being filled out towards 500. The front of the list is where
+the new ones are going: props, destructuring, conditional rendering, keys, fetch.
 Fundamentals first, because everything above them is easier once those are
 automatic.
 
@@ -16,12 +16,12 @@ you to whatever machine you sit down at.
 
 Each challenge is a stub with its rules in the doc comment and a spec beside it.
 Read the rules, write the code, run the tests until they are green. Eight
-sections, easiest first — work down, or jump to what you need. 421–500 need no
-React at all, so they are the ones to do on a train.
+sections, easiest first — work down, or jump to what you need. The JS toolbox
+needs no React at all, so those are the ones to do on a train.
 
 ```bash
 npm run dev               # the app
-npm run test:watch 030    # or run one challenge in the terminal, by folder name
+npm run test:watch keys   # or run one challenge in the terminal, by folder name
 npm test                  # everything
 ```
 
@@ -40,22 +40,28 @@ neither.
 
 ## The ladder
 
-Eight sections. Numbers are three digits with gaps left between them, so a new
-challenge slots in beside the one it belongs next to and nothing is renumbered.
+| Section | What it is for |
+|---|---|
+| Describing the UI | props, destructuring, children, conditional rendering, lists and keys, purity — the half of a component that only reads |
+| State & events | handlers, `useState`, the updater form, changing objects and arrays without mutating them |
+| Async & data | `fetch`, loading and error and empty states, aborting, out-of-order responses, retries |
+| Hooks | the custom hooks you rebuild in every project, and the closure traps inside them |
+| Components | the widgets every app ships — and the same widget again, a notch harder |
+| JS toolbox | no React. Closures, promises, data structures |
+| Machine coding | interview-sized components, built from a spec you did not write |
+| Hard | the ones worth sketching on paper first |
 
-| Range | Section | What it is for |
-|---|---|---|
-| 001–080 | Describing the UI | props, destructuring, children, conditional rendering, lists and keys, purity — the half of a component that only reads |
-| 081–160 | State & events | handlers, `useState`, the updater form, changing objects and arrays without mutating them |
-| 161–240 | Async & data | `fetch`, loading and error and empty states, aborting, out-of-order responses, retries |
-| 241–300 | Hooks | the custom hooks you rebuild in every project, and the closure traps inside them |
-| 301–420 | Components | the widgets every app ships — and the same widget again, a notch harder |
-| 421–500 | JS toolbox | no React. Closures, promises, data structures |
-| 501–560 | Machine coding | interview-sized components, built from a spec you did not write |
-| 561–600 | Hard | the ones worth sketching on paper first |
+The order is `src/ladder.js` — sections, each an ordered list of folder names.
+Move a line to reorder, delete one to drop a challenge, insert anywhere. The
+number you see on a card is that position, worked out at load time, so nothing
+depends on it and nothing has to be renamed.
 
-Every stub carries its own `Topics:` line and two `Read:` links, right under the
-level heading. Read those before writing, not after failing. The app lists every
+Folders are named after what you build, never numbered. That name is the key
+the database saves your code under, which is the one thing here that must not
+change.
+
+Every stub carries its summary, a `Topics:` line and two `Read:` links in its
+doc comment. Read those before writing, not after failing. The app lists every
 challenge with its topics and everything its spec checks, so there is no second
 copy of that list in here to drift out of date.
 
@@ -67,21 +73,21 @@ appearance, that is the one to go back and read about.
 
 | Concept | Appears in |
 |---|---|
-| props, and destructuring them | 005, 010, 060 |
-| conditional rendering, and the falsy traps | 025, 035, 045 |
-| keys, and component identity | 030, 075, 310 |
-| derived instead of stored | 040, 110, 115, 270, 325 |
-| purity, and never mutating | 055, 130, 325 |
-| stale closure → read the latest from a ref | 255, 265 |
-| effect cleanup | 200, 255, 265, 315, 320 |
-| stable identity (`useCallback`) | 150, 250, 265, 270, 275 |
-| context + a provider guard | 140, 310, 320 |
-| async races and rollback | 200, 220, 528, 567, 585 |
-| a store that lives outside React | 487, 575, 593 |
-| immutable updates, structurally shared | 484, 577 |
-| recursion over a tree | 439, 445, 510, 519, 577, 579, 587 |
-| timers you have to clean up | 433, 436, 463, 501, 504, 531, 534, 540, 581 |
-| focus and keyboard handling | 280, 522, 546, 565 |
+| props, and destructuring them | `greeting-props`, `destructure-props`, `nested-props` |
+| conditional rendering, and the falsy traps | `conditional-badge`, `empty-state`, `fallback-values` |
+| keys, and component identity | `list-keys`, `render-prop-list`, `tabs-compound` |
+| derived instead of stored | `derived-total`, `controlled-form`, `filter-list`, `use-pagination`, `data-table` |
+| purity, and never mutating | `pure-render`, `todo-reducer`, `data-table` |
+| stale closure → read the latest from a ref | `use-interval`, `use-outside-click` |
+| effect cleanup | `fetch-user`, `use-interval`, `use-outside-click`, `modal-portal`, `toast-system` |
+| stable identity (`useCallback`) | `memo-list`, `use-toggle`, `use-pagination`, `use-undoable` |
+| context + a provider guard | `theme-context`, `tabs-compound`, `toast-system` |
+| async races and rollback | `fetch-user`, `optimistic-update`, `use-query`, `server-table`, `cascading-select` |
+| a store that lives outside React | `create-store`, `use-store`, `use-router` |
+| immutable updates, structurally shared | `immutable-set`, `nested-comments` |
+| recursion over a tree | `deep-clone`, `flatten`, `file-explorer`, `nested-checkboxes`, `spreadsheet`, `markdown-lite` |
+| timers you have to clean up | `debounce`, `throttle`, `retry`, `traffic-light`, `stopwatch`, `progress-bars`, `memory-game` |
+| focus and keyboard handling | `use-ref-focus`, `autocomplete`, `dropdown-menu`, `focus-trap` |
 
 ## Progress
 
@@ -110,9 +116,9 @@ runner are Sandpack. GitHub OAuth and one Supabase table — a row per user per
 challenge holding the code and whether it passes — keep the work off any one
 laptop; RLS keeps each user to their own rows.
 
-Adding a challenge is still just adding a folder. `src/challenges.js` globs them
-in and reads the title, topics, section and spec list out of the files
-themselves, so there is no list anywhere to update.
+A challenge is a folder plus one line in `src/ladder.js` saying where it sits.
+Everything else — title, summary, topics, what the spec checks — is read out of
+the files themselves. `src/challenges.test.js` fails if those two ever disagree.
 
 ## Notes
 
