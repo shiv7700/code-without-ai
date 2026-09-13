@@ -91,10 +91,6 @@ const DEPS = {
 
 const SETUP = { dependencies: DEPS }
 
-const note = (text) => `export default () => (
-  <p style={{ font: '14px system-ui', opacity: 0.6, padding: 16 }}>${text}</p>
-)`
-
 // Specs nest tests under describes; the ladder uses neither, but walking both
 // costs three lines and survives a spec that does.
 const allTests = (node) => [
@@ -111,6 +107,45 @@ const shallowEqual = (a, b) => {
 
 const MARK = { pass: '✓', fail: '✗' }
 const MARK_COLOR = { pass: 'text-primary', fail: 'text-destructive' }
+
+// The header is h-14; the panes take the rest, or a gap opens under them.
+const PANE = 'calc(100dvh - 3.5rem)'
+
+// Only one folder ships a demo.jsx, so fifty components had no preview at all.
+// Mount the default export bare: most render fine, and the ones that need
+// props (or export no default) hit the boundary and say so instead of blanking.
+const autoMount = (stub) => `import React from 'react'
+import Subject from '.${stub}'
+
+class Boundary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { failed: false }
+  }
+
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+
+  render() {
+    if (!this.state.failed) return this.props.children
+    return (
+      <div style={{ font: '13px ui-sans-serif, system-ui, sans-serif', color: '#6b6b74', lineHeight: 1.6, maxWidth: 420, padding: 24 }}>
+        This one needs props before it will render. Add a <code>demo.jsx</code> next
+        to <code>${stub.slice(1)}</code> that mounts it with some, and it shows up here.
+      </div>
+    )
+  }
+}
+
+export default function App() {
+  return (
+    <Boundary>
+      <Subject />
+    </Boundary>
+  )
+}
+`
 
 const MOD = navigator.platform.startsWith('Mac') ? '⌘' : 'Ctrl'
 
@@ -153,7 +188,9 @@ function SaveCode({ name, stubCode }) {
   const { code } = useActiveCode()
 
   useEffect(() => {
-    if (code === stubCode) return // untouched stub, nothing worth a row
+    // Trimmed, or a stray newline makes the stub look like work and overwrites
+    // a real solution with it. That has already cost one.
+    if (code.trim() === stubCode.trim()) return
     const timer = setTimeout(
       () =>
         saveCode(name, code).catch((error) =>
@@ -287,17 +324,14 @@ export default function Challenge({ challenge }) {
   // re-triggered the run that produced it — an endless rebuild loop.
   const sandpackFiles = useMemo(() => {
     if (saved === undefined) return null
-    const app = !needsUi
-      ? note('No UI is required here — this one is a hook. Tests only.')
-      : (files['/demo.jsx'] ??
-        note('Add a demo.jsx to this challenge folder and it shows up here.'))
+    const app = files['/demo.jsx'] ?? autoMount(stub)
     return {
       ...files,
       [stub]: saved?.code || files[stub],
       ...SHIM_FILES,
       '/App.js': app,
     }
-  }, [files, needsUi, saved, stub])
+  }, [files, saved, stub])
 
   const options = useMemo(
     () => ({ activeFile: stub, visibleFiles: [stub] }),
@@ -339,7 +373,7 @@ export default function Challenge({ challenge }) {
       customSetup={SETUP}
     >
       {/* Three zones: where you are, how you are doing, what you can do. */}
-      <header className="flex items-center gap-4 border-b border-border px-4 py-2.5">
+      <header className="flex h-14 items-center gap-4 border-b border-border px-4">
         <Button
           variant="ghost"
           size="sm"
@@ -349,7 +383,7 @@ export default function Challenge({ challenge }) {
           ← ladder
         </Button>
 
-        <Separator orientation="vertical" className="h-5" />
+        <Separator orientation="vertical" className="h-5 data-vertical:self-center" />
 
         <span className="flex min-w-0 items-baseline gap-2.5">
           <span className="font-mono text-sm text-muted-foreground tabular-nums">
@@ -372,32 +406,48 @@ export default function Challenge({ challenge }) {
             {passed}/{tests.length} passing
           </span>
 
-          <Separator orientation="vertical" className="h-5" />
+          <Separator orientation="vertical" className="h-5 data-vertical:self-center" />
 
-          {/* shadcn gives pressed and hover the same bg-muted, so the selected
-              mode was indistinguishable. Pressed gets the accent as a tint. */}
-          <ToggleGroup
-            size="sm"
-            value={[view]}
-            onValueChange={([next]) => next && setView(next)}
-            className="rounded-lg border border-border p-0.5"
-            spacing={0}
-          >
-            {[
-              ['tests', 'Tests'],
-              ['preview', 'Preview'],
-            ].map(([value, label]) => (
-              <ToggleGroupItem
-                key={value}
-                value={value}
-                className="text-xs aria-pressed:bg-primary/15 aria-pressed:font-semibold aria-pressed:text-primary"
+          {/* A hook has nothing to render, so it says so where the choice
+              would have been — otherwise the gap reads as a missing feature.
+              shadcn gives pressed and hover the same bg-muted, so the selected
+              mode needs the accent as a tint to read at all. */}
+          {!needsUi && (
+            <>
+              <span className="font-mono text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">
+                no ui
+              </span>
+
+              <Separator orientation="vertical" className="h-5 data-vertical:self-center" />
+            </>
+          )}
+
+          {needsUi && (
+            <>
+              <ToggleGroup
+                size="sm"
+                value={[view]}
+                onValueChange={([next]) => next && setView(next)}
+                className="rounded-lg border border-border p-1"
+                spacing={0}
               >
-                {label}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
+                {[
+                  ['tests', 'Tests'],
+                  ['preview', 'Preview'],
+                ].map(([value, label]) => (
+                  <ToggleGroupItem
+                    key={value}
+                    value={value}
+                    className="min-w-[5rem] px-4 text-xs aria-pressed:bg-primary/15 aria-pressed:font-semibold aria-pressed:text-primary"
+                  >
+                    {label}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
 
-          <Separator orientation="vertical" className="h-5" />
+              <Separator orientation="vertical" className="h-5 data-vertical:self-center" />
+            </>
+          )}
 
           {/* Destructive, so it sits away from Run rather than beside it. */}
           <ResetToStub
@@ -414,11 +464,11 @@ export default function Challenge({ challenge }) {
       <SaveCode name={name} stubCode={files[stub]} />
 
       <SandpackLayout>
-        <SandpackCodeEditor showLineNumbers style={{ height: '88vh' }} />
+        <SandpackCodeEditor showLineNumbers style={{ height: PANE }} />
 
         <div
           className="flex flex-1 flex-col border-l border-border"
-          style={{ height: '88vh' }}
+          style={{ height: PANE }}
         >
           {/* What the spec checks, readable before a single test has run. */}
           <div className="max-h-[35%] overflow-auto border-b border-border bg-card px-4 py-3.5">
@@ -466,7 +516,11 @@ export default function Challenge({ challenge }) {
                 style={{ height: '100%' }}
               />
             </div>
-            {/* The error overlay reads the provider's error state, which every
+            {/* Mounted only while visible. Kept alive but hidden, the iframe
+                is display:none, and Chrome throttles a hidden cross-origin
+                frame — it fell an edit behind. A fresh client on every switch
+                always compiles what is in the editor right now.
+                The error overlay reads the provider's error state, which every
                 client feeds — so a failed assertion showed up here as if the
                 preview had crashed. Failures belong in the Tests panel. */}
             {view === 'preview' && (
