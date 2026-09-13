@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { challenges, tiers } from './challenges'
 import { loadProgress } from './store'
 import { signOut, useProfile } from './auth'
+import { ThemeToggle } from './ThemeToggle'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
@@ -138,6 +139,7 @@ export default function Home() {
             <Button variant="ghost" size="xs" onClick={signOut}>
               sign out
             </Button>
+            <ThemeToggle />
           </div>
         </div>
 

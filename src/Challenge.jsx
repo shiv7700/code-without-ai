@@ -13,7 +13,9 @@ import {
 } from '@codesandbox/sandpack-react'
 import { toast } from 'sonner'
 import { loadSolution, saveCode, saveDone, saveSolution } from './store'
-import { sandpackTheme } from './sandpackTheme'
+import { sandpackThemes } from './sandpackTheme'
+import { useTheme } from './theme'
+import { ThemeToggle } from './ThemeToggle'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -236,6 +238,7 @@ function Booting() {
 }
 
 export default function Challenge({ challenge }) {
+  const theme = useTheme()
   const [view, setView] = useState('tests')
   const [status, setStatus] = useState({})
   const { name, title, summary, level, stub, files, needsUi, tests } = challenge
@@ -303,7 +306,7 @@ export default function Challenge({ challenge }) {
     <SandpackProvider
       key={name}
       template="react"
-      theme={sandpackTheme}
+      theme={sandpackThemes[theme]}
       files={sandpackFiles}
       options={options}
       customSetup={SETUP}
@@ -354,6 +357,8 @@ export default function Challenge({ challenge }) {
           </Button>
 
           <ResetToStub name={name} path={stub} stubCode={files[stub]} />
+
+          <ThemeToggle size="sm" />
 
           {view === 'tests' && <RunTests />}
         </span>

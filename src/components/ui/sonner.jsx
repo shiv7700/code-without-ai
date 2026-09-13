@@ -1,14 +1,16 @@
 import { Toaster as Sonner } from "sonner";
+import { useTheme } from "@/theme"
 import { CircleCheckIcon, InfoIcon, TriangleAlertIcon, OctagonXIcon, Loader2Icon } from "lucide-react"
 
-// shadcn wires this to next-themes. index.html hard-codes `class="dark"` and
-// there is no theme switcher, so the dependency bought nothing.
+// shadcn wires this to next-themes; the app has its own two-line theme store.
 const Toaster = ({
   ...props
 }) => {
+  const theme = useTheme()
+
   return (
     <Sonner
-      theme="dark"
+      theme={theme}
       className="toaster group"
       icons={{
         success: (

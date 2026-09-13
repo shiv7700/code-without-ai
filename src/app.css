@@ -13,19 +13,46 @@
   --color-ink: #16161a;
   --color-panel: #1f1f25;
   --color-line: #32323c;
-  --color-chalk: #e6e6ea;
+  --color-chalk: #d9d9e0;
   --color-dim: #9a9aa6;
   --color-go: #6ee7a8;
+
+  /* The light six. Not an inversion: paper is warm rather than white so it
+     does not glare, and the accent darkens because mint vanishes on white. */
+  --color-paper: #fbfbf9;
+  --color-sheet: #f2f2ef;
+  --color-rule: #e2e2dd;
+  --color-graphite: #23232a;
+  --color-pencil: #6b6b74;
+  --color-fern: #0f8a54;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   --radius: 0.625rem;
+
+  --background: var(--color-paper);
+  --foreground: var(--color-graphite);
+  --card: var(--color-sheet);
+  --card-foreground: var(--color-graphite);
+  --popover: var(--color-paper);
+  --popover-foreground: var(--color-graphite);
+  --primary: var(--color-fern);
+  --primary-foreground: var(--color-paper);
+  --secondary: var(--color-sheet);
+  --secondary-foreground: var(--color-graphite);
+  --muted: var(--color-sheet);
+  --muted-foreground: var(--color-pencil);
+  --accent: var(--color-sheet);
+  --accent-foreground: var(--color-graphite);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: var(--color-rule);
+  --input: var(--color-rule);
+  --ring: var(--color-pencil);
 }
 
-/* The app ships dark-only — <html class="dark"> is hardcoded. A light theme
-   would mean filling in :root here and dropping that class. */
 .dark {
+  color-scheme: dark;
   --background: var(--color-ink);
   --foreground: var(--color-chalk);
   --card: var(--color-panel);

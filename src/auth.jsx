@@ -52,7 +52,7 @@ export function Login() {
           {Array.from({ length: 90 }, (_, i) => (
             <span
               key={i}
-              className="rung flex-1 bg-line"
+              className="rung flex-1 bg-border"
               style={{ '--i': i, height: `${8 + (i % 7) * 3}%` }}
             />
           ))}
