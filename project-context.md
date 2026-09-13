@@ -26,6 +26,22 @@ whatever changes must never be stored. The folder name is stored — Supabase
 saves your code under it, and it is the URL — so it is never renamed. The
 position is stored nowhere, so it is free to move.
 
+## The ladder is not finished, and that is normal
+
+208 challenges today, heading towards roughly 500. **Expect new folders to keep
+arriving in large batches** — a commit adding eighty at once is the intended
+rhythm, not a runaway script.
+
+The sections are deliberately uneven. Growth goes in at the front, because the
+gap was never the hard end of the ladder: it was that `counter` had nothing
+underneath it. So Describing the UI, State & events, Async & data and Hooks
+keep filling out, while Machine coding and Hard are still the originals and may
+stay that way for a while.
+
+None of this needs a migration or a rename. A batch is new folders plus lines in
+`src/ladder.js`, and every number on screen is recalculated from that list. The
+one thing a batch must not do is touch a folder that already exists.
+
 ## Adding a challenge
 
 Two steps.
