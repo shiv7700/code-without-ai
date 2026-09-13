@@ -38,7 +38,9 @@ const DEPS = {
   '@testing-library/react': '^16.0.0',
   // peer dep of react/user-event — Sandpack will not pull it in on its own
   '@testing-library/dom': '^10.4.0',
-  '@testing-library/user-event': '^14.5.0',
+  // pinned: 14.6.2+ hangs on click/type until the 5s jest timeout
+  // https://github.com/testing-library/user-event/issues/1323
+  '@testing-library/user-event': '14.6.1',
   '@testing-library/jest-dom': '^6.4.0',
 }
 
