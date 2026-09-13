@@ -115,7 +115,7 @@ const MARK_COLOR = { pass: 'text-primary', fail: 'text-destructive' }
 const MOD = navigator.platform.startsWith('Mac') ? '⌘' : 'Ctrl'
 
 const Kbd = ({ children }) => (
-  <kbd className="ml-1.5 rounded border border-current/25 px-1 font-mono text-[0.625rem] leading-4 opacity-70">
+  <kbd className="ml-2.5 rounded border border-current/30 px-1.5 py-0.5 font-mono text-[0.625rem] leading-none tracking-[0.15em] opacity-75">
     {children}
   </kbd>
 )
@@ -374,17 +374,27 @@ export default function Challenge({ challenge }) {
 
           <Separator orientation="vertical" className="h-5" />
 
+          {/* shadcn gives pressed and hover the same bg-muted, so the selected
+              mode was indistinguishable. Pressed gets the accent as a tint. */}
           <ToggleGroup
             size="sm"
             value={[view]}
             onValueChange={([next]) => next && setView(next)}
+            className="rounded-lg border border-border p-0.5"
+            spacing={0}
           >
-            <ToggleGroupItem value="tests" className="text-xs">
-              Tests
-            </ToggleGroupItem>
-            <ToggleGroupItem value="preview" className="text-xs">
-              Preview
-            </ToggleGroupItem>
+            {[
+              ['tests', 'Tests'],
+              ['preview', 'Preview'],
+            ].map(([value, label]) => (
+              <ToggleGroupItem
+                key={value}
+                value={value}
+                className="text-xs aria-pressed:bg-primary/15 aria-pressed:font-semibold aria-pressed:text-primary"
+              >
+                {label}
+              </ToggleGroupItem>
+            ))}
           </ToggleGroup>
 
           <Separator orientation="vertical" className="h-5" />
@@ -456,7 +466,15 @@ export default function Challenge({ challenge }) {
                 style={{ height: '100%' }}
               />
             </div>
-            {view === 'preview' && <SandpackPreview style={{ height: '100%' }} />}
+            {/* The error overlay reads the provider's error state, which every
+                client feeds — so a failed assertion showed up here as if the
+                preview had crashed. Failures belong in the Tests panel. */}
+            {view === 'preview' && (
+              <SandpackPreview
+                showSandpackErrorOverlay={false}
+                style={{ height: '100%' }}
+              />
+            )}
             <Booting />
           </div>
         </div>
