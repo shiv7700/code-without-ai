@@ -3,7 +3,7 @@
 Challenges and somewhere to write them, so hand-writing React stays in the
 fingers. Built for one user. No AI in the loop — that is the whole point.
 
-105 of them today, being filled out towards 500. The front of the list is where
+119 of them today, being filled out towards 500. The front of the list is where
 the new ones are going: props, destructuring, conditional rendering, keys, fetch.
 Fundamentals first, because everything above them is easier once those are
 automatic.
@@ -122,10 +122,10 @@ has the rest: the data flow, the invariants, and the two test runners.
 
 ## Notes
 
-Every challenge has been verified solvable — reference solutions pass all 865
+Every challenge has been verified solvable — reference solutions pass all 922
 tests. They are deliberately not in this repo.
 
-24 tests pass against an empty stub (`renders nothing when closed` and friends).
+31 tests pass against an empty stub (`renders nothing when closed` and friends).
 They are negative assertions, so nothing can make them fail early — ignore them
 as a progress signal.
 

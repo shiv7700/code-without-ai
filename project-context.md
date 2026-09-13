@@ -79,8 +79,32 @@ the bottom — visible, not silently missing. `src/challenges.test.js` fails on 
 ### The bar for a new spec
 
 Write the spec, write a reference solution, watch it go green, **then** put the
-stub back. A spec that has never passed is not a spec. All 865 current tests
+stub back. A spec that has never passed is not a spec. All 922 current tests
 were verified this way.
+
+Mock nothing global. A challenge that needs data takes the async function as a
+prop, and the spec hands it one it controls by hand:
+
+```js
+function controllable() {
+  const pending = new Map()
+  const load = (id) => new Promise((resolve, reject) => pending.set(id, { resolve, reject }))
+  return { load, resolve: (id, v) => act(async () => pending.get(id).resolve(v)) }
+}
+```
+
+Nothing resolves until the test says so, which is the only way to write the
+out-of-order and unmount cases at all. It also avoids fake timers and
+`vi.mock`, neither of which can be relied on inside Sandpack's Jest — so the
+spec runs identically in both places. Where a challenge needs a delay, the
+delay is a prop too.
+
+### Working rhythm
+
+**Batch the work, then commit once.** A section's worth of challenges is one
+commit, not thirty. Same for a refactor: land the whole thing, verify, commit.
+Committing after every file buries the one message that explains the change,
+and none of it is any safer — nothing here is deployed by a commit.
 
 ## How a challenge reaches the screen
 
@@ -192,7 +216,7 @@ Not enforced, but true:
   `solutions.challenge` stores it. Renaming a folder orphans saved work and
   breaks every link to it. If it ever has to happen:
   `update solutions set challenge = 'new' where challenge = 'old';`
-- 24 of the 865 tests pass against an empty stub. They are negative assertions
+- 24 of the 922 tests pass against an empty stub. They are negative assertions
   (`renders nothing when closed` and friends) — not a bug, and not progress.
 
 ## Stack
