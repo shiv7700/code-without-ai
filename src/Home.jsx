@@ -137,7 +137,7 @@ export default function Home() {
               </a>
             )}
             <Button variant="ghost" size="xs" onClick={signOut}>
-              sign out
+              Sign out
             </Button>
             <ThemeToggle />
           </div>
@@ -151,7 +151,7 @@ export default function Home() {
             / {challenges.length}
           </span>
           <span className="ml-auto font-mono text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">
-            climbed
+            solved
           </span>
         </div>
         <Progress
@@ -216,7 +216,7 @@ export default function Home() {
                 setSection('all')
               }}
             >
-              clear
+              Clear
             </Button>
           </span>
         )}

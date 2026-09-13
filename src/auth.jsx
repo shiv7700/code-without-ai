@@ -62,8 +62,8 @@ export function Login() {
           react practice ladder
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Ninety reps, hand-written. Sign in and your code and progress follow
-          you to whatever machine you sit down at.
+          Ninety reps, hand-written. Sign in and your code follows you to
+          whatever machine you sit down at.
         </p>
 
         <Button className="mt-8 w-full" onClick={signIn} disabled={busy}>

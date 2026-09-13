@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 // The specs `import { test, expect, vi } from 'vitest'`, but Sandpack runs Jest.
 // A virtual node_modules/vitest maps one onto the other so the spec files stay
@@ -111,13 +112,37 @@ const shallowEqual = (a, b) => {
 const MARK = { pass: '✓', fail: '✗' }
 const MARK_COLOR = { pass: 'text-primary', fail: 'text-destructive' }
 
-// SandpackTests ships a run button, but it is an unlabelled ▶ in the panel
-// corner. Same dispatch, with a name on it and up in the header.
+const MOD = navigator.platform.startsWith('Mac') ? '⌘' : 'Ctrl'
+
+const Kbd = ({ children }) => (
+  <kbd className="ml-1.5 rounded border border-current/25 px-1 font-mono text-[0.625rem] leading-4 opacity-70">
+    {children}
+  </kbd>
+)
+
+// The button lives beside the results it produces, but hands stay on the
+// keyboard while solving — so the shortcut is the real control, and it is
+// printed on the button rather than left to be discovered.
 function RunTests() {
   const { dispatch } = useSandpack()
+
+  useEffect(() => {
+    const run = (e) => {
+      if (e.key !== 'Enter' || !(e.metaKey || e.ctrlKey)) return
+      // Capture, or CodeMirror has already inserted the newline by the time
+      // this runs and preventDefault has nothing left to prevent.
+      e.preventDefault()
+      e.stopPropagation()
+      dispatch({ type: 'run-all-tests' })
+    }
+    document.addEventListener('keydown', run, true)
+    return () => document.removeEventListener('keydown', run, true)
+  }, [dispatch])
+
   return (
     <Button size="sm" onClick={() => dispatch({ type: 'run-all-tests' })}>
-      ▶ Run tests
+      Run tests
+      <Kbd>{MOD}↵</Kbd>
     </Button>
   )
 }
@@ -132,7 +157,7 @@ function SaveCode({ name, stubCode }) {
     const timer = setTimeout(
       () =>
         saveCode(name, code).catch((error) =>
-          toast.error('Could not save your code', {
+          toast.error('Your code did not save', {
             description: error.message,
           }),
         ),
@@ -146,7 +171,7 @@ function SaveCode({ name, stubCode }) {
 
 // AlertDialogAction is a plain Button, not a Close — shadcn leaves closing to
 // you so the action can be async. This one waits for the write to land.
-function ResetToStub({ name, path, stubCode }) {
+function ResetToStub({ name, title, path, stubCode }) {
   const { sandpack } = useSandpack()
   const [open, setOpen] = useState(false)
 
@@ -156,9 +181,11 @@ function ResetToStub({ name, path, stubCode }) {
       // SaveCode ignores a file that matches the stub, so the row has to be
       // rewritten here — otherwise the old solution returns on the next load.
       await saveSolution(name, { code: stubCode, passed: false })
-      toast.success('Back to the stub.')
+      toast.success(`${title} is back to the stub.`)
     } catch (error) {
-      toast.error('Could not reset', { description: error.message })
+      toast.error('Could not reset this challenge', {
+        description: error.message,
+      })
     }
     setOpen(false)
   }
@@ -166,22 +193,22 @@ function ResetToStub({ name, path, stubCode }) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger render={<Button variant="ghost" size="sm" />}>
-        reset
+        Reset
       </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Start this challenge over?</AlertDialogTitle>
+          <AlertDialogTitle>Start {title} over?</AlertDialogTitle>
           <AlertDialogDescription>
-            Your code for {name} goes back to the stub, and the challenge stops
-            counting as done. This cannot be undone.
+            Your code goes back to the stub and the challenge stops counting as
+            solved. There is no undo.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Keep my code</AlertDialogCancel>
           <AlertDialogAction variant="destructive" onClick={reset}>
-            Reset
+            Reset to stub
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -207,7 +234,7 @@ function Booting() {
       <Veil>
         <p className="text-sm">The sandbox is asleep.</p>
         <Button size="sm" onClick={() => sandpack.runSandpack()}>
-          Start it
+          Wake it up
         </Button>
       </Veil>
     )
@@ -231,7 +258,7 @@ function Booting() {
       <span className="size-5 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />
       <p className="text-sm">Starting the sandbox…</p>
       <p className="text-xs text-muted-foreground">
-        {progress ?? 'first load pulls deps from a CDN — about 20s'}
+        {progress ?? 'First run pulls dependencies from a CDN — about 20 seconds.'}
       </p>
     </Veil>
   )
@@ -286,7 +313,7 @@ export default function Challenge({ challenge }) {
       name,
       ran.length > 0 && ran.every((t) => t.status === 'pass'),
     ).catch((error) =>
-      toast.error('Could not save your progress', {
+      toast.error('Your progress did not save', {
         description: error.message,
       }),
     )
@@ -347,20 +374,30 @@ export default function Challenge({ challenge }) {
 
           <Separator orientation="vertical" className="h-5" />
 
-          <Button
-            variant="ghost"
+          <ToggleGroup
             size="sm"
-            className="font-mono text-xs"
-            onClick={() => setView(view === 'tests' ? 'preview' : 'tests')}
+            value={[view]}
+            onValueChange={([next]) => next && setView(next)}
           >
-            {view === 'tests' ? 'UI' : 'tests'}
-          </Button>
+            <ToggleGroupItem value="tests" className="text-xs">
+              Tests
+            </ToggleGroupItem>
+            <ToggleGroupItem value="preview" className="text-xs">
+              Preview
+            </ToggleGroupItem>
+          </ToggleGroup>
 
-          <ResetToStub name={name} path={stub} stubCode={files[stub]} />
+          <Separator orientation="vertical" className="h-5" />
+
+          {/* Destructive, so it sits away from Run rather than beside it. */}
+          <ResetToStub
+            name={name}
+            title={title}
+            path={stub}
+            stubCode={files[stub]}
+          />
 
           <ThemeToggle size="sm" />
-
-          {view === 'tests' && <RunTests />}
         </span>
       </header>
 
@@ -375,9 +412,12 @@ export default function Challenge({ challenge }) {
         >
           {/* What the spec checks, readable before a single test has run. */}
           <div className="max-h-[35%] overflow-auto border-b border-border bg-card px-4 py-3.5">
-            <p className="mb-2.5 font-mono text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">
-              the spec
-            </p>
+            <div className="mb-2.5 flex items-center justify-between gap-3">
+              <p className="font-mono text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">
+                the spec
+              </p>
+              {view === 'tests' && <RunTests />}
+            </div>
             <ul className="space-y-1.5">
               {tests.map((t, i) => (
                 <li key={t} className="flex items-baseline gap-2.5 text-sm">
