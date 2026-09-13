@@ -387,7 +387,7 @@ export default function Challenge({ challenge }) {
 
         <span className="flex min-w-0 items-baseline gap-2.5">
           <span className="font-mono text-sm text-muted-foreground tabular-nums">
-            {String(level).padStart(2, '0')}
+            {String(level).padStart(3, '0')}
           </span>
           <span className="truncate font-mono text-sm font-medium">
             {title}

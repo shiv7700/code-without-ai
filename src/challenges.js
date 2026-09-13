@@ -7,13 +7,18 @@ const raw = import.meta.glob('./challenges/*/*.{js,jsx}', {
 })
 
 // Sections of the ladder, by level. A challenge belongs to the last tier whose
-// `from` it clears.
+// `from` it clears. Each tier owns a wide number range and the folders inside it
+// are spaced out, so a new challenge slots in beside the one it belongs next to
+// without renumbering anything.
 const TIERS = [
-  { from: 1, name: 'Fundamentals', blurb: 'state, effects, the core hooks' },
-  { from: 21, name: 'Everyday components', blurb: 'the widgets every app ships' },
-  { from: 36, name: 'JS toolbox', blurb: 'no React — closures, promises, data' },
-  { from: 56, name: 'Machine coding', blurb: 'interview-sized components' },
-  { from: 76, name: 'Hard', blurb: 'the ones that need a plan first' },
+  { from: 1, name: 'Describing the UI', blurb: 'props, JSX, lists — the parts that only read' },
+  { from: 81, name: 'State & events', blurb: 'events, state, and changing it without mutating' },
+  { from: 161, name: 'Async & data', blurb: 'fetch, loading, errors, races' },
+  { from: 241, name: 'Hooks', blurb: 'the ones you rebuild in every project' },
+  { from: 301, name: 'Components', blurb: 'widgets, and the same widget one notch harder' },
+  { from: 421, name: 'JS toolbox', blurb: 'no React — closures, promises, data' },
+  { from: 501, name: 'Machine coding', blurb: 'interview-sized components' },
+  { from: 561, name: 'Hard', blurb: 'the ones that need a plan first' },
 ]
 
 const byName = {}
@@ -31,7 +36,7 @@ export const challenges = Object.values(byName)
       (f) => !f.includes('.test.') && f !== '/demo.jsx',
     )
     const doc = c.files[stub]
-    const level = Number(c.name.slice(0, 2))
+    const level = Number(c.name.match(/^\d+/))
     const spec = c.files[Object.keys(c.files).find((f) => f.includes('.test.'))]
     const tests = [...spec.matchAll(/^\s*(?:test|it)\(\s*(['"`])(.*?)\1/gm)].map(
       (m) => m[2],

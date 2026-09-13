@@ -15,7 +15,7 @@ const STATUSES = [
   ['done', 'Done'],
 ]
 
-const pad = (n) => String(n).padStart(2, '0')
+const pad = (n) => String(n).padStart(3, '0')
 
 function Rung({ challenge, index, isDone }) {
   const { name, level, title, summary, needsUi } = challenge
@@ -118,7 +118,7 @@ export default function Home() {
               react practice ladder
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Ninety reps. Hand-written, every one.
+              {challenges.length} reps. Hand-written, every one.
             </p>
           </div>
 

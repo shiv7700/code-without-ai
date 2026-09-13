@@ -1,6 +1,6 @@
 # React practice ladder — read this before helping
 
-This is a product Shivang built for himself and uses: ninety challenges, a
+This is a product Shivang built for himself and uses: a ladder of challenges, a
 browser runner, GitHub login, his code saved per challenge. Set up 2026-08-29.
 He codes with agents daily at work (TestMu AI), so this is the one place he
 still writes React by hand — syntax, hooks, all of it — without one.
@@ -59,7 +59,7 @@ src/challenges/NN-name/
 src/challenges.js  ← globs those folders in as raw strings. Title, topics, tier
                      and the test list all come from the files themselves.
 src/Challenge.jsx  ← the runner: Sandpack editor, spec list, tests, preview
-src/Home.jsx       ← the ladder — five tiers, searchable, progress per card
+src/Home.jsx       ← the ladder — eight sections, searchable, progress per card
 src/auth.jsx       ← GitHub OAuth, session gate in front of every route
 src/store.js       ← Supabase: one row per user per challenge, `code` + `passed`
 src/setupTests.js  ← `npm test` only. The browser runner has its own setup.
@@ -67,7 +67,7 @@ src/setupTests.js  ← `npm test` only. The browser runner has its own setup.
 
 ```bash
 npm run dev             # the app — write and run challenges in the browser
-npm run test:watch 04   # one challenge in the terminal, by folder-name substring
+npm run test:watch 030  # one challenge in the terminal, by folder-name substring
 npm test                # all of them
 ```
 
@@ -80,34 +80,26 @@ maps one onto the other). A change that helps one must not break the other.
 
 ## The ladder
 
-01 counter · 02 controlled-form · 03 filter-list · 04 use-toggle · 05 fetch-user ·
-06 use-interval · 07 todo-reducer · 08 theme-context · 09 memo-list · 10 tabs-compound ·
-11 use-local-storage · 12 use-outside-click · 13 modal-portal · 14 toast-system ·
-15 use-pagination · 16 data-table · 17 wizard · 18 optimistic-update ·
-19 use-undoable · 20 error-boundary
+105 challenges today, being filled out towards 500. Eight sections, by number:
 
-21 use-ref-focus · 22 char-counter · 23 star-rating · 24 use-debounced-value ·
-25 search-highlight · 26 sortable-list · 27 checkbox-group · 28 countdown ·
-29 use-clipboard · 30 accordion · 31 use-media-query · 32 tag-input ·
-33 password-strength · 34 use-event-listener · 35 load-more
+| Range | Section |
+|---|---|
+| 001–080 | Describing the UI — props, destructuring, children, conditionals, keys, purity |
+| 081–160 | State & events — handlers, `useState`, updater form, immutable updates |
+| 161–240 | Async & data — fetch, loading/error/empty, abort, races, retry |
+| 241–300 | Hooks — the ones you rebuild every project, and their closure traps |
+| 301–420 | Components — the widgets, and the same widget a notch harder |
+| 421–500 | JS toolbox — no React |
+| 501–560 | Machine coding |
+| 561–600 | Hard |
 
-**JS toolbox (no React).** 36 curry · 37 debounce · 38 throttle · 39 deep-clone ·
-40 deep-equal · 41 flatten · 42 promise-all · 43 promise-any · 44 promisify ·
-45 memoize · 46 event-emitter · 47 retry · 48 map-async-limit · 49 get-path ·
-50 classnames · 51 lru-cache · 52 group-by · 53 dedupe-requests ·
-54 immutable-set · 55 create-store
+**Numbers are three digits and deliberately sparse.** Each section owns a wide
+range and its folders sit spaced apart inside it, so a new challenge takes the
+gap next to the one it belongs beside. Nothing is ever renumbered — the Supabase
+rows are keyed on the folder name, so a rename orphans saved work.
 
-**Machine coding.** 56 traffic-light · 57 stopwatch · 58 image-carousel ·
-59 file-explorer · 60 transfer-list · 61 tic-tac-toe · 62 nested-checkboxes ·
-63 autocomplete · 64 infinite-scroll · 65 use-query · 66 progress-bars ·
-67 digital-clock · 68 use-step · 69 memory-game · 70 form-validation ·
-71 dropdown-menu · 72 poll-widget · 73 use-set · 74 calendar ·
-75 use-controllable-state
-
-**Hard.** 76 focus-trap · 77 server-table · 78 wordle · 79 selectable-grid ·
-80 virtual-list · 81 use-store · 82 nested-comments · 83 spreadsheet ·
-84 imperative-player · 85 use-machine · 86 cascading-select · 87 markdown-lite ·
-88 tic-tac-toe-n · 89 use-resizable · 90 use-router
+Growth goes into the low numbers first. The gap was never the hard end of the
+ladder; it was that 100-counter had nothing underneath it.
 
 Sections are derived from the level number in `src/challenges.js` (`TIERS`).
 Adding a folder is still all it takes — the tier follows from its number.
@@ -116,25 +108,26 @@ Progress is not a file. A challenge flips to solved in Supabase the moment its
 suite goes green in the browser, and the home screen reads that. Nothing to tick
 off by hand, and no list in the repo to keep in sync.
 
-All 782 tests were verified passable by reference solutions before the stubs went
-back in. If something looks unsolvable, it is far more likely a misread of the
-doc comment than a broken test.
+All 865 tests were verified passable by reference solutions before the stubs went
+back in. **That is the bar for every new challenge too:** write the spec, write a
+reference solution, watch it go green, then put the stub back. A spec that has
+never passed is not a spec.
 
-Fourteen tests pass against an empty stub — they are negative assertions
+24 tests pass against an empty stub — they are negative assertions
 (`renders nothing when closed` and similar). Not a bug, and not progress either.
 
 `src/setupTests.js` replaces Node 25's stub `localStorage` global with a real
 in-memory Storage. Node's version has no `clear`/`key`/`length` and shadows
-jsdom's, which breaks challenge 11. Do not remove it.
+jsdom's, which breaks 260-use-local-storage. Do not remove it.
 
 ## What he is actually working on
 
 Keeping the syntax in his fingers is why the app exists at all — but the thing
 he actually gets wrong is **spotting which code runs once versus on every
-render or call** — closure layers, stale closures, effect cleanup. Challenges 05,
-06, 08 and 09 all aim at exactly that, and 36–38, 45, 48, 75, 84 and 89 are the
-same idea in plain JS or with a ref holding the latest value. Before this repo
-he solved `debounce` and `useDebouncedCallback` in
+render or call** — closure layers, stale closures, effect cleanup. Challenges 200,
+255, 140 and 150 aim at exactly that, and 433, 436, 457, 466, 558, 581 and 591
+are the same idea in plain JS or with a ref holding the latest value. Before this
+repo he solved `debounce` and `useDebouncedCallback` in
 `~/Documents/trash/indepentedmind/challenge/`, and the same confusion showed up
 in both.
 
