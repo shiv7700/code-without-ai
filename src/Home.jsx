@@ -24,10 +24,10 @@ function Rung({ challenge, index, isDone }) {
     <li className="rung" style={{ '--i': index }}>
       <Link
         to={`/${name}`}
-        className={`group grid grid-cols-[2.25rem_1fr_auto] items-baseline gap-4 border-l-2 py-1.5 pr-3 pl-4 transition-colors outline-none hover:bg-card focus-visible:bg-card ${
+        className={`group grid grid-cols-[2.25rem_1fr_auto] items-baseline gap-4 border-l-2 py-1.5 pr-3 pl-4 transition-colors outline-none hover:bg-muted focus-visible:bg-muted ${
           isDone
-            ? 'border-primary/50 hover:border-primary'
-            : 'border-border/40 hover:border-muted-foreground'
+            ? 'border-primary'
+            : 'border-transparent hover:border-muted-foreground'
         }`}
       >
         <span
@@ -230,7 +230,7 @@ export default function Home() {
 
       {visible.map((tier) => (
         <section key={tier.name} className="mb-9">
-          <div className="mb-1 flex items-baseline gap-3 border-b border-border pb-2 pl-4">
+          <div className="mb-2 flex items-baseline gap-3 pb-1 pl-1">
             <h2 className="font-mono text-[0.6875rem] tracking-[0.2em] uppercase">
               {tier.name}
             </h2>
@@ -243,7 +243,7 @@ export default function Home() {
             </span>
           </div>
 
-          <ul>
+          <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
             {tier.challenges.map((c) => (
               <Rung
                 key={c.name}
