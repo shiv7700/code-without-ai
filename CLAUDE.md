@@ -23,6 +23,13 @@ was found and fixed during setup, so it can happen — just surface it first.)
 Solutions are deliberately not in this repo. If he asks to compare after finishing
 a challenge, writing one out then is fine.
 
+## Comments
+
+**Two lines, and only when the code cannot say it itself.** Write the why — the
+non-obvious constraint, the reason for the odd choice. Never restate the code.
+If the explanation needs more than two lines, it belongs in the commit message
+or in your reply to him, not in the file.
+
 ## Layout
 
 ```

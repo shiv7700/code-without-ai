@@ -257,6 +257,20 @@ appearance, that is the one to go back and read about.
 - [ ] 89 use-resizable
 - [ ] 90 use-router
 
+## Later
+
+**Public shareable solution pages.** A read-only URL per solved challenge, so a
+solution can be linked to someone. Parked on 2026-09-13 while adding Supabase.
+
+Worth writing down because it is the one feature on the list that would change
+the stack: shareable pages want SEO and OG previews, which is the only real
+argument for moving off the Vite SPA to Next.js. Everything else — GitHub login,
+saving code and progress — the SPA does fine with `supabase-js` and RLS. So if
+this gets built, revisit the Next.js question then, not before.
+
+Needs a public-read RLS policy alongside the owner-only one, and a per-row
+`is_public` flag. Nothing in the current schema blocks it.
+
 ## Notes
 
 Every challenge has been verified solvable — reference solutions pass all 782
