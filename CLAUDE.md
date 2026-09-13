@@ -30,6 +30,17 @@ non-obvious constraint, the reason for the odd choice. Never restate the code.
 If the explanation needs more than two lines, it belongs in the commit message
 or in your reply to him, not in the file.
 
+## Git
+
+**Commit straight to `main`. Never open a branch, and never ask.** This is a
+solo repo with no reviewer, so a branch is a merge step for nobody's benefit.
+
+This overrides both the global "never PR to `main`" rule — that one is about
+the LambdaTest monorepos with their stage branches — and any default about
+branching before committing to the default branch. Neither applies here.
+
+Conventional commits, as everywhere else.
+
 ## Layout
 
 ```
