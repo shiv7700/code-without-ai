@@ -1,8 +1,12 @@
-# React practice repo — read this before helping
+# React practice ladder — read this before helping
 
-This is not a product. It is Shivang's weekly practice ladder, set up 2026-08-29.
-He codes with agents daily at work (TestMu AI) and is deliberately keeping the
-hand-writing muscle alive. **The rep is the deliverable, not the working code.**
+This is a product Shivang built for himself and uses: ninety challenges, a
+browser runner, GitHub login, his code saved per challenge. Set up 2026-08-29.
+He codes with agents daily at work (TestMu AI), so this is the one place he
+still writes React by hand — syntax, hooks, all of it — without one.
+
+**The rep is the deliverable, not the working code.** That is why the app
+exists, and why you still do not write the solutions in it.
 
 ## Your job here
 
@@ -22,6 +26,10 @@ was found and fixed during setup, so it can happen — just surface it first.)
 
 Solutions are deliberately not in this repo. If he asks to compare after finishing
 a challenge, writing one out then is fine.
+
+**The app around the challenges is normal work.** `Challenge.jsx`, `Home.jsx`,
+auth, the store, the styling — write that yourself, fully, like any other repo.
+Hints-only applies to `src/challenges/**` and nothing else.
 
 ## Comments
 
@@ -47,17 +55,28 @@ Conventional commits, as everywhere else.
 src/challenges/NN-name/
   Thing.jsx        ← stub, rules in the doc comment. He writes this.
   Thing.test.jsx   ← the spec. Off limits.
-src/App.jsx        ← playground for `npm run dev`
-src/setupTests.js  ← jest-dom matchers + auto cleanup
+  demo.jsx         ← optional; mounts the stub with props for the preview pane
+src/challenges.js  ← globs those folders in as raw strings. Title, topics, tier
+                     and the test list all come from the files themselves.
+src/Challenge.jsx  ← the runner: Sandpack editor, spec list, tests, preview
+src/Home.jsx       ← the ladder — five tiers, searchable, progress per card
+src/auth.jsx       ← GitHub OAuth, session gate in front of every route
+src/store.js       ← Supabase: one row per user per challenge, `code` + `passed`
+src/setupTests.js  ← `npm test` only. The browser runner has its own setup.
 ```
 
 ```bash
-npm run test:watch 04   # one challenge, by folder-name substring
+npm run dev             # the app — write and run challenges in the browser
+npm run test:watch 04   # one challenge in the terminal, by folder-name substring
 npm test                # all of them
-npm run dev             # browser playground
 ```
 
-Vitest + Testing Library + jsdom. Config lives in `vite.config.js` under `test`.
+Needs `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in `.env.local`,
+or it throws on boot. Deployed on Vercel.
+
+**The same spec files run in two places** — Vitest + jsdom locally, Jest inside
+Sandpack in the browser (`Challenge.jsx` ships a virtual `vitest` module that
+maps one onto the other). A change that helps one must not break the other.
 
 ## The ladder
 
@@ -93,7 +112,9 @@ Vitest + Testing Library + jsdom. Config lives in `vite.config.js` under `test`.
 Sections are derived from the level number in `src/challenges.js` (`TIERS`).
 Adding a folder is still all it takes — the tier follows from its number.
 
-Progress checkboxes are in `README.md` — tick them off as he finishes.
+Progress is not a file. A challenge flips to solved in Supabase the moment its
+suite goes green in the browser, and the home screen reads that. Nothing to tick
+off by hand, and no list in the repo to keep in sync.
 
 All 782 tests were verified passable by reference solutions before the stubs went
 back in. If something looks unsolvable, it is far more likely a misread of the
@@ -108,7 +129,8 @@ jsdom's, which breaks challenge 11. Do not remove it.
 
 ## What he is actually working on
 
-His gap is not syntax. It is **spotting which code runs once versus on every
+Keeping the syntax in his fingers is why the app exists at all — but the thing
+he actually gets wrong is **spotting which code runs once versus on every
 render or call** — closure layers, stale closures, effect cleanup. Challenges 05,
 06, 08 and 09 all aim at exactly that, and 36–38, 45, 48, 75, 84 and 89 are the
 same idea in plain JS or with a ref holding the latest value. Before this repo

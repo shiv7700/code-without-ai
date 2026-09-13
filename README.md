@@ -1,21 +1,28 @@
-# React practice
+# React practice ladder
 
-Weekly reps so hand-writing React stays in the fingers.
+Ninety challenges and somewhere to write them, so hand-writing React stays in
+the fingers. Built for one user. No AI in the loop — that is the whole point.
 
 ## How to use it
 
-Pick the next unfinished challenge. Open the stub, read the rules in the doc
-comment, write the code yourself. Run the tests until they are green.
+Sign in with GitHub, pick a challenge, write it in the editor, run the spec.
+Your code and what you have solved are saved as you go, so the ladder follows
+you to whatever machine you sit down at.
 
-Ninety challenges in five sections, easiest first. Work down the list, or jump
-to whichever section you need — 36–55 need no React at all, so they are the
-ones to do on a train.
+Each challenge is a stub with its rules in the doc comment and a spec beside it.
+Read the rules, write the code, run the tests until they are green. Five
+sections, easiest first — work down, or jump to what you need. 36–55 need no
+React at all, so they are the ones to do on a train.
 
 ```bash
-npm run test:watch 04     # watch one challenge (matches the folder name)
-npm test                  # run everything
-npm run dev               # play with it in the browser (src/App.jsx)
+npm run dev               # the app
+npm run test:watch 04     # or run one challenge in the terminal, by folder name
+npm test                  # everything
 ```
+
+`npm run dev` wants `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in
+`.env.local` — it says so rather than failing later. The terminal runner needs
+neither.
 
 ## Rules
 
@@ -166,96 +173,9 @@ appearance, that is the one to go back and read about.
 
 ## Progress
 
-- [ ] 01 counter
-- [ ] 02 controlled-form
-- [ ] 03 filter-list
-- [ ] 04 use-toggle
-- [ ] 05 fetch-user
-- [ ] 06 use-interval
-- [ ] 07 todo-reducer
-- [ ] 08 theme-context
-- [ ] 09 memo-list
-- [ ] 10 tabs-compound
-- [ ] 11 use-local-storage
-- [ ] 12 use-outside-click
-- [ ] 13 modal-portal
-- [ ] 14 toast-system
-- [ ] 15 use-pagination
-- [ ] 16 data-table
-- [ ] 17 wizard
-- [ ] 18 optimistic-update
-- [ ] 19 use-undoable
-- [ ] 20 error-boundary
-- [ ] 21 use-ref-focus
-- [ ] 22 char-counter
-- [ ] 23 star-rating
-- [ ] 24 use-debounced-value
-- [ ] 25 search-highlight
-- [ ] 26 sortable-list
-- [ ] 27 checkbox-group
-- [ ] 28 countdown
-- [ ] 29 use-clipboard
-- [ ] 30 accordion
-- [ ] 31 use-media-query
-- [ ] 32 tag-input
-- [ ] 33 password-strength
-- [ ] 34 use-event-listener
-- [ ] 35 load-more
-- [ ] 36 curry
-- [ ] 37 debounce
-- [ ] 38 throttle
-- [ ] 39 deep-clone
-- [ ] 40 deep-equal
-- [ ] 41 flatten
-- [ ] 42 promise-all
-- [ ] 43 promise-any
-- [ ] 44 promisify
-- [ ] 45 memoize
-- [ ] 46 event-emitter
-- [ ] 47 retry
-- [ ] 48 map-async-limit
-- [ ] 49 get-path
-- [ ] 50 classnames
-- [ ] 51 lru-cache
-- [ ] 52 group-by
-- [ ] 53 dedupe-requests
-- [ ] 54 immutable-set
-- [ ] 55 create-store
-- [ ] 56 traffic-light
-- [ ] 57 stopwatch
-- [ ] 58 image-carousel
-- [ ] 59 file-explorer
-- [ ] 60 transfer-list
-- [ ] 61 tic-tac-toe
-- [ ] 62 nested-checkboxes
-- [ ] 63 autocomplete
-- [ ] 64 infinite-scroll
-- [ ] 65 use-query
-- [ ] 66 progress-bars
-- [ ] 67 digital-clock
-- [ ] 68 use-step
-- [ ] 69 memory-game
-- [ ] 70 form-validation
-- [ ] 71 dropdown-menu
-- [ ] 72 poll-widget
-- [ ] 73 use-set
-- [ ] 74 calendar
-- [ ] 75 use-controllable-state
-- [ ] 76 focus-trap
-- [ ] 77 server-table
-- [ ] 78 wordle
-- [ ] 79 selectable-grid
-- [ ] 80 virtual-list
-- [ ] 81 use-store
-- [ ] 82 nested-comments
-- [ ] 83 spreadsheet
-- [ ] 84 imperative-player
-- [ ] 85 use-machine
-- [ ] 86 cascading-select
-- [ ] 87 markdown-lite
-- [ ] 88 tic-tac-toe-n
-- [ ] 89 use-resizable
-- [ ] 90 use-router
+Kept in the app, not in this file. A challenge counts as solved the moment its
+spec goes green in the browser, and the home screen shows where you are in each
+section. Nothing to tick off by hand.
 
 ## Later
 
@@ -271,6 +191,17 @@ this gets built, revisit the Next.js question then, not before.
 Needs a public-read RLS policy alongside the owner-only one, and a per-row
 `is_public` flag. Nothing in the current schema blocks it.
 
+## How it is built
+
+Vite SPA on React 19, Tailwind and shadcn/ui, deployed to Vercel. The editor and
+runner are Sandpack. GitHub OAuth and one Supabase table — a row per user per
+challenge holding the code and whether it passes — keep the work off any one
+laptop; RLS keeps each user to their own rows.
+
+Adding a challenge is still just adding a folder. `src/challenges.js` globs them
+in and reads the title, topics, section and spec list out of the files
+themselves, so there is no list anywhere to update.
+
 ## Notes
 
 Every challenge has been verified solvable — reference solutions pass all 782
@@ -280,7 +211,10 @@ Fourteen tests pass against an empty stub (`renders nothing when closed` and
 friends). They are negative assertions, so nothing can make them fail early —
 ignore them as a progress signal.
 
-Test setup lives in `vite.config.js` and `src/setupTests.js`. Vitest +
-Testing Library + jsdom. `setupTests.js` also replaces Node 25's stub
-`localStorage` global with a real in-memory one — without that, challenge 11
-cannot work.
+The same spec files run in two places. In the terminal it is Vitest + Testing
+Library + jsdom, set up in `vite.config.js` and `src/setupTests.js`; in the
+browser it is Jest inside Sandpack, with a virtual `vitest` module mapping one
+onto the other. A spec has to stay green in both.
+
+`setupTests.js` also replaces Node 25's stub `localStorage` global with a real
+in-memory one — without that, challenge 11 cannot work.
