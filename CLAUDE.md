@@ -87,42 +87,29 @@ maps one onto the other). A change that helps one must not break the other.
 Describing the UI · State & events · Async & data · Hooks · Components ·
 JS toolbox · Machine coding · Hard
 
-**A folder is named after what you build — `list-keys`, `use-router` — and
-nothing else.** The name is an identity: Supabase keys the saved code on it, so
-renaming a folder orphans his work. Never rename one.
+**`project-context.md` has the architecture** — how a challenge is added, how
+saved code is loaded and written back, why the same spec runs under two test
+runners. Read it before changing anything structural. What matters here:
 
-**Order lives in `src/ladder.js` and nowhere else.** Sections, each an ordered
-list of folder names. Rearrange by moving a line, delete by removing one, insert
-anywhere. The number on a card is that position, worked out at load — so
-inserting at the top shifts every number below it and breaks nothing, because
-nothing is stored against a number.
+**Never rename a challenge folder.** The name is its identity: Supabase keys the
+saved code on it and the URL routes by it. To move a challenge, move its line in
+`src/ladder.js` — that file owns order and sections, and the number on a card is
+just a position worked out at load. Nothing is stored against a number.
 
-A folder missing from `ladder.js` still shows up, in an Unsorted section at the
-bottom. `src/challenges.test.js` fails on it, and on a slug in the ladder with
-no folder behind it.
+**Every new spec gets a reference solution first.** Write the spec, write a
+solution, watch it go green, then put the stub back. A spec that has never
+passed is not a spec. All 865 current tests were verified that way, so if
+something looks unsolvable it is far more likely a misread of the doc comment
+than a broken test.
+
+24 tests pass against an empty stub — negative assertions (`renders nothing when
+closed` and similar). Not a bug, and not progress either.
+
+Progress is not a file. A challenge flips to solved in Supabase the moment its
+suite goes green in the browser, and the home screen reads that.
 
 Growth goes into the front of the list first. The gap was never the hard end of
 the ladder; it was that `counter` had nothing underneath it.
-
-Each stub's doc comment is the other half: first line is the summary, then
-`Topics:` and two `Read:` links. There is no level number in it — that was a
-second copy of the position, and it went stale the first time anything moved.
-
-Progress is not a file. A challenge flips to solved in Supabase the moment its
-suite goes green in the browser, and the home screen reads that. Nothing to tick
-off by hand, and no list in the repo to keep in sync.
-
-All 865 tests were verified passable by reference solutions before the stubs went
-back in. **That is the bar for every new challenge too:** write the spec, write a
-reference solution, watch it go green, then put the stub back. A spec that has
-never passed is not a spec.
-
-24 tests pass against an empty stub — they are negative assertions
-(`renders nothing when closed` and similar). Not a bug, and not progress either.
-
-`src/setupTests.js` replaces Node 25's stub `localStorage` global with a real
-in-memory Storage. Node's version has no `clear`/`key`/`length` and shadows
-jsdom's, which breaks `use-local-storage`. Do not remove it.
 
 ## What he is actually working on
 

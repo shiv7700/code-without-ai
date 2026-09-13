@@ -117,8 +117,8 @@ challenge holding the code and whether it passes — keep the work off any one
 laptop; RLS keeps each user to their own rows.
 
 A challenge is a folder plus one line in `src/ladder.js` saying where it sits.
-Everything else — title, summary, topics, what the spec checks — is read out of
-the files themselves. `src/challenges.test.js` fails if those two ever disagree.
+Everything else is read out of the files themselves. **`project-context.md`**
+has the rest: the data flow, the invariants, and the two test runners.
 
 ## Notes
 

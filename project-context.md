@@ -1,0 +1,206 @@
+# How this thing is put together
+
+Written for whoever touches it next, including me in six months. CLAUDE.md says
+what to do; this says how it works.
+
+## The one idea
+
+Three things used to be the same string, and they change for different reasons:
+
+| | What it is | When it changes |
+|---|---|---|
+| **Identity** | which challenge this is | never |
+| **Order** | where it sits on the ladder | whenever the ladder is rearranged |
+| **Position** | the number you see, 1, 2, 3 | every time anything above it moves |
+
+So they are three separate things now:
+
+```
+identity → the folder name          src/challenges/list-keys/
+order    → a line in a list         src/ladder.js
+position → computed at load         challenges.js, ++level while walking
+```
+
+**The rule that falls out of it:** whatever is stored must never change, and
+whatever changes must never be stored. The folder name is stored — Supabase
+saves your code under it, and it is the URL — so it is never renamed. The
+position is stored nowhere, so it is free to move.
+
+## Adding a challenge
+
+Two steps.
+
+**1. A folder, named after the thing you build.** No number, no prefix.
+
+```
+src/challenges/use-throttle/
+  useThrottle.js        the stub — doc comment, then a body that does nothing
+  useThrottle.test.jsx  the spec
+  demo.jsx              optional, only if the preview needs props
+```
+
+The stub's doc comment is the whole brief, and it is parsed:
+
+```js
+/**
+ * Effect cleanup + the stale closure (Dan Abramov's classic)   ← summary
+ *
+ * Topics: useRef · effect cleanup · stale closure              ← topics, split on ·
+ * Read:   https://react.dev/reference/react/useRef
+ * Read:   https://react.dev/learn/separating-events-from-effects
+ *
+ * Rules:
+ *  1. ...
+ */
+```
+
+First line after `/**` is the summary. `Topics:` becomes the tag list. There is
+no level number in here — that used to be a second copy of the position, and it
+went stale the first time anything moved.
+
+**2. One line in `src/ladder.js`,** in the section it belongs to, at the spot it
+belongs at:
+
+```js
+{
+  name: 'Hooks',
+  blurb: 'the ones you rebuild in every project',
+  challenges: ['use-toggle', 'use-throttle', 'use-interval'],
+}
+```
+
+That is the entire ordering mechanism. Move a line to reorder. Move it to
+another array to change its section. Delete the line to drop it. Nothing is
+renamed, so nothing loses its saved code.
+
+Forget step 2 and the challenge still shows up, in an **Unsorted** section at
+the bottom — visible, not silently missing. `src/challenges.test.js` fails on it.
+
+### The bar for a new spec
+
+Write the spec, write a reference solution, watch it go green, **then** put the
+stub back. A spec that has never passed is not a spec. All 865 current tests
+were verified this way.
+
+## How a challenge reaches the screen
+
+```
+src/challenges/*/*            every file, as a raw string, at build time
+      ↓  import.meta.glob('./challenges/*/*.{js,jsx}', { query: '?raw', eager: true })
+byName['list-keys'].files     { '/ReorderableList.jsx': '…', '/ReorderableList.test.jsx': '…' }
+      ↓  walk LADDER in order, ++level per entry
+challenges[]                  { name, title, summary, topics, tests, level, tier, files, … }
+      ↓
+Home.jsx                      grouped by tier, searchable
+Challenge.jsx                 one challenge, in Sandpack
+```
+
+`tests` is pulled straight out of the spec file by regex — every `test('…')`
+title — so the challenge page can list what you are aiming at before you have
+run anything.
+
+## How your code is loaded and saved
+
+One Supabase table, `solutions`. One row per user per challenge:
+
+```
+user_id      uuid        → auth.users
+challenge    text        → the folder name. 'list-keys'
+code         text        → whatever is in the editor
+passed       boolean     → did the whole suite go green
+updated_at   timestamptz
+             unique (user_id, challenge)
+```
+
+RLS keeps each user to their own rows, which is why nothing in `store.js`
+filters by user on read.
+
+**Opening a challenge** — `Challenge.jsx` holds `saved` as `undefined` until the
+row lands, and renders a spinner. Sandpack cannot be handed the stub first and
+the real code second: that is a file change, and it re-bundles.
+
+```
+loadSolution('list-keys')  →  { code, passed } | null
+files[stub] = saved?.code || files[stub]       ← saved code, else the stub
+```
+
+**Typing** — `SaveCode` debounces 1s, then upserts. It skips a write when the
+code matches the stub (trimmed), so a stray newline cannot overwrite a real
+solution with an empty one. That has already cost one.
+
+**Running the tests** — `SandpackTests` calls `onComplete` with every spec
+result. `passed` is true only when tests actually ran and all of them pass:
+
+```js
+saveDone(name, ran.length > 0 && ran.every((t) => t.status === 'pass'))
+```
+
+That is the only thing that marks a challenge solved. The home screen reads it
+back via `loadProgress()`, which fetches names only — not ninety blobs of code.
+
+**Reset** writes the stub *and* `passed: false` explicitly, because `SaveCode`
+ignores a file that matches the stub and would otherwise leave the old row.
+
+## The same spec runs in two places
+
+| | Terminal | Browser |
+|---|---|---|
+| runner | Vitest | Jest, inside Sandpack |
+| DOM | jsdom | a real iframe |
+| setup | `vite.config.js` + `src/setupTests.js` | `VITEST_SHIM` in `Challenge.jsx` |
+
+The specs `import { test, expect, vi } from 'vitest'`, which Sandpack has no
+idea about. A virtual `/node_modules/vitest` maps those onto Jest's globals, so
+the spec files never need to know where they are running. **A change that helps
+one must not break the other.**
+
+Two things in that shim are load-bearing and non-obvious:
+
+- Chrome throttles `setTimeout` to roughly 1/s in the hidden test iframe, and
+  user-event awaits one per click. Correct answers were blowing the 5s timeout,
+  so zero-delay timeouts get routed through a `MessageChannel` instead.
+- `@testing-library/user-event` is pinned to 14.6.1. 14.6.2+ hangs on
+  click/type until the Jest timeout.
+
+`setupTests.js` replaces Node 25's stub `localStorage` global with a real
+in-memory Storage — Node's has no `clear`/`key`/`length` and shadows jsdom's,
+which breaks `use-local-storage`.
+
+## The preview pane
+
+Only a couple of folders ship a `demo.jsx`. Everything else gets `autoMount()`,
+which renders the default export bare inside an error boundary. Components that
+need props hit the boundary and get told to add a `demo.jsx` — better than a
+blank pane. A `.js` stub is a hook or a plain function, so it has no preview at
+all and the toggle says "no ui" rather than leaving a gap.
+
+The preview client is mounted only while visible. Kept alive but hidden, the
+iframe is `display: none`, Chrome throttles it, and it falls an edit behind.
+
+## Invariants, and what enforces them
+
+`src/challenges.test.js` — not a challenge, edit it freely:
+
+- every slug in `ladder.js` has a folder behind it
+- every folder is placed on the ladder (nothing stuck in Unsorted)
+- levels are 1, 2, 3 with no gaps and no duplicates
+- every challenge has a summary, topics, and at least one test
+
+Not enforced, but true:
+
+- **the folder name is the URL and the database key.** `/list-keys` routes by it,
+  `solutions.challenge` stores it. Renaming a folder orphans saved work and
+  breaks every link to it. If it ever has to happen:
+  `update solutions set challenge = 'new' where challenge = 'old';`
+- 24 of the 865 tests pass against an empty stub. They are negative assertions
+  (`renders nothing when closed` and friends) — not a bug, and not progress.
+
+## Stack
+
+Vite SPA, React 19, Tailwind v4, shadcn/ui on Base UI, react-router, Sandpack
+for the editor and runner, Supabase for auth and storage, Vercel for hosting
+(`vercel.json` rewrites everything to `index.html` so deep links work).
+
+Needs `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in `.env.local`.
+`supabase.js` throws on boot without them rather than failing as a confusing
+401 halfway through a save.
