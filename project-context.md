@@ -114,9 +114,9 @@ out-of-order and unmount cases at all. Where a challenge needs a delay, a tick
 or a clock, that is a prop too.
 
 The reason to inject rather than fake is that it cannot go wrong in either
-runner. **Whether Sandpack's Jest supports `vi.useFakeTimers` has not been
-tested** — see the open question below — and injecting sidesteps the whole
-subject. `vi.mock` is not used anywhere and should stay that way.
+runner. Fake timers do now work in the browser, but only because the shim
+carries a clock of its own — see below. Injecting needs nothing. `vi.mock` is
+not used anywhere and should stay that way.
 
 ### Working rhythm
 
@@ -190,20 +190,21 @@ ignores a file that matches the stub and would otherwise leave the old row.
 |---|---|---|
 | runner | Vitest | Jest, inside Sandpack |
 | DOM | jsdom | a real iframe |
-| setup | `vite.config.js` + `src/setupTests.js` | `VITEST_SHIM` in `Challenge.jsx` |
+| setup | `vite.config.js` + `src/setupTests.js` | `src/sandpackVitestShim.js` |
 
 The specs `import { test, expect, vi } from 'vitest'`, which Sandpack has no
 idea about. A virtual `/node_modules/vitest` maps those onto Jest's globals, so
 the spec files never need to know where they are running. **A change that helps
 one must not break the other.**
 
-Two things in that shim are load-bearing and non-obvious:
+Three things in that shim are load-bearing and non-obvious:
 
 - Chrome throttles `setTimeout` to roughly 1/s in the hidden test iframe, and
   user-event awaits one per click. Correct answers were blowing the 5s timeout,
   so zero-delay timeouts get routed through a `MessageChannel` instead.
 - `@testing-library/user-event` is pinned to 14.6.1. 14.6.2+ hangs on
   click/type until the Jest timeout.
+- The fake-timer clock, which Sandpack's Jest does not provide. See below.
 
 `setupTests.js` replaces Node 25's stub `localStorage` global with a real
 in-memory Storage — Node's has no `clear`/`key`/`length` and shadows jsdom's,
@@ -238,22 +239,41 @@ Not enforced, but true:
 - 27 of the tests pass against an empty stub. They are negative assertions
   (`renders nothing when closed` and friends) — not a bug, and not progress.
 
-## Open question: fake timers in the browser runner
+## Fake timers, and why the shim has a clock in it
 
 Fourteen of the older specs call `vi.useFakeTimers()` — `debounce`, `throttle`,
 `retry`, `use-interval`, `use-debounced-value`, `use-clipboard`, `countdown`,
 `digital-clock`, `stopwatch`, `traffic-light`, `progress-bars`, `memory-game`,
 `toast-system`, `imperative-player`.
 
-They pass under Vitest. **Nobody has checked whether they pass inside Sandpack**,
-which is a different runner, and the shim already has to reroute `setTimeout` to
-dodge Chrome's throttling in a hidden iframe. Either they work and this is
-nothing, or those fourteen cannot be solved in the browser at all — which is the
-only place the challenges are actually used.
+Sandpack's Jest answers to `useFakeTimers()` and then has nothing to move them
+with: `advanceTimersByTime` is not on its `jest` object. So those fourteen
+passed in the terminal and were **unsolvable in the browser**, which is the only
+place the challenges are actually used. The failure was quiet — the spec got as
+far as calling the stub, so it looked like an ordinary red run.
 
-Checking it is one manual run: open one of them, paste a known-good solution,
-press Run. Until someone does, do not assume either way, and keep writing new
-specs with injected time.
+`src/sandpackVitestShim.js` now carries its own clock: a queue for
+`setTimeout`/`setInterval`, a `Date` subclass so `Date.now()` and a bare
+`new Date()` read the fake time, and `advanceTimersByTime`,
+`advanceTimersByTimeAsync`, `runAllTimers`, `setSystemTime`, `stubGlobal` and
+`unstubAllGlobals` on top. It installs over whatever Jest did and restores the
+real ones on `useRealTimers()`.
+
+Two things about it worth knowing:
+
+- It layers on the `MessageChannel` patch above, not around it. Installing
+  captures whatever `setTimeout` is current and puts it back on uninstall, so
+  the throttle workaround survives.
+- Advancing recomputes the next due timer every turn, because a callback may
+  schedule another one inside the same window. `MAX_TURNS` is the backstop
+  against a timer that reschedules itself at the same instant forever.
+
+New specs should still inject their time rather than fake it. The clock makes
+the old ones work; it does not make faking the better choice.
+
+**This is the class of bug to watch for.** A spec green under Vitest proves
+nothing about Sandpack. The only real check is opening the challenge in the app
+and pressing Run.
 
 ## Stack
 

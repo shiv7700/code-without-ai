@@ -13,6 +13,7 @@ import {
 } from '@codesandbox/sandpack-react'
 import { toast } from 'sonner'
 import { loadSolution, saveCode, saveDone, saveSolution } from './store'
+import { SHIM_FILES } from './sandpackVitestShim'
 import { sandpackThemes } from './sandpackTheme'
 import { useTheme } from './theme'
 import { ThemeToggle } from './ThemeToggle'
@@ -30,54 +31,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-
-// The specs `import { test, expect, vi } from 'vitest'`, but Sandpack runs Jest.
-// A virtual node_modules/vitest maps one onto the other so the spec files stay
-// untouched. jest-dom registers its matchers on import.
-const VITEST_SHIM = `
-import '@testing-library/jest-dom'
-
-// Chrome throttles setTimeout to ~1/s in Sandpack's hidden test iframe, and
-// user-event awaits one per click — so a correct answer blew the 5s timeout.
-if (!globalThis.__unthrottled) {
-  globalThis.__unthrottled = true
-  const nativeSetTimeout = globalThis.setTimeout
-  const nativeClearTimeout = globalThis.clearTimeout
-  const cancelled = new Set()
-  let nextId = -1
-
-  globalThis.setTimeout = function (fn, ms, ...args) {
-    if (typeof fn !== 'function' || ms > 0) return nativeSetTimeout(fn, ms, ...args)
-    const id = nextId--
-    const { port1, port2 } = new MessageChannel()
-    port1.onmessage = () => {
-      port1.close()
-      if (!cancelled.delete(id)) fn(...args)
-    }
-    port2.postMessage(0)
-    return id
-  }
-
-  globalThis.clearTimeout = (id) =>
-    typeof id === 'number' && id < 0 ? cancelled.add(id) : nativeClearTimeout(id)
-}
-
-export const describe = globalThis.describe
-export const test = globalThis.test
-export const it = globalThis.it
-export const expect = globalThis.expect
-export const beforeEach = globalThis.beforeEach
-export const afterEach = globalThis.afterEach
-export const vi = globalThis.jest
-`
-
-const SHIM_FILES = {
-  '/node_modules/vitest/package.json': JSON.stringify({
-    name: 'vitest',
-    main: 'index.js',
-  }),
-  '/node_modules/vitest/index.js': VITEST_SHIM,
-}
 
 const DEPS = {
   '@testing-library/react': '^16.0.0',
