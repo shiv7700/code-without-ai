@@ -110,13 +110,6 @@ than a broken test.
 (`renders nothing when closed` and similar). Not a bug, not progress. The other
 22 green tests in a full run are the app's own suites, not challenges.
 
-**`userEvent.hover` does not work in the browser runner.** React's synthetic
-`onMouseEnter` never fires across Sandpack's two DOM realms, though every DOM
-event does reach the element. Four specs depend on it — `tooltip`,
-`star-rating`, `submenu-hover-delay`, `toast-pause-on-hover` — and they pass in
-the terminal. `npm run check` prints it on every run; project-context.md has the
-evidence and everything already tried.
-
 Progress is not a file. A challenge flips to solved in Supabase the moment its
 suite goes green in the browser, and the home screen reads that.
 

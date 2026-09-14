@@ -29,7 +29,7 @@ const RUNNER =
 // — pointerover, mouseover, mouseenter, the lot — but React's synthetic
 // onMouseEnter never fires, because its enter/leave plugin reasons about node
 // ownership and the nodes belong to the other realm. See project-context.md.
-const KNOWN_GAPS = ['user-event › hover and unhover']
+const KNOWN_GAPS = []
 
 const ENV_ERROR = new RegExp(
   [

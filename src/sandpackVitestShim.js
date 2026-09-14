@@ -85,16 +85,24 @@ if (!globalThis.__unthrottled) {
     )
   }
 
-  // The direct API is a fresh session per call already — this only decides which
-  // document that session gets.
+  // One session per document, not one per call. user-event's own direct API
+  // keeps its pointer and keyboard state on the document for exactly this
+  // reason: unhover(el) has to know the pointer was over el, and a fresh
+  // session thinks it is still sitting on the body with nothing to leave.
+  const sessions = new WeakMap()
+  const sessionFor = (args) => {
+    const doc = documentFor(args)
+    if (!sessions.has(doc)) sessions.set(doc, realSetup({ document: doc }))
+    return sessions.get(doc)
+  }
+
   for (const name of [
     'click', 'dblClick', 'tripleClick', 'hover', 'unhover', 'tab', 'keyboard',
     'type', 'clear', 'selectOptions', 'deselectOptions', 'paste', 'pointer',
     'upload',
   ]) {
     if (typeof userEvent[name] !== 'function') continue
-    userEvent[name] = (...args) =>
-      realSetup({ document: documentFor(args) })[name](...args)
+    userEvent[name] = (...args) => sessionFor(args)[name](...args)
   }
 }
 

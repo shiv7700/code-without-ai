@@ -355,20 +355,14 @@ anything has rendered returns a proxy that binds on first use.
 
 Six of the seven now pass.
 
-### What is still broken: hover
+All seven pass. `npm run check` reports no known gaps.
 
-`hover` no longer throws, and every DOM event it dispatches reaches the element —
-`pointerover`, `pointerenter`, `mouseover`, `mouseenter`, `mousemove`, all
-confirmed with native listeners. What does not happen is React's synthetic
-`onMouseEnter`. React's enter/leave plugin reasons about node ownership and
-`relatedTarget`, and the nodes belong to the other realm.
-
-Four specs use it: `tooltip`, `star-rating`, `submenu-hover-delay`,
-`toast-pause-on-hover`. Their hover assertions cannot pass in the browser; they
-pass in the terminal with `npm run test:watch <name>`.
-
-`fireEvent.mouseOver` is unaffected, so a spec can be written against that
-instead where hovering is incidental rather than the point.
+One thing about the wrapper is load-bearing: it keeps **one session per
+document**, not one per call. user-event stores its pointer and keyboard state
+on the document for the same reason — `unhover(el)` has to know the pointer was
+over `el`, and a session built fresh for that call believes it is still on the
+body with nothing to leave. Building one per call passed every test except
+hover/unhover, which is a quiet way to be wrong.
 
 ## Fake timers, and why the shim has a clock in it
 
