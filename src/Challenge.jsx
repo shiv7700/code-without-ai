@@ -18,6 +18,7 @@ import { sandpackThemes } from './sandpackTheme'
 import { useTheme } from './theme'
 import { ThemeToggle } from './ThemeToggle'
 import { Hints } from './Hints'
+import { NoPaste } from './NoPaste'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -409,6 +410,7 @@ export default function Challenge({ challenge }) {
       </header>
 
       <SaveCode name={name} stubCode={files[stub]} />
+      <NoPaste />
 
       <SandpackLayout>
         <SandpackCodeEditor showLineNumbers style={{ height: PANE }} />

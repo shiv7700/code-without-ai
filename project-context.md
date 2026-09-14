@@ -157,6 +157,25 @@ point of the exercise to save five minutes.
 `src/challenges/list-keys/hints.md` and `src/challenges/use-interval/hints.md`
 are the reference for tone. `src/Hints.test.jsx` covers the reveal behaviour.
 
+## The editor refuses the clipboard
+
+Paste is the one route a solution can take into this app, so `src/NoPaste.jsx`
+blocks paste, copy and cut inside the editor and toasts one of a few lines
+instead. The rest of the page keeps its clipboard — the spec panel and the test
+output are not the exercise.
+
+Two things about it are deliberate and easy to undo by accident:
+
+- **Capture phase.** CodeMirror handles paste on its own content element and has
+  already inserted the text by the time a bubbling listener runs.
+- **A document listener scoped to `.cm-editor`, not a wrapper.** Sandpack sizes
+  the editor as a direct child of its layout row, and it styles itself at
+  runtime, so an element rendered around the editor cannot be checked for
+  breakage from here. Nothing is rendered; `NoPaste` sits beside `SaveCode` and
+  exists for its effect.
+
+`src/NoPaste.test.jsx` covers both, plus that the rest of the page is untouched.
+
 ## How a challenge reaches the screen
 
 ```
