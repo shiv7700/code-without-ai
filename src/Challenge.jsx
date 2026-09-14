@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import {
   SandpackProvider,
@@ -109,24 +109,31 @@ createRoot(document.getElementById('root')).render(<App />)
 // The button lives beside the results it produces, but hands stay on the
 // keyboard while solving — so the shortcut is the real control, and it is
 // printed on the button rather than left to be discovered.
-function RunTests() {
+function RunTests({ consoleRef }) {
   const { dispatch } = useSandpack()
 
+  // A run's logs have to answer for that run alone. Kept across runs, four
+  // lines read as eight and the pane stops meaning anything.
+  const run = useCallback(() => {
+    consoleRef.current?.reset()
+    dispatch({ type: 'run-all-tests' })
+  }, [consoleRef, dispatch])
+
   useEffect(() => {
-    const run = (e) => {
+    const onKey = (e) => {
       if (e.key !== 'Enter' || !(e.metaKey || e.ctrlKey)) return
       // Capture, or CodeMirror has already inserted the newline by the time
       // this runs and preventDefault has nothing left to prevent.
       e.preventDefault()
       e.stopPropagation()
-      dispatch({ type: 'run-all-tests' })
+      run()
     }
-    document.addEventListener('keydown', run, true)
-    return () => document.removeEventListener('keydown', run, true)
-  }, [dispatch])
+    document.addEventListener('keydown', onKey, true)
+    return () => document.removeEventListener('keydown', onKey, true)
+  }, [run])
 
   return (
-    <Button size="sm" onClick={() => dispatch({ type: 'run-all-tests' })}>
+    <Button size="sm" onClick={run}>
       Run tests
       <Kbd>{MOD}↵</Kbd>
     </Button>
@@ -293,6 +300,7 @@ export default function Challenge({ challenge }) {
   const [view, setView] = useState('tests')
   const [logs, setLogs] = useState(false)
   const [logsHeight, setLogsHeight] = useState(220)
+  const consoleRef = useRef(null)
   // Clamped here rather than in the handle: the drag reports a delta and has no
   // idea what is left above it.
   const resizeLogs = (by) =>
@@ -491,7 +499,7 @@ export default function Challenge({ challenge }) {
               <p className="font-mono text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">
                 the spec
               </p>
-              {view === 'tests' && <RunTests />}
+              {view === 'tests' && <RunTests consoleRef={consoleRef} />}
             </div>
             <ul className="space-y-1.5">
               {tests.map((t, i) => (
@@ -555,7 +563,7 @@ export default function Challenge({ challenge }) {
             <>
               <DragEdge onDrag={resizeLogs} />
               <div className="min-h-0 shrink-0" style={{ height: logsHeight }}>
-                <SandpackConsole showRestartButton={false} />
+                <SandpackConsole ref={consoleRef} showRestartButton={false} />
               </div>
             </>
           )}
