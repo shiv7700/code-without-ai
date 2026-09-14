@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import {
   SandpackProvider,
   SandpackLayout,
   SandpackCodeEditor,
+  SandpackConsole,
   SandpackPreview,
   SandpackTests,
   useActiveCode,
@@ -18,6 +19,8 @@ import { sandpackThemes } from './sandpackTheme'
 import { useTheme } from './theme'
 import { ThemeToggle } from './ThemeToggle'
 import { Hints } from './Hints'
+import { Jump } from './Jump'
+import { Kbd, MOD } from './Kbd'
 import { NoPaste } from './NoPaste'
 import {
   AlertDialog,
@@ -92,13 +95,16 @@ export default function App() {
 }
 `
 
-const MOD = navigator.platform.startsWith('Mac') ? '⌘' : 'Ctrl'
+// Sandpack's react template renders App inside StrictMode, which double-invokes
+// every render and re-runs every effect — so one console.log printed twice and
+// the console pane could not be believed. Correctness is the spec's job; the
+// preview only has to be honest about how many times something ran.
+const ENTRY = `import { createRoot } from 'react-dom/client'
+import './styles.css'
+import App from './App'
 
-const Kbd = ({ children }) => (
-  <kbd className="ml-2.5 rounded border border-current/30 px-1.5 py-0.5 font-mono text-[0.625rem] leading-none tracking-[0.15em] opacity-75">
-    {children}
-  </kbd>
-)
+createRoot(document.getElementById('root')).render(<App />)
+`
 
 // The button lives beside the results it produces, but hands stay on the
 // keyboard while solving — so the shortcut is the real control, and it is
@@ -246,9 +252,53 @@ function Booting() {
   )
 }
 
+// The console takes its height from whatever is above it, so the handle sits on
+// its top edge — drag up to grow, and the edge stays under the pointer.
+// Pointer capture is what makes it work at all: without it the first move over
+// the editor or the test iframe goes to that frame and the drag dies there.
+function DragEdge({ onDrag }) {
+  const last = useRef(null)
+
+  return (
+    <div
+      role="separator"
+      aria-orientation="horizontal"
+      aria-label="Resize the console"
+      tabIndex={0}
+      className="h-1.5 shrink-0 cursor-row-resize bg-border transition-colors hover:bg-primary/50 focus-visible:bg-primary/50 focus-visible:outline-none"
+      onPointerDown={(e) => {
+        e.currentTarget.setPointerCapture(e.pointerId)
+        last.current = e.clientY
+      }}
+      onPointerMove={(e) => {
+        if (last.current === null) return
+        onDrag(last.current - e.clientY)
+        last.current = e.clientY
+      }}
+      onPointerUp={() => {
+        last.current = null
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'ArrowUp') onDrag(24)
+        else if (e.key === 'ArrowDown') onDrag(-24)
+        else return
+        e.preventDefault()
+      }}
+    />
+  )
+}
+
 export default function Challenge({ challenge }) {
   const theme = useTheme()
   const [view, setView] = useState('tests')
+  const [logs, setLogs] = useState(false)
+  const [logsHeight, setLogsHeight] = useState(220)
+  // Clamped here rather than in the handle: the drag reports a delta and has no
+  // idea what is left above it.
+  const resizeLogs = (by) =>
+    setLogsHeight((h) =>
+      Math.min(Math.max(h + by, 72), window.innerHeight * 0.7),
+    )
   const [status, setStatus] = useState({})
   const { name, title, summary, level, stub, files, needsUi, tests, hints } =
     challenge
@@ -276,6 +326,7 @@ export default function Challenge({ challenge }) {
       [stub]: saved?.code || files[stub],
       ...SHIM_FILES,
       '/App.js': app,
+      '/index.js': ENTRY,
     }
   }, [files, saved, stub])
 
@@ -328,6 +379,8 @@ export default function Challenge({ challenge }) {
         >
           ← ladder
         </Button>
+
+        <Jump current={name} />
 
         <Separator orientation="vertical" className="h-5 data-vertical:self-center" />
 
@@ -394,6 +447,19 @@ export default function Challenge({ challenge }) {
               <Separator orientation="vertical" className="h-5 data-vertical:self-center" />
             </>
           )}
+
+          {/* Not in the Tests/Preview group: the console is not a third view,
+              it opens underneath whichever one is up — and a hook challenge,
+              which has no Preview toggle at all, needs it most. */}
+          <Button
+            variant="ghost"
+            size="sm"
+            aria-pressed={logs}
+            onClick={() => setLogs((was) => !was)}
+            className="aria-pressed:font-semibold aria-pressed:text-primary"
+          >
+            Console
+          </Button>
 
           <Hints title={title} hints={hints} />
 
@@ -480,6 +546,19 @@ export default function Challenge({ challenge }) {
             )}
             <Booting />
           </div>
+
+          {/* Not standalone, so it registers no client of its own and listens
+              to all of them — a log from the test run and one from the preview
+              both land here. resetOnPreviewRestart would wipe the test run's
+              logs every time the preview remounts, so it stays off. */}
+          {logs && (
+            <>
+              <DragEdge onDrag={resizeLogs} />
+              <div className="min-h-0 shrink-0" style={{ height: logsHeight }}>
+                <SandpackConsole showRestartButton={false} />
+              </div>
+            </>
+          )}
         </div>
       </SandpackLayout>
     </SandpackProvider>
