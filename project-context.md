@@ -96,7 +96,7 @@ the bottom — visible, not silently missing. `src/challenges.test.js` fails on 
 ### The bar for a new spec
 
 Write the spec, write a reference solution, watch it go green, **then** put the
-stub back. A spec that has never passed is not a spec. All 2,022 current tests
+stub back. A spec that has never passed is not a spec. All 2,005 challenge tests
 were verified this way.
 
 Mock nothing global. A challenge that needs data takes the async function as a
@@ -323,50 +323,52 @@ catches that class. Add to it whenever a spec starts using something new.
 `vi.<method>` a spec uses must exist on the shim's `vi`, and every non-relative
 import must be `vitest`, `react`, or a package in `DEPS`.
 
-## Known gap: user-event's ambient-document calls
-
-`npm run check` reports seven **known gaps** and still exits 0. They are real
-and they are not regressions, and they are printed on every run so nobody gets
-to forget them. A gate that is red every single time gets ignored within a week,
-and then the next real break is invisible too.
+## The two realms, and what the shim does about them
 
 Sandpack renders the DOM in one realm and runs the spec's globals in another.
 Probed from inside the runner:
 
 ```
-el.ownerDocument === globalThis.document     false
-el instanceof globalThis.Element             false
-el instanceof el.ownerDocument.defaultView.Element   true
-globalThis.document.defaultView === globalThis        true
+el.ownerDocument === globalThis.document              false
+el instanceof globalThis.Element                      false
+el instanceof el.ownerDocument.defaultView.Element    true
+globalThis.document.defaultView === globalThis         true
+globalThis.document reassignable                       no — not configurable
+that document reachable via parent/top/self/window     no
 ```
 
-Testing Library renders into one document; the spec's globals belong to
-another. user-event takes its window from whatever element it is handed, so
-`click(el)` and `type(el, …)` are fine. Everything that resolves the ambient
-globals instead is not:
+user-event takes its window from an element it is handed, so `click(el)` and
+`type(el, …)` always worked. Everything resolving the ambient globals did not:
+`setup()`, `selectOptions`, `dblClick` and `hover` threw *"The provided value is
+not of type 'Element'"*, and `keyboard()` and `tab()` **silently did nothing** —
+which is worse, because the test then fails on its assertion and reads exactly
+like an unfinished answer. That reached 34 keyboard calls, 17 setups, 13
+selectOptions, 5 tabs, and the 44 `toHaveFocus` assertions that depend on tab.
 
-| call | what happens |
-|---|---|
-| `userEvent.setup()`, `selectOptions`, `dblClick`, `hover`/`unhover` | throws `The provided value is not of type 'Element'` |
-| `userEvent.keyboard(…)` | silently does nothing |
-| `userEvent.tab()` | silently does nothing, focus stays on `<body>` |
+The fix is to hand user-event the right document; `setup({ document })` works.
+Finding it is the whole trick, since no global exposes it — but `render()`
+returns a container that knows, and both modules turned out to be writable. So
+the shim wraps `render` to remember the document, and wraps user-event's methods
+to pass it: an element in the arguments when there is one, the last thing
+rendered for `tab()` and `keyboard()`, which take none. `setup()` called before
+anything has rendered returns a proxy that binds on first use.
 
-Blast radius across the specs: 34 `keyboard`, 17 `setup`, 13 `selectOptions`,
-5 `tab`, 5 `hover`, 1 `dblClick`, and the 44 `toHaveFocus` assertions that
-depend on `tab`. **Those challenges cannot currently be solved in the browser.**
-They are solvable in the terminal with `npm run test:watch <name>`.
+Six of the seven now pass.
 
-Two fixes were tried and reverted, both here in the shim: aligning the global
-constructors to `document.defaultView` (no effect — as the probe shows, that
-view already *is* globalThis), and delegating `getComputedStyle` to each
-element's own realm (no effect — user-event does not resolve it through the
-global). The next thing to try is giving user-event the right document
-explicitly, which its API does support; the obstacle is that specs import the
-package directly, so it would mean shadowing it in Sandpack's virtual
-`node_modules` the way `vitest` already is.
+### What is still broken: hover
 
-Do not guess at a third patch without running `npm run check` against it. That
-command exists precisely so this stops being a matter of opinion.
+`hover` no longer throws, and every DOM event it dispatches reaches the element —
+`pointerover`, `pointerenter`, `mouseover`, `mouseenter`, `mousemove`, all
+confirmed with native listeners. What does not happen is React's synthetic
+`onMouseEnter`. React's enter/leave plugin reasons about node ownership and
+`relatedTarget`, and the nodes belong to the other realm.
+
+Four specs use it: `tooltip`, `star-rating`, `submenu-hover-delay`,
+`toast-pause-on-hover`. Their hover assertions cannot pass in the browser; they
+pass in the terminal with `npm run test:watch <name>`.
+
+`fireEvent.mouseOver` is unaffected, so a spec can be written against that
+instead where hovering is incidental rather than the point.
 
 ## Fake timers, and why the shim has a clock in it
 

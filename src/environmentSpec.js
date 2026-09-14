@@ -484,6 +484,9 @@ describe('@testing-library/user-event', () => {
   })
 })
 
+
+
+
 `
 
 export const ENVIRONMENT_SPEC_PATH = '/environment.test.js'

@@ -123,12 +123,12 @@ has the rest: the data flow, the invariants, and the two test runners.
 
 ## Notes
 
-Every challenge has been verified solvable — reference solutions pass all 2,022
-tests. They are deliberately not in this repo.
+Every challenge has been verified solvable — reference solutions pass all 2,005
+challenge tests. They are deliberately not in this repo.
 
-27 tests pass against an empty stub (`renders nothing when closed` and friends).
-They are negative assertions, so nothing can make them fail early — ignore them
-as a progress signal.
+29 of them pass against an empty stub (`renders nothing when closed` and
+friends). They are negative assertions, so nothing can make them fail early —
+ignore them as a progress signal.
 
 The same spec files run in two places. In the terminal it is Vitest + Testing
 Library + jsdom, set up in `vite.config.js` and `src/setupTests.js`; in the

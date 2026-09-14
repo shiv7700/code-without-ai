@@ -102,12 +102,20 @@ just a position worked out at load. Nothing is stored against a number.
 
 **Every new spec gets a reference solution first.** Write the spec, write a
 solution, watch it go green, then put the stub back. A spec that has never
-passed is not a spec. All 2,022 current tests were verified that way, so if
+passed is not a spec. All 2,005 challenge tests were verified that way, so if
 something looks unsolvable it is far more likely a misread of the doc comment
 than a broken test.
 
-27 tests pass against an empty stub — negative assertions (`renders nothing when
-closed` and similar). Not a bug, and not progress either.
+29 of the challenge tests pass against an empty stub — negative assertions
+(`renders nothing when closed` and similar). Not a bug, not progress. The other
+22 green tests in a full run are the app's own suites, not challenges.
+
+**`userEvent.hover` does not work in the browser runner.** React's synthetic
+`onMouseEnter` never fires across Sandpack's two DOM realms, though every DOM
+event does reach the element. Four specs depend on it — `tooltip`,
+`star-rating`, `submenu-hover-delay`, `toast-pause-on-hover` — and they pass in
+the terminal. `npm run check` prints it on every run; project-context.md has the
+evidence and everything already tried.
 
 Progress is not a file. A challenge flips to solved in Supabase the moment its
 suite goes green in the browser, and the home screen reads that.

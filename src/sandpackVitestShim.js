@@ -30,6 +30,74 @@ if (!globalThis.__unthrottled) {
     typeof id === 'number' && id < 0 ? cancelled.add(id) : nativeClearTimeout(id)
 }
 
+// Sandpack renders the DOM in one realm and runs the spec's globals in another:
+// \`el.ownerDocument !== globalThis.document\`, and the ambient one is an empty
+// page. user-event takes its window from an element it is handed, so click(el)
+// and type(el) were fine — but keyboard(), tab() and setup() resolved the
+// ambient document and typed into nothing, silently. Handing user-event the
+// right document fixes every one of them, so that is all this does.
+//
+// globalThis.document cannot be reassigned (the property is not configurable),
+// and the right document is reachable from no global — but Testing Library's
+// render() returns a container that knows it, and both modules are writable.
+{
+  const rtl = require('@testing-library/react')
+  const ueModule = require('@testing-library/user-event')
+  const userEvent = ueModule.default ?? ueModule
+
+  let rendered = null
+
+  const originalRender = rtl.render
+  rtl.render = (...args) => {
+    const result = originalRender(...args)
+    rendered = result?.container?.ownerDocument ?? rendered
+    return result
+  }
+
+  // An element in the arguments is the best answer; the last thing rendered is
+  // the fallback for the calls that take none — tab() and keyboard().
+  const documentFor = (args) => {
+    for (const arg of args) {
+      if (arg && arg.ownerDocument) return arg.ownerDocument
+    }
+    return rendered ?? globalThis.document
+  }
+
+  const realSetup = userEvent.setup.bind(userEvent)
+
+  userEvent.setup = (options = {}) => {
+    if (options.document || rendered) {
+      return realSetup({ document: rendered, ...options })
+    }
+    // setup() is routinely the first line of a test, before anything has
+    // rendered. Bind the session on first use instead, by which time it has.
+    let session = null
+    return new Proxy(
+      {},
+      {
+        get:
+          (_, key) =>
+          (...args) => {
+            session ??= realSetup({ document: documentFor(args), ...options })
+            return session[key](...args)
+          },
+      },
+    )
+  }
+
+  // The direct API is a fresh session per call already — this only decides which
+  // document that session gets.
+  for (const name of [
+    'click', 'dblClick', 'tripleClick', 'hover', 'unhover', 'tab', 'keyboard',
+    'type', 'clear', 'selectOptions', 'deselectOptions', 'paste', 'pointer',
+    'upload',
+  ]) {
+    if (typeof userEvent[name] !== 'function') continue
+    userEvent[name] = (...args) =>
+      realSetup({ document: documentFor(args) })[name](...args)
+  }
+}
+
 // Sandpack's Jest answers to useFakeTimers() but ships none of the methods that
 // move them — advanceTimersByTime is simply not there. Fourteen of the timer
 // challenges were therefore unsolvable in the browser while passing in the

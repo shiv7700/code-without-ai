@@ -24,19 +24,12 @@ const SETUP = { dependencies: DEPS }
 const RUNNER =
   '(?:vi|expect|screen|render|renderHook|act|fireEvent|within|waitFor|userEvent|localStorage|sessionStorage|structuredClone|queueMicrotask|AbortController|Date|setTimeout|setInterval|clearTimeout|clearInterval|MessageChannel|IntersectionObserver|ResizeObserver|matchMedia|jest)'
 
-// Sandpack renders the DOM in one realm and runs the spec's globals in another,
-// so an element from Testing Library is not an instance of the spec's `Element`.
-// user-event takes its window from whatever element it is handed — click(el) and
-// type(el) are fine — but these resolve the ambient globals instead and find an
-// empty page. Characterised, not yet fixed; see project-context.md.
-const KNOWN_GAPS = [
-  'user-event › setup()',
-  'user-event › selectOptions',
-  'user-event › dblClick',
-  'user-event › keyboard',
-  'user-event › tab',
-  'user-event › hover and unhover',
-]
+// The shim hands user-event the right document now, which fixed six of the seven
+// realm failures. This is the one left: hover's DOM events all reach the element
+// — pointerover, mouseover, mouseenter, the lot — but React's synthetic
+// onMouseEnter never fires, because its enter/leave plugin reasons about node
+// ownership and the nodes belong to the other realm. See project-context.md.
+const KNOWN_GAPS = ['user-event › hover and unhover']
 
 const ENV_ERROR = new RegExp(
   [
