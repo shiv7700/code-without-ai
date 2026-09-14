@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test } from 'vitest'
-import Field from './Field'
+import LabelledField from './LabelledField'
 
 test('an id ties the label to the input from the outside', () => {
-  const { container } = render(<Field label="Email" id="email" />)
+  const { container } = render(<LabelledField label="Email" id="email" />)
   const input = screen.getByLabelText('Email')
   const label = container.querySelector('label')
 
@@ -14,7 +14,7 @@ test('an id ties the label to the input from the outside', () => {
 })
 
 test('with no id the input goes inside the label', () => {
-  const { container } = render(<Field label="Email" />)
+  const { container } = render(<LabelledField label="Email" />)
   const input = screen.getByLabelText('Email')
 
   expect(container.querySelector('label').contains(input)).toBe(true)
@@ -22,18 +22,18 @@ test('with no id the input goes inside the label', () => {
 })
 
 test('the type is passed on and defaults to text', () => {
-  const { rerender } = render(<Field label="Email" />)
+  const { rerender } = render(<LabelledField label="Email" />)
   expect(screen.getByLabelText('Email')).toHaveAttribute('type', 'text')
 
-  rerender(<Field label="Email" type="email" />)
+  rerender(<LabelledField label="Email" type="email" />)
   expect(screen.getByLabelText('Email')).toHaveAttribute('type', 'email')
 })
 
 test('two fields with the same label are two separate fields', async () => {
   render(
     <>
-      <Field label="Email" />
-      <Field label="Email" />
+      <LabelledField label="Email" />
+      <LabelledField label="Email" />
     </>,
   )
 
@@ -47,8 +47,8 @@ test('two fields with the same label are two separate fields', async () => {
 test('ids given by the caller are used as given', () => {
   render(
     <>
-      <Field label="Home" id="home" />
-      <Field label="Work" id="work" />
+      <LabelledField label="Home" id="home" />
+      <LabelledField label="Work" id="work" />
     </>,
   )
 

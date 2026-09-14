@@ -25,6 +25,6 @@
  * up next to each other in the network tab and get explained away as a
  * double-render.
  */
-export default function TaskList({ loadTasks, addTask }) {
+export default function SavedTasks({ loadTasks, addTask }) {
   return null
 }

@@ -27,6 +27,18 @@ test('a challenge appears exactly once', () => {
   expect(new Set(names).size).toBe(names.length)
 })
 
+// The card heading comes from the component's filename, so two challenges named
+// ItemList.jsx read as the same rung twice on the home screen.
+test('no two challenges share a title', () => {
+  const seen = new Map()
+  const clashes = []
+  for (const c of challenges) {
+    if (seen.has(c.title)) clashes.push(`${c.title}: ${seen.get(c.title)} and ${c.name}`)
+    seen.set(c.title, c.name)
+  }
+  expect(clashes).toEqual([])
+})
+
 test('every challenge has a summary, topics and a spec', () => {
   for (const c of challenges) {
     expect(c.summary, c.name).not.toBe('')

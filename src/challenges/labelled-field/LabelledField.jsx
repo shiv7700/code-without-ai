@@ -23,6 +23,6 @@
  * is duplicated the moment the component is used twice — and duplicate ids do
  * not throw, they just quietly point every label at the first input on the page.
  */
-export default function Field() {
+export default function LabelledField() {
   return null
 }

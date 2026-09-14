@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { expect, test } from 'vitest'
-import FileTree from './FileTree'
+import OutlineTree from './OutlineTree'
 
 const TREE = [
   {
@@ -17,14 +17,14 @@ const TREE = [
 const depthOf = (name) => screen.getByText(name).getAttribute('data-depth')
 
 test('top level nodes are at depth zero', () => {
-  render(<FileTree nodes={TREE} />)
+  render(<OutlineTree nodes={TREE} />)
 
   expect(depthOf('src')).toBe('0')
   expect(depthOf('README.md')).toBe('0')
 })
 
 test('children are one deeper, and grandchildren one deeper again', () => {
-  render(<FileTree nodes={TREE} />)
+  render(<OutlineTree nodes={TREE} />)
 
   expect(depthOf('App.jsx')).toBe('1')
   expect(depthOf('lib')).toBe('1')
@@ -32,7 +32,7 @@ test('children are one deeper, and grandchildren one deeper again', () => {
 })
 
 test('a child sits inside its parent row', () => {
-  render(<FileTree nodes={TREE} />)
+  render(<OutlineTree nodes={TREE} />)
 
   const parent = screen.getByText('src').closest('li')
   expect(parent).toContainElement(screen.getByText('App.jsx'))
@@ -40,19 +40,19 @@ test('a child sits inside its parent row', () => {
 })
 
 test('a leaf has no list under it, empty children or none at all', () => {
-  const { container } = render(<FileTree nodes={TREE} />)
+  const { container } = render(<OutlineTree nodes={TREE} />)
 
   // the root list, src's children, and lib's children — and nothing else
   expect(container.querySelectorAll('ul')).toHaveLength(3)
 })
 
 test('every node is rendered once', () => {
-  render(<FileTree nodes={TREE} />)
+  render(<OutlineTree nodes={TREE} />)
   expect(screen.getAllByRole('listitem')).toHaveLength(5)
 })
 
 test('no nodes renders an empty list', () => {
-  const { container } = render(<FileTree nodes={[]} />)
+  const { container } = render(<OutlineTree nodes={[]} />)
 
   expect(container.querySelectorAll('ul')).toHaveLength(1)
   expect(screen.queryAllByRole('listitem')).toHaveLength(0)

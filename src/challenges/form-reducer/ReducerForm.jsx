@@ -25,6 +25,6 @@
  * typing still looks right, as long as you remembered to return a copy — and
  * then Reset carefully restores the values you have just finished typing.
  */
-export default function ProfileForm({ initial, onSave }) {
+export default function ReducerForm({ initial, onSave }) {
   return null
 }

@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
-import TaskList from './TaskList'
+import SavedTasks from './SavedTasks'
 
 function controllable() {
   const lists = []
@@ -30,7 +30,7 @@ const submit = async (text) => {
 
 test('the list is loaded on mount', async () => {
   const api = controllable()
-  render(<TaskList loadTasks={api.loadTasks} addTask={api.addTask} />)
+  render(<SavedTasks loadTasks={api.loadTasks} addTask={api.addTask} />)
 
   await api.list(['milk'])
   expect(rows()).toEqual(['milk'])
@@ -38,7 +38,7 @@ test('the list is loaded on mount', async () => {
 
 test('submitting sends the text', async () => {
   const api = controllable()
-  render(<TaskList loadTasks={api.loadTasks} addTask={api.addTask} />)
+  render(<SavedTasks loadTasks={api.loadTasks} addTask={api.addTask} />)
   await api.list(['milk'])
 
   await submit('eggs')
@@ -47,7 +47,7 @@ test('submitting sends the text', async () => {
 
 test('the old list stays up while the refetch is in flight', async () => {
   const api = controllable()
-  render(<TaskList loadTasks={api.loadTasks} addTask={api.addTask} />)
+  render(<SavedTasks loadTasks={api.loadTasks} addTask={api.addTask} />)
   await api.list(['milk'])
 
   await submit('eggs')
@@ -60,7 +60,7 @@ test('the old list stays up while the refetch is in flight', async () => {
 
 test('a failed add shows an alert and keeps the text', async () => {
   const api = controllable()
-  render(<TaskList loadTasks={api.loadTasks} addTask={api.addTask} />)
+  render(<SavedTasks loadTasks={api.loadTasks} addTask={api.addTask} />)
   await api.list(['milk'])
 
   await submit('eggs')
@@ -73,7 +73,7 @@ test('a failed add shows an alert and keeps the text', async () => {
 
 test('a successful add empties the box', async () => {
   const api = controllable()
-  render(<TaskList loadTasks={api.loadTasks} addTask={api.addTask} />)
+  render(<SavedTasks loadTasks={api.loadTasks} addTask={api.addTask} />)
   await api.list(['milk'])
 
   await submit('eggs')
@@ -84,7 +84,7 @@ test('a successful add empties the box', async () => {
 
 test('one add refetches the list exactly once', async () => {
   const api = controllable()
-  render(<TaskList loadTasks={api.loadTasks} addTask={api.addTask} />)
+  render(<SavedTasks loadTasks={api.loadTasks} addTask={api.addTask} />)
   await api.list(['milk'])
 
   await submit('eggs')

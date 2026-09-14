@@ -22,6 +22,6 @@
  * that survives the first click is returning only that one key: the row you
  * pressed counts up perfectly while every other row quietly resets.
  */
-export default function Cart({ items = [] }) {
+export default function QuantityPicker({ items = [] }) {
   return null
 }

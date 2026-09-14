@@ -30,6 +30,6 @@
  * every render, so memo() compares props, sees a different function, and
  * re-renders anyway. Push the id down and let the Row call back with it.
  */
-export default function ItemList({ items, onPick, onRender }) {
+export default function MemoList({ items, onPick, onRender }) {
   return null
 }

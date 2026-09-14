@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
-import SignupForm from './SignupForm'
+import ControlledForm from './ControlledForm'
 
 const email = () => screen.getByLabelText(/email/i)
 const password = () => screen.getByLabelText(/password/i)
 const submit = () => screen.getByRole('button', { name: /sign up/i })
 
 test('inputs are controlled — typing updates their value', async () => {
-  render(<SignupForm onSubmit={() => {}} />)
+  render(<ControlledForm onSubmit={() => {}} />)
 
   await userEvent.type(email(), 'a@b.com')
   expect(email()).toHaveValue('a@b.com')
@@ -18,7 +18,7 @@ test('inputs are controlled — typing updates their value', async () => {
 })
 
 test('submit is disabled until both fields are valid', async () => {
-  render(<SignupForm onSubmit={() => {}} />)
+  render(<ControlledForm onSubmit={() => {}} />)
   expect(submit()).toBeDisabled()
 
   await userEvent.type(email(), 'a@b.com')
@@ -32,7 +32,7 @@ test('submit is disabled until both fields are valid', async () => {
 })
 
 test('an email without @ keeps submit disabled', async () => {
-  render(<SignupForm onSubmit={() => {}} />)
+  render(<ControlledForm onSubmit={() => {}} />)
 
   await userEvent.type(email(), 'not-an-email')
   await userEvent.type(password(), 'longenough')
@@ -41,7 +41,7 @@ test('an email without @ keeps submit disabled', async () => {
 
 test('submitting calls onSubmit once with the values', async () => {
   const onSubmit = vi.fn()
-  render(<SignupForm onSubmit={onSubmit} />)
+  render(<ControlledForm onSubmit={onSubmit} />)
 
   await userEvent.type(email(), 'a@b.com')
   await userEvent.type(password(), 'longenough')

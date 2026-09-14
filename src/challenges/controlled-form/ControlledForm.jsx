@@ -19,6 +19,6 @@
  *  4. no `isValid` state. Validity is DERIVED from email/password on each render.
  *     If you find yourself writing useEffect to sync validity, stop — you don't need it.
  */
-export default function SignupForm({ onSubmit }) {
+export default function ControlledForm({ onSubmit }) {
   return null
 }

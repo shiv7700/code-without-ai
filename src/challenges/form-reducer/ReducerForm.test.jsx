@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
-import ProfileForm from './ProfileForm'
+import ReducerForm from './ReducerForm'
 
 const build = () => ({ name: 'Ada', email: 'ada@example.com' })
 
@@ -14,14 +14,14 @@ const retype = async (label, value) => {
 }
 
 test('both fields start from what it was given', () => {
-  render(<ProfileForm initial={build()} onSave={() => {}} />)
+  render(<ReducerForm initial={build()} onSave={() => {}} />)
 
   expect(field('Name')).toHaveValue('Ada')
   expect(field('Email')).toHaveValue('ada@example.com')
 })
 
 test('one field changes without disturbing the other', async () => {
-  render(<ProfileForm initial={build()} onSave={() => {}} />)
+  render(<ReducerForm initial={build()} onSave={() => {}} />)
 
   await retype('Name', 'Grace')
 
@@ -31,7 +31,7 @@ test('one field changes without disturbing the other', async () => {
 
 test('Save reports the current values', async () => {
   const onSave = vi.fn()
-  render(<ProfileForm initial={build()} onSave={onSave} />)
+  render(<ReducerForm initial={build()} onSave={onSave} />)
 
   await retype('Name', 'Grace')
   await click('Save')
@@ -43,7 +43,7 @@ test('Save reports the current values', async () => {
 })
 
 test('Reset puts every field back', async () => {
-  render(<ProfileForm initial={build()} onSave={() => {}} />)
+  render(<ReducerForm initial={build()} onSave={() => {}} />)
 
   await retype('Name', 'Grace')
   await retype('Email', 'grace@example.com')
@@ -54,7 +54,7 @@ test('Reset puts every field back', async () => {
 })
 
 test('Reset still works after a save', async () => {
-  render(<ProfileForm initial={build()} onSave={() => {}} />)
+  render(<ReducerForm initial={build()} onSave={() => {}} />)
 
   await retype('Name', 'Grace')
   await click('Save')
@@ -66,7 +66,7 @@ test('Reset still works after a save', async () => {
 
 test('the object it was handed is never written into', async () => {
   const initial = build()
-  render(<ProfileForm initial={initial} onSave={() => {}} />)
+  render(<ReducerForm initial={initial} onSave={() => {}} />)
 
   await retype('Name', 'Grace')
   await retype('Email', 'grace@example.com')

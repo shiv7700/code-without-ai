@@ -24,6 +24,6 @@
  * quietly going on in the background. The fix is one pair of characters, and
  * knowing which pair.
  */
-export default function ItemList({ makeItems }) {
+export default function SeededList({ makeItems }) {
   return null
 }

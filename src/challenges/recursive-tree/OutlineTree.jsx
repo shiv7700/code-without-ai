@@ -23,6 +23,6 @@
  * up the padding your CSS puts on lists. The depth is the other half — it is
  * not a counter you keep, it is a value each level hands to the next.
  */
-export default function FileTree() {
+export default function OutlineTree() {
   return null
 }

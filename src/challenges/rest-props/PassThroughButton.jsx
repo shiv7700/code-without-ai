@@ -18,6 +18,6 @@
  * a stray attribute. Rule 5 is not about which props you spread but about which
  * side of the spread the attribute you wrote sits on.
  */
-export default function IconButton() {
+export default function PassThroughButton() {
   return null
 }

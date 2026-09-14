@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test } from 'vitest'
-import Cart from './Cart'
+import QuantityPicker from './QuantityPicker'
 
 const ITEMS = [
   { id: 'k', name: 'Keyboard', price: 100 },
@@ -13,7 +13,7 @@ const total = () => screen.getByTestId('total')
 const click = (name) => userEvent.click(screen.getByRole('button', { name }))
 
 test('every row starts at zero, and so does the total', () => {
-  render(<Cart items={ITEMS} />)
+  render(<QuantityPicker items={ITEMS} />)
 
   expect(qty('k')).toHaveTextContent('0')
   expect(qty('m')).toHaveTextContent('0')
@@ -21,7 +21,7 @@ test('every row starts at zero, and so does the total', () => {
 })
 
 test('Add raises that row', async () => {
-  render(<Cart items={ITEMS} />)
+  render(<QuantityPicker items={ITEMS} />)
 
   await click('Add Keyboard')
   await click('Add Keyboard')
@@ -30,7 +30,7 @@ test('Add raises that row', async () => {
 })
 
 test('Remove lowers it, and stops at zero', async () => {
-  render(<Cart items={ITEMS} />)
+  render(<QuantityPicker items={ITEMS} />)
 
   await click('Add Mouse')
   await click('Remove Mouse')
@@ -40,7 +40,7 @@ test('Remove lowers it, and stops at zero', async () => {
 })
 
 test('the total is price times quantity, added up', async () => {
-  render(<Cart items={ITEMS} />)
+  render(<QuantityPicker items={ITEMS} />)
 
   await click('Add Keyboard')
   await click('Add Mouse')
@@ -50,7 +50,7 @@ test('the total is price times quantity, added up', async () => {
 })
 
 test('adding to one row does not wipe the other', async () => {
-  render(<Cart items={ITEMS} />)
+  render(<QuantityPicker items={ITEMS} />)
 
   await click('Add Keyboard')
   await click('Add Mouse')

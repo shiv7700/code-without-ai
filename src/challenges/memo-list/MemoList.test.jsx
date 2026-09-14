@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
-import ItemList from './ItemList'
+import MemoList from './MemoList'
 
 const ITEMS = Array.from({ length: 6 }, (_, i) => ({ id: i, label: `Item ${i}` }))
 
@@ -12,7 +12,7 @@ function setup() {
   const rendered = []
   const onPick = vi.fn()
   const view = render(
-    <ItemList items={ITEMS} onPick={onPick} onRender={(id) => rendered.push(id)} />,
+    <MemoList items={ITEMS} onPick={onPick} onRender={(id) => rendered.push(id)} />,
   )
   return { rendered, onPick, ...view }
 }

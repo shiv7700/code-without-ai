@@ -1,18 +1,18 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
-import ItemList from './ItemList'
+import SeededList from './SeededList'
 
 const rows = () => screen.queryAllByRole('listitem').map((li) => li.textContent)
 const add = () => userEvent.click(screen.getByRole('button', { name: 'Add' }))
 
 test('starts from whatever the factory returned', () => {
-  render(<ItemList makeItems={() => ['milk', 'eggs']} />)
+  render(<SeededList makeItems={() => ['milk', 'eggs']} />)
   expect(rows()).toEqual(['milk', 'eggs'])
 })
 
 test('Add appends what was typed and empties the box', async () => {
-  render(<ItemList makeItems={() => ['milk']} />)
+  render(<SeededList makeItems={() => ['milk']} />)
 
   await userEvent.type(screen.getByLabelText('New item'), 'bread')
   await add()
@@ -22,7 +22,7 @@ test('Add appends what was typed and empties the box', async () => {
 })
 
 test('adding nothing adds nothing', async () => {
-  render(<ItemList makeItems={() => ['milk']} />)
+  render(<SeededList makeItems={() => ['milk']} />)
 
   await add()
   expect(rows()).toEqual(['milk'])
@@ -30,7 +30,7 @@ test('adding nothing adds nothing', async () => {
 
 test('the factory runs once, however many renders there are', async () => {
   const makeItems = vi.fn(() => ['milk'])
-  render(<ItemList makeItems={makeItems} />)
+  render(<SeededList makeItems={makeItems} />)
 
   await userEvent.type(screen.getByLabelText('New item'), 'bread')
   await add()
@@ -41,9 +41,9 @@ test('the factory runs once, however many renders there are', async () => {
 test('a different factory on a later render is never called', async () => {
   const first = vi.fn(() => ['milk'])
   const second = vi.fn(() => ['nothing at all'])
-  const { rerender } = render(<ItemList makeItems={first} />)
+  const { rerender } = render(<SeededList makeItems={first} />)
 
-  rerender(<ItemList makeItems={second} />)
+  rerender(<SeededList makeItems={second} />)
 
   expect(second).not.toHaveBeenCalled()
   expect(rows()).toEqual(['milk'])
