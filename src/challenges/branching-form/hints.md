@@ -1,0 +1,5 @@
+- One object holding every answer, and one number for the step. Do not give each step its own state — the whole point is that the steps can see each other.
+- Which question step three asks is not a decision to store. It falls out of the answer to step one, and so does which line the review prints.
+- Whether Next is allowed is the same shape of thing: look up the answer belonging to the step showing and ask whether it is empty.
+- The last test fills in the company, goes back, changes its mind, and then checks the review. Run it before you go looking for what is wrong.
+- The old branch's field stopped being rendered; its answer did not stop existing. There is exactly one moment when it becomes wrong, and that is the moment to clear it.

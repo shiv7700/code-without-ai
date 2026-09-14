@@ -1,0 +1,5 @@
+- The last test is the one the obvious build fails: after a click, the array the parent passed in is still in its original order.
+- The built-in sort reorders the array it is called on and hands that same array back, so sorting what arrived in props edits the parent's data.
+- Sorted order is not state. Store which column and which direction, and produce the ordering from the prop during render.
+- "No column chosen yet" is a third value that column can hold, and it is what makes the first test pass.
+- Same header flips the direction, a different header resets it. One comparison in the handler covers both.

@@ -1,0 +1,4 @@
+- Test three is the one that fails quietly in a browser and loudly here: two extra renders of the parent must not produce two extra requests.
+- The effect's second argument is what decides how often it runs. With nothing there, "after every render" includes the render your own state update just caused.
+- So the request answers, you store it, storing it renders, and the render asks again. Nothing in the code looks like a loop, and it never stops.
+- The list also has to be empty before anything settles, which decides what the state starts as — something that renders as no rows at all, not as a crash.

@@ -1,0 +1,4 @@
+- Two tests decide this one: the one sending `type` and `data-kind`, which your component never mentions, and the one where no className is given and the class must be exactly the base.
+- A wrapper that only forwards the props it thought of breaks the first time someone needs one it did not. Name the few you actually consume and let the signature gather up everything else under one name.
+- Where the gathered props sit relative to the attributes you set yourself decides who wins a collision. The class is one you set yourself, so it cannot be sitting where it can be overwritten.
+- The visible content is an icon, so the accessible name has to come from an attribute rather than from the text — which makes that prop one you consume rather than forward blindly.

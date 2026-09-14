@@ -1,0 +1,5 @@
+- Aim at the test that pauses and then advances three seconds: nothing may tick while paused, and Start has to resume from where it stopped.
+- There are two facts here, not one — the seconds left, and whether it is running. Only the second decides whether a timer exists.
+- Depend on the seconds and the timer is torn down and rebuilt every tick. It works and the shape is wrong: the value inside the callback should come from the update itself, not from the closure around it.
+- Reaching zero is a transition, not a condition to keep re-noticing. The test runs five seconds past a two-second countdown and expects exactly one report.
+- Whatever sets the timer up is what clears it — on pause, on reset and on unmount alike.

@@ -1,0 +1,5 @@
+- Write down the three boxes as data — name, how many digits, who comes next — and the three handlers stop being three different handlers.
+- Setting state does not change the variable you are holding. The next line still sees the old one, and that is exactly the line deciding whether the box is full.
+- So compute the cleaned-up value first, into a plain local, and let both the state update and the focus decision read that.
+- Backspace has to be caught while the box is still full of whatever it had, which is not the moment the value changes. There is an earlier one.
+- Moving focus means touching a real element, so you need a way to reach the other two boxes' nodes from the handler of the one being typed in.

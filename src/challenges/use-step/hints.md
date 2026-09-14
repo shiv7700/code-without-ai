@@ -1,0 +1,5 @@
+- The last test is the whole point: after the step changes, the four functions must be the very same objects they were before.
+- That is impossible if any of them reads the current step from the render it was created in. A new step means a new render, and a function built in the old one still holds the old number.
+- So wrapping them to preserve their identity is only half the job. The other half is making sure they never need the current step as an input.
+- Ask state for its previous value at the moment of the update instead of capturing it earlier, and the clamping happens against the right number with no dependency at all.
+- The two booleans are plain comparisons made during render, so they cost nothing — and with a total of one, both comparisons come out true, which is exactly what that test is checking.

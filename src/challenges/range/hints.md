@@ -1,0 +1,5 @@
+- The last two tests are the ones that matter: a step pointing the wrong way, and a step of zero. Settle what those do before you write the loop.
+- With no step given you pick the direction yourself, and rule 3 says it comes from comparing the two ends, not from anything the caller passed.
+- One loop condition cannot serve both directions. Counting down with "less than the end" never stops, and stopping on "not equal to the end" never stops the moment a step of 3 jumps straight over it.
+- So the sign of the step decides which comparison you are making. Work that out once, before the loop starts, rather than inside it.
+- A step of zero has no sign and no direction at all, which is why it is a question you answer up front and not a loop condition.

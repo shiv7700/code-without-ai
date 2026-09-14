@@ -1,0 +1,4 @@
+- The last test is the one to satisfy first: Clear empties the input and leaves focus sitting on it.
+- The value is state. The node is not — you need a handle on the actual DOM element to call `focus()` on it, and React gives you one through an attribute on the element.
+- That handle gets filled in without anything re-rendering, and reading it later changes nothing on screen. Putting it in state would be a render for no visible reason.
+- `autoFocus` is a once-only job that can only run after the node exists, so the first render itself is too early — there is nothing there yet to focus.

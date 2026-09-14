@@ -1,0 +1,5 @@
+- Rule 5 is the one that makes it real, and the test for it is near the end: after an undo, a new `set` has to destroy the redo future for good.
+- Settle the shape before writing anything. A current value plus two stacks, or one array plus an index — both work, and one of them makes rule 5 a single truncation.
+- With an array and an index, a new `set` drops everything past the index and appends. `reset` is the same move with the array replaced outright.
+- `set` takes an updater, and undo, redo and reset all need the history as it stands — so none of them may capture it. Every transition is computed from what the setter is handed at the moment it applies.
+- Which is also why all seven identities are free: one piece of state, one transition function, nothing closed over.

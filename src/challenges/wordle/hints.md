@@ -1,0 +1,5 @@
+- The two examples in the doc comment are the real spec: SPEED against ERASE, and BOBBY against ABBEY. Any rule you invent has to produce both.
+- Going left to right in a single pass cannot do it. Deciding about the first E needs to know about an E further along that is sitting exactly where it belongs.
+- So every exact match is found first, and each one uses up one copy of that letter from the answer.
+- What remains is a count of unclaimed letters. The second pass spends those counts left to right, and once a letter's count is gone the rest of its occurrences are absent.
+- The board itself is nothing but the list of guesses made so far. Which row is next, what each tile shows, and whether the game is over are all read off that list during render.

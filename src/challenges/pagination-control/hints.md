@@ -1,0 +1,5 @@
+- Go straight to the two sliding tests: page 2 of 10 shows 1–5, page 9 shows 6–10. Both windows are five wide.
+- Clamping the start and the end separately is what makes the window shrink. Clamp the start alone, then take a fixed count from there.
+- The start has two limits — it cannot go below the first page, and it cannot go far enough that the window runs past the last one.
+- Fewer pages than the window is the same calculation, as long as the count you take is capped by how many pages exist.
+- Disabled controls and the current page both report nothing. Only the reachable ones call back, with the page they lead to.

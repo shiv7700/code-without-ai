@@ -1,0 +1,5 @@
+- Start at the bottom. The only thing a user can change directly is a leaf; everything drawn on a branch is a summary of the leaves under it.
+- Store one collection of checked leaves and nothing else. A flag per node is six flags that can disagree, and keeping them in step becomes your job.
+- A branch is checked when every leaf beneath it is, half-way when some but not all are, and neither otherwise — one recursive walk per node, during render.
+- Clicking a branch is that same walk again: collect every leaf underneath it and add them all, or remove them all.
+- The half-way state cannot be written in JSX at all. It is set on the element itself once it exists, which is what a function handed the element is for.

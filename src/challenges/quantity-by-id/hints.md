@@ -1,0 +1,5 @@
+- The last test is the one that survives the first click and fails the second: adding to one row must not wipe another.
+- One object of quantities keyed by id. A separate piece of state per row is the other wrong turn, and it stops being possible the moment the rows arrive as a prop.
+- The id is a variable, so it has to be marked as a computed key, or you store a literal key spelled like the variable.
+- The setter replaces. Return only the id you changed and every other id disappears — the new object has to be built from the one already in state.
+- The total is not state. It is price times quantity, summed while rendering, and it stays correct for free.

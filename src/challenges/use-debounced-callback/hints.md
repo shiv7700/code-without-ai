@@ -1,0 +1,5 @@
+- Two things are pulling apart: the function you return must never change, and the function it eventually runs must always be the newest one.
+- Write it without the identity rule first and watch it work. Then re-render and notice that each render's copy owns its own pending timer, so nothing ever collapses into anything.
+- The returned function can be built once. What it reaches for at the moment the timer fires cannot be.
+- The pending timer's id has the same problem: it has to be readable from a call made three renders later.
+- The arguments are the exception. Those really do belong to the call that made them, so the closure is the right place for them.

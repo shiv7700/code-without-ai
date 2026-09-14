@@ -1,0 +1,5 @@
+- The last test is the specification in miniature: three attempts fail, and there are exactly two waits. Get that ratio right and the rest is arithmetic.
+- The delay is not looked up from the attempt number. It is a value you carry along, and doubling it is the last thing that happens before the next attempt.
+- Sleeping at the end of every loop body is the natural shape and it is wrong. After the final failure there is nothing to wait for, and the caller sits there for 400ms being told about a decision already made.
+- So either the wait comes before every attempt except the first, or the loop has to know whether another attempt is coming before it decides to wait at all.
+- Zero retries is the case that catches both mistakes. Walk your loop through it by hand before you run anything.

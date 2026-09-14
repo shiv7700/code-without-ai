@@ -1,0 +1,5 @@
+- The first two tests are about one element in one position. A table's name is not read from anything nearby — it comes from a child element, and only from the first one.
+- Headers and body cells are different elements with different roles, and one of them takes an attribute saying which direction it labels.
+- The empty case is not an empty body. It is one row with one cell in it, so the branch happens where the rows would have been mapped, not around the whole table.
+- The number on that cell is a property of the configuration you were handed, worked out while rendering. Typing the number that happens to be right today is exactly what the last test is there to catch.
+- Its attribute name is one of the handful React spells differently from HTML. Use the HTML spelling and React tells you so in the console, which is a message worth not scrolling past.

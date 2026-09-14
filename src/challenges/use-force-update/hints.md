@@ -1,0 +1,5 @@
+- The test with teeth is "it does not go quiet after the first time". The obvious version passes "calling it renders" and then never renders again.
+- React throws away a state update that sets the value already in there, so a boolean flipped to true works exactly once, silently, with no warning.
+- Whatever you set has to be something React cannot consider equal to what it replaced — every single time, without limit. A fresh object qualifies; so does a number that only ever climbs.
+- The last test is about identity: the function captured on the first render must still work, and be the same one. Do not wrap it in a fresh arrow each render.
+- The updater React hands back alongside a piece of state is already stable for the life of the component. Return it as it is and rule 3 is free.

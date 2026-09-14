@@ -1,0 +1,5 @@
+- The one-reply-box-at-a-time test is the structural decision: which comment is being replied to is a fact about the thread, not about any individual comment.
+- So the tree and that one id both live at the top, and the recursive part receives them and reports clicks back up.
+- Inserting and deleting both walk the tree looking for one id. Along the path to it every node and every array is rebuilt; everywhere else the original objects are handed straight back.
+- Copying the whole tree wholesale also passes, but throws away the one property that makes this worth doing — untouched branches staying the same objects.
+- The count is a walk of the tree during render, not a number maintained by hand; and the empty-reply rule is a trim applied before the insert, not a check afterwards.

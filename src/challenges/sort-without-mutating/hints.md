@@ -1,0 +1,4 @@
+- "Original" is the rule that decides the whole design. Ask where the original order is kept, and whether anything you do could destroy it.
+- The sorted list is not something you have to remember. There is exactly one thing the three buttons change, and it is much smaller than a list.
+- Sorting is not a way of reading an array. The method you are reaching for rearranges the one you called it on, and then returns that same array.
+- So either the sort gets a copy to chew on, or you ask for the sorted copy directly — there is a method that does only that.

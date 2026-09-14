@@ -1,0 +1,4 @@
+- The last test is the shape of the whole thing: hover away and the committed value is back, untouched.
+- So the preview never overwrites anything. It is a second value that exists only while a pointer is over a star.
+- Rendering asks one question — is there a preview, and if not what is the committed value — and rules 3 and 4 both fall out of the answer.
+- "Off a star" means each star reports its own leave. Clearing the preview there is enough.

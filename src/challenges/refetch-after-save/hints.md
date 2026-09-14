@@ -1,0 +1,5 @@
+- The counting test is the one that matters: one add, two loads in total, and never three.
+- The two obvious mechanisms — bumping a value the effect depends on, and calling the loader straight from the handler — each work alone and fire twice when both are present, which is easy to do by accident.
+- Pick one owner for "load the list" and let both the mount and the save go through it.
+- The refetch happens after the save has resolved, not alongside it, and not at all when it rejects. The failure test checks the load count to make sure.
+- Clearing the input sits on the same success path. Doing it when the click happens throws away what the user typed the moment the network is down.

@@ -1,0 +1,4 @@
+- The test to write first is "reports the real answer on the very first render". Starting at false and correcting it afterwards shows the user the wrong layout for a frame.
+- Which means the current match is read where the initial state is produced, not after the component is already on screen. State creation has a form that lets you compute it instead of passing it.
+- Everything else is an ordinary subscription: attach when the query changes, detach the old one before attaching the new, detach on the way out.
+- `query` is the only thing that subscription depends on, so it is the only thing in that dependency list. Anything else in there costs you a resubscribe nobody asked for.

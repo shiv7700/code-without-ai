@@ -1,0 +1,5 @@
+- The last test decides the shape: two sets in one handler, both recorded.
+- Value in one piece of state and history in another cannot do it. Both calls read the same `value` from this render, so the second records what the first recorded and then overwrites it.
+- Rule 1 already tells you they are not two things: the current value is always the last entry of the history, so it is read off the array rather than stored beside it.
+- That leaves one piece of state, moved by a function that is handed the array as it actually stands, appends to it, and drops from the front once it is over `capacity`.
+- The setter must not change when `capacity` does, so the number has to be reachable at the moment it runs rather than copied in when the setter was made.

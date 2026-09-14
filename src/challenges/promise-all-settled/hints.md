@@ -1,0 +1,5 @@
+- The whole thing turns on one decision: whether each item becomes a promise that cannot fail before you wait on them together, or after.
+- Get it the wrong way round and the first rejection takes everything down, which is precisely the behaviour this function exists to avoid.
+- So each item is wrapped individually into something that always succeeds, carrying a description of how it ended, and then waiting on all of them is trivial.
+- The last test is the quiet one. Building both result shapes from a single object literal with all three keys passes every check on the value and is still not the shape the real one returns.
+- Order comes for free once the wrapping is per-item, because nothing is racing anything any more.

@@ -1,0 +1,5 @@
+- The last test is the spec: three edits in flight, the middle one fails, the other two keep their changes.
+- A copy of the whole list taken at click time is a photograph of a moment before all three edits. Putting it back undoes two changes that had nothing to do with this failure.
+- The rollback concerns one item and needs one fact: what that item's name was before this click. Capture that, not the list.
+- Which means the change has to be expressed as something applied to whatever the list happens to be when it runs, rather than as a finished list computed back when the click happened.
+- The same reasoning applies going forwards: three clicks in a row each have to build on the result of the last, not on the list their own render was holding.

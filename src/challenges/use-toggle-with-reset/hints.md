@@ -1,0 +1,5 @@
+- The last test is the one to write in your head first: the parent passes a new `initial`, and `reset()` must still go where it went on day one.
+- `initial` is a parameter, so it turns up again on every render. React already ignores every one after the first when it creates the state — you have to ignore them the same way, deliberately.
+- Reading `initial` inside `reset` costs you twice: reset drifts, and `initial` now belongs in the dependency list, which takes the stable identity with it.
+- You need a place to put the first `initial` that is written once, never overwritten by a later render, and still readable from a function created long before.
+- It is not state — nothing about storing it should cause a render.

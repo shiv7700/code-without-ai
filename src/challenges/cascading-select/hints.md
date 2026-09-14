@@ -1,0 +1,5 @@
+- The last test decides the structure: a slow response for a country you have already left must never fill the city list.
+- Which means the city fetch is not something the change handler does. The handler only records which country is chosen; the fetching is a consequence of that value.
+- An effect keyed on the chosen country hands you the cleanup for free — it runs the instant the country changes, which is exactly when the old response stopped mattering.
+- The old cities and the chosen city are both cleared as the new fetch starts, not when it finishes. Otherwise there is a window where the previous country's cities are selectable under the new one.
+- Empty and loading are different answers, so "no cities" cannot be an empty list plus a guess. The loading flag is what tells them apart.

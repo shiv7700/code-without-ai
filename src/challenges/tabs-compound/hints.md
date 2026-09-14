@@ -1,0 +1,5 @@
+- The last test is the design constraint: each piece rendered on its own has to throw, with "Tabs" in the message.
+- Which means the children never receive the active value as a prop. They go looking for it, and finding nothing is the error case.
+- Panels need no counting and no indexing. Each one knows its own value and can compare it itself.
+- Setting the value and reporting it are the same handler, but the equality check comes first — clicking the active tab is not a change.
+- Hanging List, Tab and Panel off the parent function is only namespacing. They are ordinary components; the lookup is what binds them.

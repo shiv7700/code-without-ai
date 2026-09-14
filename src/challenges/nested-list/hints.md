@@ -1,0 +1,4 @@
+- If the page comes up completely blank with nothing in the console, stop reading the JSX and look at what your outer callback actually hands back.
+- An arrow with a braced body returns only what you explicitly tell it to. An arrow with a parenthesised body returns the expression. Swapping one for the other is silent.
+- Both maps need their own key, each on the outermost element that map produces. The labels repeat across groups, so a label cannot be one — but the data already carries something that never repeats.
+- The empty group is the same present-or-absent decision from earlier challenges, applied to the inner container rather than to what goes in it.

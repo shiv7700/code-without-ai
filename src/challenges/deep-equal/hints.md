@@ -1,0 +1,5 @@
+- Rule 1 describes a built-in without naming it: one comparison already calls two not-a-numbers equal and two zeros of opposite sign different. Find it, and use it for every primitive.
+- Rule 3 is why comparing keys is more than looping over one side. An extra key holding undefined reads identically to a missing key when you only ever read values.
+- So compare how many keys each side has, and for every key ask whether the other side really has it before comparing what is stored there.
+- An array and an object with numeric keys have the same keys and the same values. The only thing separating them is what they are, so establish that before you start comparing contents.
+- A Date is a leaf. Two of them compare by one number, and a Date against a plain object is false without recursing into either.

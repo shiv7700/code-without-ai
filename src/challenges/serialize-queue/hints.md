@@ -1,0 +1,4 @@
+- You do not need an array of waiting tasks. One variable, holding a promise for "everything asked for so far is finished", is enough — each new call hangs off it and then becomes it.
+- What each call hands back and what the next call waits on look like the same promise, and the last two tests are exactly the difference between them.
+- The caller must see the failure. The queue must not. So one of those two is the raw promise and the other is a version of it that has already dealt with the failure.
+- Note which one you assign back to that variable. Get it the wrong way round and one failure rejects every call that comes after it, with an error the caller never caused.

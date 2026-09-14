@@ -1,0 +1,5 @@
+- Rule 4 is what makes this more than one line. Both promises will settle eventually, and whichever loses has to change nothing at all when it does.
+- The built-in that settles with whoever finishes first is no use here, because the timeout resolving is indistinguishable from a good answer. You would render its value, which is nothing.
+- So attach to the two separately, each deciding its own outcome, and let them race to be the first one allowed to write.
+- "First one allowed to write" needs something both of those closures can read and set, that is not frozen at the render they were created in. State read from inside them is always the value from that render.
+- The last two tests are the same latch seen from both sides — once it is closed, the loser's branch gets no further than the check.

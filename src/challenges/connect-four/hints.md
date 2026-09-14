@@ -1,0 +1,5 @@
+- A click names a column, not a square. Finding the row is a search from the bottom up for the first empty one, and it can come back empty-handed.
+- That search failing is a real outcome, not an edge case. Work out where it lands before you write the handler, because everything after it has to be skipped.
+- You only ever need to check for a win around the disc that was just played. Four directions, and each one runs both ways from that square.
+- Counting outwards from the new disc means you start at one and add whatever matches on either side. Stop the moment a square is empty or the wrong colour.
+- Reading off the end of the board should not throw and should not match. A lookup that quietly gives you nothing is easier to get right than four bounds checks.

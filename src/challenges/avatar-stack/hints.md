@@ -1,0 +1,4 @@
+- Start at the last test: four users, max of one. One list item, no avatars, and the chip has to speak for all four.
+- The chip is a list item like any other, so it spends one of the `max` slots. Only the slots left over hold avatars.
+- The number on the chip counts everyone without an avatar on screen — including the user the chip pushed out.
+- Whether a chip is needed is decided before how many avatars to show. Exactly `max` users need none.

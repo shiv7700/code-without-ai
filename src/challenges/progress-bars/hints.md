@@ -1,0 +1,5 @@
+- Design against the test where a fourth bar is added mid-flight and sits at 0 while three others are at 25.
+- "At most three filling" is not a property of any one bar. No bar can decide it alone; only something looking at the whole list can.
+- So there is one repeating timer for the component and one array of numbers. Each tick, its job is to work out which entries move.
+- Which entries move follows from the array itself: walk it in order and take the first three that are not yet full. Nothing extra needs storing.
+- The tick asks state for its previous value rather than closing over the array, so the timer can be set up once and never rebuilt.

@@ -1,0 +1,5 @@
+- Read the last three tests together: a won game refuses moves, a full board is a draw, and Reset undoes everything. All three are questions about the same nine squares.
+- Nothing about the winner needs remembering. Given the board you can work it out again on every render, and then it can never disagree with what is on screen.
+- The eight winning lines are fixed triples of positions. Keep them outside the component and the check is one pass over them.
+- The click handler is mostly guards: a square already taken, and a game already decided, each end it before anything changes.
+- Turns alternate on accepted moves only, so a rejected click must never reach whatever flips the turn.

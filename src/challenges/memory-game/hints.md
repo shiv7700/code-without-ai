@@ -1,0 +1,5 @@
+- Two things are state: which cards are face up right now, and which are matched for good. Everything on screen follows from those two.
+- Whether the un-flipping timer is running is not a third. It is already implied by there being two face-up cards whose values differ.
+- So the timer belongs in an effect that depends on the face-up list, and it only arms itself when that list has two entries and they do not match.
+- The click handler's guards come out of the same two lists: a card already up, a card already matched, or two already showing — each returns without doing anything.
+- Winning is a comparison between the matched list and the number of cards, made during render.

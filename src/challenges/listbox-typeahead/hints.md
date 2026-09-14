@@ -1,0 +1,5 @@
+- The search string is not something anyone looks at, and nothing on screen changes because it changed. That is a strong clue about where it should not live.
+- Whatever holds it also has to hold when the last letter arrived, because the two are only ever read together.
+- Build the new search string into a plain variable first, then use that same variable for both the remembering and the looking-up. Reading it back from where you stored it is what puts you a letter behind.
+- The clock is a prop for a reason: call it once per keypress and compare with the one you kept, rather than trying to schedule anything.
+- Selecting and focusing happen together everywhere here — arrows, letters, clicks. One small helper, called from all three.

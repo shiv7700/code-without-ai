@@ -1,0 +1,4 @@
+- The prop that turns escaping off does not take a string. It takes an object with a single oddly named field, and the name is deliberately awkward so that nobody types it by accident.
+- Try putting the heading and the markup on the same element and read the error. React refuses outright, which tells you the markup needs an element of its own with nothing else in it.
+- Whether that element exists at all is a decision made before you render it, not an empty string handed over and hoped for.
+- The fourth test is not asking you to add anything. It is checking that you did not quietly add a strip-the-dangerous-bits pass — this component trusts its input, and the place to stop trusting it is upstream, not here.

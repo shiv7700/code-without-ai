@@ -1,0 +1,4 @@
+- Only the first test hands over more than one child, and it is the only one a plain `.map` survives. The single-child and bare-string tests break it, and the empty one throws.
+- What arrives between the tags is not a collection. It is a list, or one lone node, or nothing at all, and which of the three it is depends on the caller, not on you.
+- Wrapping it in an array yourself gets you past the crash and then fails rule 5: the `null` and the `false` were written between the tags too, and a naive wrap keeps both.
+- React ships a small set of helpers for exactly this — flattening that unpredictable shape into one real list with the empty slots already dropped. Once you have that list, the count is just its length.

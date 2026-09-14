@@ -1,0 +1,5 @@
+- The two render-count tests are the entire exercise. The other four pass without any of this, so write those two in your head first.
+- A memoised row re-renders when its props are not the same values as last time, compared one at a time, by identity.
+- A function created while building the list is a brand new value on every render, so every row sees a changed prop and the memoising buys you nothing.
+- Which means the row cannot be handed a ready-made, argument-free callback. Give it the plain values it needs and let it call back with its own id.
+- The same trap catches any object or array you build inline while rendering the rows, for exactly the same reason.

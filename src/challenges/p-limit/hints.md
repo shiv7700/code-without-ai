@@ -1,0 +1,5 @@
+- Two pieces of state live in the closure and outlive every individual job: how many are running, and who is waiting. Everything else is local.
+- Submitting and starting are different moments. The submit path always queues, then asks whether anything can start — that single question handles both "a slot was free" and "a slot just opened".
+- The promise the caller holds is not the promise the job produces. You settle theirs from yours, which is why you have to keep hold of the two functions that settle it.
+- The count comes down in exactly one place, and that place has to be reached by both endings. There is a clause for precisely this, and the word for it is not "then".
+- The last test only ever fails on the second batch. Nothing about the first run looks wrong, which is why it survives a review.

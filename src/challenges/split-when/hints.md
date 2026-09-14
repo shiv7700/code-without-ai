@@ -1,0 +1,4 @@
+- Start from the answer shape, not the loop: before you have looked at a single item you already know there is one group, and it is empty. That is what an empty list returns.
+- Walk the list once. Each item does one of two things: it joins the group you are currently filling, or it closes that group and opens a fresh one.
+- Nothing ever decides whether a finished group is worth keeping. Ask that question and the last two tests go red.
+- The group you are filling is always the final one in the result, so you never need to hold it in a second variable.

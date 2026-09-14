@@ -1,0 +1,4 @@
+- The tests compare the whole label with an exact match, so a leading space fails just as hard as a missing word.
+- That space comes from gluing the parts together in the same expression that decides whether each one exists. Those are two separate jobs.
+- Gather the parts that were actually given into one ordered place first — the order is fixed, the count is not — and only then put a single separator between whatever survived.
+- The nickname goes into that gathering already wrapped in its quotes, and a gathering that ends up empty is exactly the "Anonymous" case.

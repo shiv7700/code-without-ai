@@ -1,0 +1,4 @@
+- The last test hands you a fixed `value` and a parent that throws the change away. Whatever is pressed after the click has to be what was pressed before it.
+- So there is nothing to store here. The only thing deciding which button is pressed already arrives on every render.
+- aria-pressed is not optional on the unselected buttons. Missing and "false" are different announcements.
+- Clicking the pressed option is its own branch: compare before you report, not after.

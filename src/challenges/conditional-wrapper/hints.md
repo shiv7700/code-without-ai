@@ -1,0 +1,4 @@
+- A component may return its children unchanged. That is a whole branch, and it is one line long — no element, no fragment, nothing added to the tree.
+- Start from that branch and leave early. What is left after it is the single wrapped version, which means the content is written once because there is only one place left to write it.
+- Watch what an absent attribute looks like. Passing nothing is not the same as passing an empty string, and the two "not external" assertions are checking that the attribute never reached the DOM at all.
+- The second test compares the whole rendered markup, so anything you wrap around the plain case — even a div for styling — shows up there.

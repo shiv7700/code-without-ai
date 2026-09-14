@@ -1,0 +1,5 @@
+- The last test is the specification: reset, throw again, catch again. A boundary that latches once fails it.
+- A function component cannot do this at all. React hands a render error back through two lifecycles on a class — one that decides what renders next, one that runs the side effect.
+- They are separate on purpose. Choosing the next state during render has to stay pure, and calling `onError` is not.
+- The fallback is either a node or something you call with the error and a way to clear it. A `typeof` check is the entire branch.
+- Resetting is just putting the error back to nothing. No other bookkeeping — which is exactly why the boundary is reusable.

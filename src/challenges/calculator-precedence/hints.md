@@ -1,0 +1,5 @@
+- The calculator you have used has one number and one pending operator in its head. That design cannot pass the fourth test and it is worth being sure why before you start.
+- Keep the whole thing that was typed: numbers and operators alternating in a list, plus the digits you are in the middle of entering.
+- Working it out is then a plain function of that list, with nothing React about it. Write it and try it on paper before you wire up a single button.
+- Two passes over the list is the easiest correct answer. Collapse the tighter-binding pairs in place first, then fold what is left from the left.
+- Repeating on a second equals needs two things remembered, not one, and both of them are sitting at the end of the list you just worked out.

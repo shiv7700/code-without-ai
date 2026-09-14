@@ -1,0 +1,5 @@
+- Three things are on screen and only one of them is actually state. Write down which of the lines, the subtotal, the discount and the total you would still be able to work out from the others.
+- Pressing Apply does not change what anything costs. It changes which rule is in force from then on, so what you store is the rule, not its answer.
+- Store the amount taken off and the last test fails: the cart shrinks underneath it and that number sits there unchanged.
+- Every figure on screen except the contents of the cart is arithmetic you redo while rendering. None of it needs to survive between renders.
+- Removing a line and decreasing past one are the same operation. Writing them twice is how they drift apart.

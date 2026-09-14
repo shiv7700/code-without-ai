@@ -1,0 +1,4 @@
+- The first test settles nothing at all and still asserts both functions were called. It is the only test that cares how you started them.
+- Awaiting the first before calling the second means the second request does not exist until the first round trip is over. Two 300ms calls become 600ms for no reason anyone can point at.
+- Calling both and holding on to the two promises separates starting from waiting. Once both are in the air, the order you wait in stops mattering.
+- There is a built-in that takes an array of promises and gives back one promise for all their values, in the order you passed them, failing the moment any of them does. That is rules 2, 3 and 4 in one call.

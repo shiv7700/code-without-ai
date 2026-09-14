@@ -1,0 +1,5 @@
+- Every call has to hand back a promise straight away, long before anyone knows what the answer is. So the two functions that settle that promise have to be kept somewhere and used much later.
+- Kept where, though. One slot only holds the most recent caller, and the ones before it are then waiting on a promise nobody can ever settle — which is exactly what the third test is measuring.
+- So the window collects callers, plural, and when it finally runs it settles all of them with the same outcome. Both outcomes.
+- Whatever you collected has to be handed over and emptied at the moment it fires, before the work starts, or calls made while it is running end up in someone else's batch.
+- The arguments are the opposite: only the last set survives, and they are already sitting in the closure of the call that restarted the timer.

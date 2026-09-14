@@ -1,0 +1,5 @@
+- These are two different shapes of markup, not one shape with an attribute switched on and off. Decide which one you are rendering before you start writing the elements.
+- The attribute that points a label at an input is not spelled the way it is in HTML. React renames it for the same reason it renames the class attribute.
+- In the other shape nothing points at anything. The input being inside the label is the whole connection, which is why that branch needs no id and cannot be made to collide.
+- Do not solve the duplicate-id problem by making up a unique one from the label, or a counter. The last test is there to say that the second shape already solved it.
+- The version with two elements side by side has no element wrapping them, and returning two things needs the one thing that is not an element.

@@ -1,0 +1,5 @@
+- Resist the flag. Whether the menu is showing is not something to remember — it is something to work out from the text, on every render, in one expression.
+- The question is not "is there an at sign in here". It is "does the text end in a mention", and that is a different question with a different answer.
+- Three things have to hold at once: the at sign has nothing but a space or the very start in front of it, only letters come after it, and nothing comes after those.
+- The matching machinery for that lives in the language already, anchored to the end of the string. The letters it captures are your search term, and an empty capture is a perfectly good one.
+- Replacing the mention on choose is the same pattern doing the other half of its job.

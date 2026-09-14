@@ -1,0 +1,5 @@
+- The last test renders, then renders again with different lines, and checks the numbers moved. It is the only test that catches you storing them.
+- A number you can work out from props is not a second copy of anything. It is an expression evaluated on the way to the markup, fresh on every render, and it needs nowhere to live.
+- The subtotal is one pass over the array collapsing it down to a single number. Tax and total are one line each after that.
+- Give that collapsing step a starting value and the empty array produces 0 without any special case at all.
+- Two decimals is a display concern. Format at the very last moment, not while you are still adding things up.

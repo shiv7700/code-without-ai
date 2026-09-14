@@ -1,0 +1,4 @@
+- Nothing new from the previous challenge — the same two boxes, arranged differently.
+- Decide what "am I inside a window" is stored as before you write anything else. That choice decides the rest.
+- Rule 4 is where most versions fail. When the window closes with nothing waiting, there must be nothing left to fire.
+- The arguments of the last call made inside the window have to survive until the window closes. That rules out a local variable, and rule 5 rules out state.

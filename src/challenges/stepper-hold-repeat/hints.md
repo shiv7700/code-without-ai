@@ -1,0 +1,5 @@
+- Three things stop a hold and they all do exactly the same thing. Write that once, and make it safe to call when nothing is running.
+- The repeat function is created at the moment of the press. Everything it can see is frozen at that moment — including the number you were about to add one to.
+- So it must not read the value from where it was standing when it was written. It needs somewhere that is updated on every render but does not cause one.
+- Whatever holds the cancel handle has the same requirement, and for the same reason: it changes constantly and nobody renders because of it.
+- Unmounting is just another way of letting go. You already have the function for it.

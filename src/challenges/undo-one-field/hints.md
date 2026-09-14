@@ -1,0 +1,4 @@
+- In the broken version Undo is not disabled and does not throw. It puts back the value that is already on screen.
+- Ask when the previous value gets written down. Keeping it permanently up to date means it is never actually previous.
+- There is exactly one moment when the old title is still the old title and the new one is already known, and it is not during a render.
+- After the step back there is nowhere further to go, which is also how the button knows to switch itself off.

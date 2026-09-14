@@ -1,0 +1,5 @@
+- The last three tests are the spec: walking through a null, a stored null that counts as a hit, and an index past the end.
+- Only undefined means "not there". A null is something the data actually said, and handing back the fallback for it is a bug you will chase through a form later.
+- Which rules out the operator that defaults on both of them. Decide "missing" by asking, at the point you stop walking, whether you fell off or found something.
+- Brackets are the parsing half. The path string has two separators in it and one of them wraps rather than divides, so normalise the whole thing into a list of keys once, up front.
+- After that it is a loop that has to stop early the moment there is nothing left to read from, rather than reading first and checking after.

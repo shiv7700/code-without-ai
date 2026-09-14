@@ -1,0 +1,4 @@
+- The last test is the proof: the same mechanism has to accept the string "h1" and a function, with nothing branching on which it got.
+- JSX decides between "this is an element name" and "this is a variable" purely by the case of the first letter. Written directly, your prop is read as a literal HTML tag with that spelling, and unknown tags render silently rather than erroring.
+- The fix is not a lookup table and not a switch. Put the value somewhere JSX will read as a variable, and let it be whatever the caller handed over.
+- Whatever ends up rendering has to receive the className you built and the children, and that class-building is the same gather-and-join job from earlier in this section.

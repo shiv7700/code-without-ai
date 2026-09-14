@@ -1,0 +1,4 @@
+- The alternating-tags test and the no-wrapper test together forbid putting anything around each pair, while the loop still needs a key per pair. Those two demands are what the challenge is.
+- Two elements produced by one iteration have to be grouped somehow, but the grouping cannot be an element, because the parent only accepts those two tags as direct children.
+- React has a grouping that produces no DOM node at all. The shorthand spelling of it takes no attributes, so it cannot carry the key — but there is a longer spelling of the very same thing that can.
+- The empty case still expects the container in the DOM, so the container itself is never conditional. Only what goes inside it is.

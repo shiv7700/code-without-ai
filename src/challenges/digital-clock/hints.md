@@ -1,0 +1,4 @@
+- The first test renders and immediately reads the time. Nothing that runs after the render can help you there.
+- So the state starts out holding the real current time, produced when the state is first created rather than handed in as a value that is rebuilt every render and thrown away.
+- The ticking is one repeating timer, set up once with a cleanup, replacing the whole value each second.
+- The formatting is string work on the three parts, each padded to two characters. The parts come off the date as they are; no conversion is needed for 24-hour time.

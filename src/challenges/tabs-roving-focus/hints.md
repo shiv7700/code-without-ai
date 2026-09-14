@@ -1,0 +1,5 @@
+- Assume tabs and panels already work. Two tests decide this build: the tabindex one, and manual activation.
+- The tablist is one stop in the tab order, so exactly one tab is reachable and every other is explicitly removed from it. All of them carry the attribute, with a value.
+- Arrows move focus, which means calling focus on a DOM node, which means holding each tab's node by index.
+- Focus and selection are now two different things, and "which tab has tabindex 0" is a question about selection, not about where focus currently is.
+- automatic and manual differ only in whether the arrow handler also selects. Enter and Space exist so that manual has a way to commit.

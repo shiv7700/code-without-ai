@@ -1,0 +1,5 @@
+- Assume the open/close logic from the plain accordion. The test that breaks it types into a panel, closes it, and wants the text back.
+- Conditional rendering is what destroys it. A subtree you stop rendering leaves the DOM and takes the input's value with it — React keeps no copy.
+- So every panel renders every time, and the only thing that changes is an attribute that takes it off the screen and out of the accessibility tree.
+- That same attribute decides how many regions the test can find. A closed panel must not be one of them; the test expects exactly one.
+- Header and panel now reference each other by id in both directions — the header names the panel it controls, the panel takes its name from the header.

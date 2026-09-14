@@ -1,0 +1,4 @@
+- Rule 5 is not an unmount problem, so a flag saying "am I still mounted" will not get you there.
+- Two calls are in the air. When one of them answers, it has to be able to work out whether it is still the one being waited for.
+- A number that goes up by one each time a run starts, plus a copy of it kept inside that run, is enough to settle the question.
+- Rule 4 says the runner is built once, so everything it consults afterwards has to live somewhere any render can keep up to date.

@@ -1,0 +1,5 @@
+- The last test is the one no shortcut passes: the items you did not change have to come back as the exact same objects, compared by identity.
+- That rules out rebuilding every item, and rule 3 rules out the other shortcut, flipping the flag on the object where it already lies.
+- Flipping it in place would fail anyway: that object is inside the array that came back from state, the one React already rendered, so changing it gives React nothing new to compare.
+- So you need a new array of the same length, where exactly one position holds a newly built object and every other position holds the object that was already there.
+- Walking the old array and deciding per item whether this is the one being flipped gives you both halves in a single pass.

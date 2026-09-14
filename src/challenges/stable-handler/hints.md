@@ -1,0 +1,4 @@
+- Read rules 3 and 4 as a pair. They are not about the same thing: one is about the function, the other about the number it adds to.
+- List the count as a dependency to keep it fresh and you get a new function every time it changes, so the memoised button re-renders. There goes rule 3.
+- Which means the handler must not need to know the count at all — so it cannot be the thing doing the addition.
+- The setter takes something other than a value, and whatever you give it runs when the update is applied, not when the click happened.

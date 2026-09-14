@@ -1,0 +1,4 @@
+- Every test here is a call count. Say the rule out loud before writing the loop: retries is how many attempts come after the first, so retries of 2 is three calls in total.
+- A loop that runs retries times does the wrong number of attempts. A recursive call that passes retries through unchanged never terminates.
+- The attempt that succeeds has to stop everything — no further calls, no alert, and the value it returned on screen.
+- The error you eventually show is the last one, not the first. Keep overwriting what you caught instead of holding on to the first thing that went wrong.

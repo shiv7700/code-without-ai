@@ -1,0 +1,4 @@
+- The "$5.00" test and the "$1,234.50" test cannot both pass with either of the two obvious approaches — each one fixes exactly what the other breaks.
+- The formatter takes options. It prints "1,234.5" because its decimal setting is a maximum, and there is a separate minimum sitting at zero. Rule 1 says "exactly", so both have to be said.
+- The symbol is not part of the number at all here. It goes in front as plain text and defaults like any other optional prop.
+- The absent case has to be decided before any formatting happens, and 0 is not absent — so the guard is the one that catches only the two genuinely missing values.

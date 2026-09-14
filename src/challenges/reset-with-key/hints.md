@@ -1,0 +1,4 @@
+- The fields are uncontrolled, and that is the part that matters: the starting value is read once, when the element is created, and never looked at again.
+- Which rules out patching them when the props change. A new starting value needs a new element.
+- React works out whether what you rendered this time is the same thing it rendered last time. It does not read the props to decide.
+- You are after one attribute, and the value it wants is the one piece of the user that says which user this is.

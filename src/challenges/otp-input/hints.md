@@ -1,0 +1,5 @@
+- One piece of state holds all six characters; the boxes are a view of it. Six separate pieces and every rule below turns into bookkeeping.
+- Pressing a key on an empty box changes nothing, so the handler that fires when the contents change never runs. Backspace has to be caught earlier than that.
+- Focus is the part you cannot do in JSX. You need a handle on each of the six nodes, stored somewhere that survives a render, and an index is enough to pick one out.
+- A whole code arriving in one go is its own event, and the box it lands in has room for exactly one character. Stop the browser from putting it there and read it yourself.
+- The completion callback must compare what the code is about to be with what it already was — otherwise it fires again on every keystroke after the sixth.

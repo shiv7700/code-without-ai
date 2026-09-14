@@ -1,0 +1,5 @@
+- There is exactly one number to keep here: which item is currently the way in. Every rule is either reading it or changing it.
+- It has to be remembered between renders and it has to survive the user wandering off, so it cannot be recalculated from the items each time.
+- Stepping over the disabled ones is a loop, not an offset: keep moving in the same direction until you land somewhere that will accept focus, and give up after a full circle.
+- Home and End are the same loop with a different starting point. Write it once and pass it where to start and which way to go.
+- Changing the number is not enough on its own. Something also has to tell the browser to move.

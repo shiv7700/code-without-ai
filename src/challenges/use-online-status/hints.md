@@ -1,0 +1,4 @@
+- Rules 1 to 4 are the straightforward version: read it while rendering, subscribe in an effect, tidy up afterwards. Get that working first.
+- Rule 5 is about the moment in between. Say out loud, in order, what React actually does on mount.
+- The value is read during the render. The listener is attached some time after that. Anything happening in the gap was announced to nobody, and what you are showing was already out of date.
+- The fix is one line, and it goes straight after the subscription. Put it before and you have only made the gap smaller.

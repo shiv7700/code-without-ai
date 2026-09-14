@@ -1,0 +1,5 @@
+- Keep one set of chosen ids for the whole table and slice the page out of it when you render. Storing anything per page makes rule 4 a nightmare.
+- The header's three states are not state at all — they are two questions asked about the rows you can currently see.
+- Two of those states are ordinary markup. The third one does not exist in HTML as an attribute, so no prop you pass will do it.
+- Which means you need a handle on that actual element, and somewhere to set it that runs after every render where the answer changed.
+- Untick means untick this page. The ids to remove are sitting right there in the slice you already computed.

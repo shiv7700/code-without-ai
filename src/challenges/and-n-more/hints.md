@@ -1,0 +1,5 @@
+- Two numbers matter and only one of them is the limit. Work out how many you are hiding as its own value before you render anything, and every boundary test becomes a comparison against it.
+- Careful how you calculate it. The limit is what you asked for; the number of rows you actually drew is what you got, and on a short list those are not the same.
+- The last row appears when that number is above zero, not when it is zero or more. A list that fits exactly produces zero, and zero must produce nothing at all — including no stray digit on the page.
+- The word after the number changes at one, and a ternary in the middle of the text is fine. Watch the spaces around it while you are in there.
+- The limit itself may be zero, so anything you wrote that assumes at least one name is shown will need another look.

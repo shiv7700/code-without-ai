@@ -1,0 +1,5 @@
+- Sorting is two jobs here and they happen in a fixed order. Work out which one has to run first, and notice that only one of them ever changes.
+- The position a row is drawn at is not what you print in the first column. They agree just often enough to look right.
+- A player's place is decided by the score alone, so compute it once while the list is in score order, and carry it on the player from then on.
+- When two scores are equal the second player does not get a new place, and the player after them does not get the next one either. Count what is above you, not where you are.
+- The array arrives as a prop. The sort you reach for first changes it where it stands, which means you have quietly edited something that is not yours.

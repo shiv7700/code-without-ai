@@ -1,0 +1,5 @@
+- Assume the dialog renders and Escape closes it. The test that decides this one clicks a button inside the dialog first, and still expects the opener to get focus back.
+- So the opener is read exactly once, when it opens, and before anything inside the dialog is focused. The order of those two lines is the bug.
+- It then has to be kept somewhere a re-render does not disturb, and read back later as it currently is rather than as it was when this render was created.
+- Handing focus back is the cleanup half of the same effect that took it, which is why unmounting needs no second code path.
+- "The first focusable element inside" is a DOM query, and the fallback when there is none is the dialog itself — which then has to be focusable at all.

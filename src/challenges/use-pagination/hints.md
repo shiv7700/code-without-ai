@@ -1,0 +1,5 @@
+- Rule 6 is the test the whole shape has to satisfy: the list shrinks under you, and `page` and `pageItems` both have to be right on that same render.
+- Correcting the page in an effect gets there one render late, and the user sees an empty list in between. Fix it where the values are worked out instead.
+- `totalPages` and `pageItems` are not state. They follow from `items`, `pageSize` and the page. The only thing worth storing is the page.
+- If the page you hand back is the stored page pulled into the range that exists right now, rule 6 needs no code of its own.
+- `next`, `prev` and `setPage` still have to stop at the real edges while `items` changes under them and their identities do not — so the current page count is something they look up when they run, never something they captured when they were made.

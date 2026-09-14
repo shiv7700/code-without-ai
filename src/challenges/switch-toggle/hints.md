@@ -1,0 +1,4 @@
+- Rules 4 and 5 — Space, and a single Tab landing on it — come free with one element and cost three extra pieces with any other.
+- A div carrying role="switch" reads correctly and does nothing. It is not in the tab order, and keys do not fire on it.
+- Pick the element the browser already treats as a control, then put the role and the checked state the rules ask for on top of it.
+- That element's default behaviour inside a form is to submit it. Say what kind of button it is, or the Space test will tell you.

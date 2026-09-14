@@ -1,0 +1,3 @@
+- The last test renders the tag with nothing between its brackets and expects the body element to be gone entirely, not present and empty.
+- Whatever sits between the opening and closing tag is handed to you under a fixed name, alongside the ordinary props. Nothing between them means that name holds nothing.
+- So rule 4 is the same absence check as any other optional prop, and the contents themselves you never inspect, count, or wrap — only place.

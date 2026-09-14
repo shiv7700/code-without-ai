@@ -1,0 +1,5 @@
+- The first three tests pass with almost anything. The last two are the challenge: identity survives a re-render, and two incs in one handler land two.
+- Both calls in a handler run before React renders again, so both are looking at the same `count` — the one from the render the function was built in.
+- A function that reads `count` needs `count` in its dependency list to stay correct, and the moment it is in there the identity is gone on every change.
+- So the function must not read `count` at all. The setter takes something other than a value, and whatever that is gets handed the number actually in state at the moment it is applied.
+- `reset` never had the problem: `initial` is a parameter, not state, and it does not change under you here.

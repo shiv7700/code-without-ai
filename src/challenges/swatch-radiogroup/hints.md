@@ -1,0 +1,4 @@
+- Work out which single swatch is allowed in the tab order, as an index, before you write any markup. Everything else follows from that one number.
+- "The chosen one" is not an answer on its own, because there is a perfectly normal state in which nothing is chosen.
+- Arrows have to move the real focus, not just recolour something, which means you need a way to reach the actual element sitting at the index you just computed.
+- Moving and choosing happen together here, so a single key handler can do both — and the swatch that has focus is the one whose handler ran.

@@ -1,0 +1,5 @@
+- Rule 3 is the whole exercise: three clicks made before any callback has run have to be worth three, not one.
+- The callback is built during a render and keeps that render's count, frozen, for as long as it exists. Three clicks in the same render build three callbacks all holding the same number.
+- Reading the count inside the callback rather than outside it changes nothing. It is the same captured value either way, because the render it came from is over.
+- So the callback must not need to know the current count at all. It can only describe the change, and let whoever applies it supply the number.
+- One click hands over exactly one callback. If you are tempted to schedule five of them to make "+5" work, the arithmetic belongs inside the single one instead.

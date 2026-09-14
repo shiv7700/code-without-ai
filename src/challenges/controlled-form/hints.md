@@ -1,0 +1,4 @@
+- Rule 4 is a rule about what not to write: no state holding validity, and nothing syncing it.
+- Both answers are already available from the two values you have, on every render. Work them out there and hand the result straight to the button's disabled state.
+- An input is controlled when its value comes from state and its change handler writes back. Do only the first half and the field refuses to accept typing at all.
+- The callback fires once with both values. Whichever path you hang that off, the browser must not be left to reload the page afterwards.

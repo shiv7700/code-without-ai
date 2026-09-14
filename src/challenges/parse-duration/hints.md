@@ -1,0 +1,5 @@
+- Deciding whether the string is a duration and working out what it adds up to are two passes, not one. Do them in that order and both hard tests get easier.
+- The first pass asks one yes-or-no question about the entire string, end to end. Anchoring it at both ends is what stops "1h junk" from counting.
+- The second pass never has to be defensive, because nothing invalid reaches it. It walks the parts and adds.
+- Whichever way you list the units, the two-letter one has to be offered before the one-letter one, or "5ms" is read as five minutes with a leftover.
+- The last thing to check is the shortcut you took to return the failure. A total of zero is a perfectly good total.

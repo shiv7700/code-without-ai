@@ -1,0 +1,5 @@
+- Rules 4 and 5 are the familiar pair: subscribe once, and still run the selector from the newest render.
+- Write it with the selector in the effect's dependency list, then count subscriptions rather than listeners. The listener count will look perfectly healthy.
+- The callback you subscribe with is created once and lives for the whole mount, so it cannot close over the selector. It has to go and ask for the current one.
+- Rule 6 is the other half. You are comparing the slice you last rendered against the one you have just worked out, so what you compare against has to be kept in step on every render.
+- That comparison is the only thing allowed to cause a render. Nothing else in the hook should.

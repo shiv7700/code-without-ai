@@ -1,0 +1,4 @@
+- The last test passes a false and two undefineds and expects the class to be exactly "chip" — no trailing space, no double space anywhere.
+- Concatenating into a growing string forces a decision about the separator at every step, and the step that contributes nothing still contributes its space.
+- Build the pieces as a collection instead, where "does not apply" is simply an entry that gets removed, and put the separator in once at the end.
+- Rules 1 to 4 are already the order of that collection, so the ordering test costs you nothing extra.

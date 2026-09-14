@@ -1,0 +1,4 @@
+- Two events fire for one keypress, and they see the box in two different states. Pick the one that still shows what the user had before the key did its work.
+- If you find yourself asking whether the box is empty after a deletion, you are in the later of the two.
+- Once you are in the earlier one, the key is only interesting when there is nothing left to delete — in every other case let the browser get on with it.
+- Removing a chip takes away the element that was pressed, so something has to say where focus goes next, or the page decides for you and picks the top.

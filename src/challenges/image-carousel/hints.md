@@ -1,0 +1,4 @@
+- One index in state, and everything on screen is that index read against the array.
+- Forward past the end and backward before the start are not the same problem: the remainder of a negative number is still negative, and there is no such position in an array.
+- Add a whole length before taking the remainder and both directions collapse into the same one line.
+- The "2 / 3" reading and the marked dot are both that index again, worked out during render. Neither is extra state.

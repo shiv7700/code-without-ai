@@ -1,0 +1,5 @@
+- The last test is the one to aim at: the row appears on screen, and the array you were handed still has three entries.
+- The method that cuts an array open at an index does it in place, to the array that came back from state — the one React already rendered — and hands you back the part it removed rather than the result.
+- Because it is that same array, React compares it against itself afterwards, sees nothing new, and skips the render.
+- What you want is a new array made of three parts: everything up to and including the row whose button was pressed, then the new item, then the rest.
+- Taking a section of an array without disturbing it is a different method from the one that cuts. The names are nearly the same, which is most of the problem.

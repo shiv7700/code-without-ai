@@ -1,0 +1,4 @@
+- Write the second test first: text of exactly the limit gets no ellipsis and no button at all.
+- One comparison decides three things at once — whether the button exists, whether the text is cut, and whether an ellipsis appears.
+- The visible string ends up one character longer than the limit, and that is correct. The ellipsis is decoration, not one of the counted characters.
+- Expanded is the only thing worth storing. The cut string is read off the text and that flag while rendering.

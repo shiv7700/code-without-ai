@@ -1,0 +1,4 @@
+- Every one of the five rules is about the same moment: the instant you hand a value to the setter.
+- Ticking the same box twice is the test that tells the two implementations apart. If the second click appears to do nothing, state and the thing you handed it are one object.
+- Both of the methods that change a Set look like they return something useful. One returns the Set itself, the other a yes-or-no. Neither is a new Set.
+- The way out has the same shape as copying an array before writing to it: build the new one, change that, and only then hand it over.

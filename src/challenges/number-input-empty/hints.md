@@ -1,0 +1,4 @@
+- Type each of the test cases into what you have written and watch the box itself, not the value underneath it. Three of them fight back.
+- Empty text is not a number, but the conversion you are using disagrees, and says it is zero.
+- "3." and "3" convert to the same number, which is why the point vanishes the moment it has been round-tripped through one.
+- There are two pieces of information here, and only one of them can be rebuilt from the other. Keep the one that cannot.

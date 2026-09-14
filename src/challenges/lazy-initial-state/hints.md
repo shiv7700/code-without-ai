@@ -1,0 +1,4 @@
+- Only one line needs to differ from the obvious version, and the tests that fail are about counting, not about what is on screen.
+- Whatever you pass as the initial state is evaluated where it is written — in the body of the component, which runs again for every keystroke.
+- React ignores the result after the first render, so nothing ever looks wrong. The work simply happens again, every time, for nobody.
+- Hand it something that can be called rather than something already worked out, and React gets to decide when — which is once.

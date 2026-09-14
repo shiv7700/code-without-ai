@@ -1,0 +1,5 @@
+- Write the test grouping the strings 'toString' and 'constructor' in your head first. Everything else passes with almost any version.
+- A plain object already has those keys before you put anything in it — inherited rather than its own — and they are already truthy.
+- So "if the bucket is missing, create it" never fires for them, and the items get pushed onto something that was never an array.
+- Two ways out, and they are different in kind: start from an object that inherits nothing, or ask whether the key belongs to the object itself rather than whether reading it gives you something.
+- The other half of the signature is that keyFor may be a property name instead of a function, and the cheapest place to settle that is once, before the loop.

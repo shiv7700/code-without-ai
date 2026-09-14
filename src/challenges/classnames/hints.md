@@ -1,0 +1,4 @@
+- No trap in this one, just four kinds of argument. Write down what each kind contributes before you write a line.
+- Joining everything with spaces and then cleaning up the doubles afterwards is the version that breaks later. Collect what survives, then join once.
+- Numbers are the awkward kind: zero contributes nothing, and one contributes the text "1".
+- Rule 4 is what makes it recursive, because an array may hold anything the function itself accepts — including another array.

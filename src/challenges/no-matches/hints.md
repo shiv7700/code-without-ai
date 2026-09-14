@@ -1,0 +1,4 @@
+- Read tests 3 and 4 together. Both end up with nothing to show and they have to say different things, so the number of matches cannot be what you branch on.
+- Two separate questions live here: is there any data at all, and did the search find any of it. The first has to be asked before the filter has any say.
+- Answer them in that order and the third case needs no special handling — items exist and matches exist is simply what is left over.
+- Both empty branches drop the list element entirely, so the list and the message are alternatives to each other, never siblings.

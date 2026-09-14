@@ -13,10 +13,11 @@ import {
 } from '@codesandbox/sandpack-react'
 import { toast } from 'sonner'
 import { loadSolution, saveCode, saveDone, saveSolution } from './store'
-import { SHIM_FILES } from './sandpackVitestShim'
+import { DEPS, SHIM_FILES } from './sandpackVitestShim'
 import { sandpackThemes } from './sandpackTheme'
 import { useTheme } from './theme'
 import { ThemeToggle } from './ThemeToggle'
+import { Hints } from './Hints'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,16 +32,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-
-const DEPS = {
-  '@testing-library/react': '^16.0.0',
-  // peer dep of react/user-event — Sandpack will not pull it in on its own
-  '@testing-library/dom': '^10.4.0',
-  // pinned: 14.6.2+ hangs on click/type until the 5s jest timeout
-  // https://github.com/testing-library/user-event/issues/1323
-  '@testing-library/user-event': '14.6.1',
-  '@testing-library/jest-dom': '^6.4.0',
-}
 
 const SETUP = { dependencies: DEPS }
 
@@ -258,7 +249,8 @@ export default function Challenge({ challenge }) {
   const theme = useTheme()
   const [view, setView] = useState('tests')
   const [status, setStatus] = useState({})
-  const { name, title, summary, level, stub, files, needsUi, tests } = challenge
+  const { name, title, summary, level, stub, files, needsUi, tests, hints } =
+    challenge
 
   // `undefined` until the saved row lands. Sandpack cannot be handed the stub
   // and then the real code — that is a file change, and it re-bundles.
@@ -401,6 +393,8 @@ export default function Challenge({ challenge }) {
               <Separator orientation="vertical" className="h-5 data-vertical:self-center" />
             </>
           )}
+
+          <Hints title={title} hints={hints} />
 
           {/* Destructive, so it sits away from Run rather than beside it. */}
           <ResetToStub

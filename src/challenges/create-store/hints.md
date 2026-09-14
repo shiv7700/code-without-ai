@@ -1,0 +1,4 @@
+- Two rules carry this: subscribers are notified after the state has already been replaced, and one unsubscribing mid-notification must not skip the next.
+- The second is the emitter challenge's bug again — removing from the collection you are iterating. Notify over something the removal cannot shift.
+- The first is just ordering inside dispatch, and it is worth being deliberate about, because the subscriber calls getState itself and reads whatever is current at that instant.
+- The state and the subscriber collection both live in the closure created per call to createStore, which is the whole of rule 6.

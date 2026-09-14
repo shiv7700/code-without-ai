@@ -1,0 +1,5 @@
+- The last two tests are the design: a change must produce a different object, and the four actions must stay the same objects.
+- Adding to the collection already sitting in state changes its contents but not its identity. React compares the reference, sees no difference, and renders nothing.
+- So every action builds a new collection from the old one and hands that over. Copying something this small is cheaper than the bug from not copying.
+- And the actions cannot read the current collection to copy it, or they would have to be rebuilt every render. Ask state for its previous value at update time instead.
+- The starting contents are consulted once, when the state is created. Rebuilding a collection from them on every render is work immediately thrown away, and there is a form of initialisation that skips it.

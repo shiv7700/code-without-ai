@@ -1,0 +1,4 @@
+- Rules 1 and 6 together rule out the first thing you will reach for.
+- "Have I rendered before" feels like state. Store it as state, then count how many times the component renders on mount.
+- What you want is a value rendering can read, that you can write to without anyone noticing, and that is separate for every mounted component.
+- Where you flip it matters. It belongs in the first run of the effect itself, not in the render above it.

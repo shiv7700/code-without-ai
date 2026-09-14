@@ -1,0 +1,5 @@
+- The last two tests render the row on its own with no card anywhere above it. Everything that row needs has to arrive through its own props, the default currency included.
+- Handing the child the whole invoice and letting it pick out its line, or having both read one module-level constant, passes the first four tests and fails those two.
+- So the same default is written into both signatures, and the row receives exactly the one item it draws and nothing wider.
+- That leaves the card two jobs: turn the items into rows, and collapse the same array down to one number. Both read the items directly; neither reaches into the row component for arithmetic.
+- The two-decimal formatting appears in three places. A plain helper shared by both components is fine — the thing that must not be shared is the currency, because that one is data.

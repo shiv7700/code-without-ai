@@ -1,0 +1,5 @@
+- The function you hand to tick is created in one particular render and goes on reading that render's variables for as long as it lives. Everything here follows from that.
+- Guarding with the status held in state therefore tests a word that was true when you subscribed and has been wrong ever since. The job finished; the polling did not.
+- The status that just came back, on the other hand, is in scope right there and is current by definition. Decide from it.
+- "Never ask again" is a stronger claim than "do not update the screen". The listener has to actually come off, and the last test counts listeners to prove it.
+- Detaching a subscription from inside the work that subscription kicked off is the awkward part. You need a handle to it that outlives the render where it was set up.

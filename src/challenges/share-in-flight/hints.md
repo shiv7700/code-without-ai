@@ -1,0 +1,5 @@
+- Two tests pull in opposite directions: instances mounting together make one request, a later mount makes another. Whatever lives in the map has to be short-lived on purpose.
+- Storing the result cannot satisfy the first one, because at the moment the second instance mounts there is no result yet. There is only a request in progress.
+- So store the thing that stands for a request in progress. Any number of instances can hang their own handlers off the same one and each gets the answer when it comes.
+- Removing the entry when the answer arrives is only half the job. The last test rejects, then mounts again — a failed request left in the map re-fails instantly for everyone who asks from then on.
+- There is a way to attach a step that runs whichever way it settled, without changing what the waiters receive. That is the one place the removal belongs.

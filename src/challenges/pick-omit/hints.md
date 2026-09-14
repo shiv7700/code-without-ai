@@ -1,0 +1,4 @@
+- Three tests disagree with each other on purpose: a key that is absent, a key holding undefined, and a key that exists only on the prototype.
+- Deciding "does it have this key" by reading the value and comparing it to undefined gets the second one wrong. The key is genuinely there.
+- Deciding it by asking whether the key is reachable gets the third one wrong. Inherited keys are perfectly reachable.
+- There is one question that answers all three correctly, and omit needs it just as much as pick, because the loop that copies everything else must not walk up the chain on its way out.

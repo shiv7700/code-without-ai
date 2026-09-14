@@ -1,0 +1,5 @@
+- Write it the obvious way first and read the failure message carefully. The expected and received strings differ by single characters, and where they differ tells you exactly which rule JSX applied.
+- The rule: whitespace between things on the same line survives, whitespace that wraps across a newline does not. Your formatter decides which of those you have, and it will not ask you.
+- So a space that must be there regardless of formatting has to stop being whitespace in the markup and become a value instead — a one-character string, put in the same way any other value is.
+- Do not reach for the HTML entity. It renders as a space that looks identical and the last test knows the difference.
+- The optional part is the only place where the leading space belongs, which means the space travels with it rather than being left behind on the line above.

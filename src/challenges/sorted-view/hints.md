@@ -1,0 +1,5 @@
+- Sorting an array does not hand you a sorted array and leave the old one alone. It rearranges the one you called it on and hands that same one back, which is why the last three tests exist.
+- Make a shallow copy first. The items inside can stay exactly as they are — it is the order that has to be yours rather than the caller's.
+- The number in front of each row does not come from the loop you are rendering. It is a question about the original list: where was this track before anything moved.
+- Which means you need both orders alive at once. That falls out for free the moment the copy exists, and is impossible the moment it does not.
+- Two different sorts, one of them going backwards. Work out which comparator subtracts and which compares text before you write either.

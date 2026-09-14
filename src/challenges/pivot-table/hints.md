@@ -1,0 +1,5 @@
+- Only the chosen column is state. The whole report is a walk over the rows done during render, so changing the select needs no other machinery at all.
+- Do the grouping in one pass: for each row, work out its key, make the bucket if it is not there yet, push the row in. The counts and sums come from the buckets afterwards.
+- The last test groups by a column of years. Write the grouping the obvious way, run it, and look at the order you get back.
+- Keys on a plain object are strings, and the ones that look like whole numbers are handed back in numeric order no matter what order they went in.
+- There is a container in the language whose keys can be anything and which always gives them back in the order they arrived. That is the entire fix.

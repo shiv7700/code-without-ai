@@ -1,0 +1,5 @@
+- Three pieces hold the whole thing: what is playing, what is still to come, and what has already been. Next moves one item from the second to the first and pushes the old one onto the third; Previous does exactly that in reverse.
+- Because the history is a list of its own, shuffling never confuses Previous. It walks what happened, not what was planned.
+- Turning shuffle on is a single event that rewrites what is still to come. Do not touch the randomness anywhere else — Next should not know that shuffle exists.
+- The one you are listening to cannot be in the new deal, and the same is true when the deal runs dry and you make another. That is the case the tests press four times to reach.
+- Repeat one is the easiest rule in the list once you notice it is not a different kind of Next. It is Next declining to run.

@@ -1,0 +1,5 @@
+- The board is a list of columns each holding a list of cards, so a move is two edits at once: one column loses a card, another gains it. Do both in a single update or you will briefly have the card twice, or not at all.
+- Find the column the card is in rather than passing the column down with it. Then left and right are the same function with a different step.
+- The last test presses the arrow key twice on purpose. Run it after you think you are done and watch the second press do nothing.
+- The button you pressed no longer exists after the move — a different column built a brand new one. Nothing carries focus across that on its own.
+- So you need two things: a way to reach the new button by the card's id, and somewhere to do the reaching that runs after the board has been redrawn, not during.

@@ -1,0 +1,4 @@
+- Every test asserts the full list of what is on screen, not just that the right thing is there. Read that as a constraint on your state, not on your JSX.
+- Three booleans have eight combinations and only four of them describe a screen that can exist. Nothing stops your code producing one of the other four.
+- One variable that can only hold one of four words cannot be in two screens at once, and rendering becomes a single choice rather than a chain of guards.
+- Empty is decided when the data arrives, not when it is rendered. The same array that would render zero rows is a different screen entirely, so the decision belongs where you receive it.

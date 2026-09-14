@@ -1,0 +1,5 @@
+- There is exactly one piece of state here: nine strings of raw text. Every displayed value is worked out from them during render.
+- Keeping the computed values alongside the raw ones gives one fact two sources, and the day they disagree the grid shows numbers that are no longer true.
+- Evaluating a cell means evaluating whatever it points at first, which is the same function calling itself. The chain tests come out right for free once it is written that way.
+- Left alone, that function never returns when a cell reaches itself. The way out is information the recursion carries downward: which references are already being evaluated on this path.
+- Meeting a reference that is already on the path is the cycle. Because that record is per-path and not global, a cell that merely sits near a cycle without depending on it still evaluates normally.

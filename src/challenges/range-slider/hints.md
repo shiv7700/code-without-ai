@@ -1,0 +1,4 @@
+- The two thumbs are the same component twice. Write one and pass it which of the two it is, or you will be maintaining the same clamp in two places and getting it wrong in one.
+- Each thumb has a floor and a ceiling, and only two of those four numbers come from the props. Work out all four before you touch a key handler.
+- Once the floor and ceiling are right, the keys need no special cases: even the end-to-end jumps are just those two numbers.
+- The same pair of numbers goes into the attributes a screen reader reads. If you find yourself computing the limit twice, in two different shapes, that is the bug in waiting.

@@ -1,0 +1,4 @@
+- Start with the tally. It re-renders on every change, so the first change that fails to re-render shows up there.
+- Clearing is the half that goes wrong. Look up what that method actually evaluates to before you hand it to the setter.
+- The spread you use for objects does nothing at all for a Map — its entries are not properties, so the copy comes out empty and nobody tells you.
+- The constructor takes an existing Map and gives back a fresh one holding the same entries. That is the whole of the copying step.

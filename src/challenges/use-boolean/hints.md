@@ -1,0 +1,5 @@
+- The last test checks two things. The second half — the individual function — is the easy one. It is the first half, the object itself, that fails.
+- Three stable functions inside a fresh wrapper still give the caller a fresh wrapper, and the wrapper is what goes into a dependency list.
+- So the object has to be built once and kept, the same way the functions are. A literal written in the hook body is rebuilt every render, always.
+- If none of the three functions reads the value — each one computes the next state from what the setter hands it — then nothing inside the object ever goes stale.
+- Which means nothing about it has any reason to be rebuilt after the first render, and it can be produced once, depending on nothing.

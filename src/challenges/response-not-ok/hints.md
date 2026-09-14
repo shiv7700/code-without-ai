@@ -1,0 +1,4 @@
+- Look at the second test first: the promise resolved perfectly happily, nothing threw, and the screen still has to show an error.
+- A response arriving is success at the transport level only. Whether the server agreed to do what you asked is a separate field on that response, and nobody checks it for you.
+- The catch you already have is the right place for both kinds of failure, which means the not-ok case has to become a thrown thing before it gets there.
+- Rule 4 rules out reading the body and deciding afterwards. The check happens before you touch the body at all, so the status is the only thing you have to build the message from.

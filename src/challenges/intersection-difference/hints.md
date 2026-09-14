@@ -1,0 +1,5 @@
+- The keyFor test is the one that separates a real answer from a plausible one, and the giveaway is which array the surviving object came from.
+- Computing a key for the item you are looping over and then asking whether the other array contains the item itself compares raw objects, finds nothing, and returns an empty result that reads like a data problem rather than a bug.
+- Both lists go through keyFor. Turn the second list into its keys once, before the loop, not once per item.
+- Not-a-number has to match itself, which rules out some of the ways of asking "is this in there" — the same distinction the deduplicate challenge turned on.
+- A repeat in the first list appearing only once means you are tracking what you have already emitted, as well as what the other list holds.

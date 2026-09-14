@@ -1,0 +1,5 @@
+- The test that shift-clicks twice in a row dictates the state: the second rectangle is measured from the original click, not from the first shift-click.
+- So "what is selected" and "where am I measuring from" are two separate pieces of state. Only a plain or a modifier click moves the second one.
+- A rectangle between two cells is four numbers — the smaller and the larger of each coordinate — which is why it works in every direction with no special case.
+- Shift builds a fresh selection from that rectangle and replaces whatever was there. Modifier-click edits the existing one by exactly one cell. A plain click throws it all away.
+- Identify a cell by a single value combining its row and column, and membership becomes one lookup instead of a search through pairs.

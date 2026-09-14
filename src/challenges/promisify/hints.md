@@ -1,0 +1,5 @@
+- The last two tests are the spec: nothing runs until the wrapper is called, and calling the wrapper twice starts two independent runs.
+- Building the promise where you build the wrapper gives every caller one shared promise, settled by whichever call happens to get there first.
+- So the promise is created inside the wrapper, once per call, and the callback you append is what settles that particular one.
+- The error-first convention is not "was a first argument passed". A null there is a success. Only a truthy one is a failure.
+- The caller's arguments are all of them except the callback, and the callback goes on the end however many there were — so do not count them.

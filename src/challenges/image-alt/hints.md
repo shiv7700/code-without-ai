@@ -1,0 +1,5 @@
+- The last test is not about what you render, it is about what React does with a prop that has no value. Passing nothing for an attribute is not the same as passing an empty string, and only one of the two reaches the DOM.
+- Fixing that is a default, and the default you want is not a placeholder sentence. It is the shortest string there is.
+- The fourth test looks for the image by its role and expects to find nothing. You are not adding an attribute to hide it — the browser already treats an image with nothing to say as decoration.
+- One prop overrides the other rather than combining with it, so that branch is a single expression in the attribute, not two.
+- The two size numbers go on as they are. React writes a bare number into an attribute perfectly well; it is only in inline styles that it adds units.

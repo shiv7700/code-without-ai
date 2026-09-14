@@ -1,0 +1,5 @@
+- The two tests that decide everything are the nesting one and the one where markers inside backticks stay literal.
+- Handling one mark at a time across the whole string — all the bold, then all the italic — cannot produce either. The second pass has no idea it is standing inside the first one's contents.
+- Instead, scan once for whichever mark starts earliest, emit the plain text before it, deal with that one match, and carry on from just past it.
+- Dealing with a match means calling the same function on its contents, which is where nesting comes from — except for code, whose contents are taken as they are and never looked at again.
+- Two asterisks have to be tried before one, or every bold reads as an empty italic; and an opening marker with no partner is an ordinary character, so a match only counts once the closing one has been found.

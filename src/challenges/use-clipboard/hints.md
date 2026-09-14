@@ -1,0 +1,5 @@
+- Two tests carry this one: copying again restarts the window, and unmounting cancels the pending reset.
+- A second copy while the first timer is still running has to cancel that timer first. Otherwise the first deadline arrives on schedule and turns the flag off early.
+- So the pending timer id has to be reachable both from the next call to `copy` and from the unmount cleanup — somewhere that survives renders, since nothing about a timer id should render anything.
+- The write can reject, and rule 4 says nothing throws and the flag stays false. So the flip to true happens after it resolves, not before.
+- `copy` has to be the same function on every render, which means everything it touches must either never change or be looked up at the moment it runs.

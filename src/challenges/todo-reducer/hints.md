@@ -1,0 +1,5 @@
+- Two tests separate a working reducer from a plausible one: an unknown action returning the exact same state object, and the previous state coming out untouched.
+- "The same object" means handed straight back, not rebuilt with matching contents. What the caller does with it is an identity comparison, and a fresh object with the same fields fails that.
+- Every other action returns a new top-level object. The todos array inside it is new only when the todos actually changed — setting the filter leaves the todos as the same array they were.
+- Appending, flipping one, and dropping one are three shapes of the same job: produce a new array without writing into the array you were given, and without touching the todo objects you are not changing.
+- An id that does not exist has to be a quiet no-op rather than a crash, so nothing in the code may assume the search found anything.

@@ -1,0 +1,5 @@
+- The last two tests have the teeth: the header box has three states, and only two of them can be expressed in JSX.
+- Indeterminate is a property on the DOM element with no attribute behind it, so it has to be set on the node after the node exists.
+- Checked, indeterminate and neither are all answers to a counting question about the options. None of it is stored.
+- What you do store is which ids are selected — and reporting them in the options' order means deriving the array from the options, not from the order they were clicked.
+- Select-all is one branch: everything already ticked means clear, anything else means tick the lot.

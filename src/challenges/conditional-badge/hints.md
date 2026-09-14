@@ -1,0 +1,4 @@
+- The `count={0}` test compares the entire rendered text to just the label, so a bare "0" with no bubble around it still fails.
+- `&&` does not hand back a boolean. It hands back whichever side it stopped on, and React prints a 0 as happily as it prints a name.
+- The thing you want on the left is not the count but the answer to a question about it. A comparison produces a real boolean, and React draws nothing for those.
+- The class is a separate rule: the last test compares the whole className exactly, so when nothing extra applies there must be no leftover space or empty slot beside the base.

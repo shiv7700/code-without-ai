@@ -1,0 +1,5 @@
+- Two things can finish this: the work and the clock. Build the thing you hand back first and let both of them reach into it, rather than trying to combine two promises you already have.
+- Whatever settles a promise second is ignored for free — that part you get without writing anything. The last test is not about that.
+- The clock is something you started, so it is something you have to stop, and the place to stop it is wherever the work reports back. Both ways it can report back.
+- The signal is the only window onto a timer still running. If it turns on a minute after the work was done, the callback holding it never got cancelled.
+- The thing that tells the work to give up is created before either racer starts, because the work needs it at the moment it is called.

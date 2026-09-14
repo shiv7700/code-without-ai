@@ -1,0 +1,5 @@
+- The test that opens root, then src, and checks that utils is still closed is the one that decides your structure.
+- One component that renders itself once per child, each holding a single boolean of its own, gets that for free. One component holding a collection of open paths has to key them correctly and prune them.
+- A closed folder should not render its children at all — which also means their state does not exist yet, and that is fine.
+- The ordering rule is one comparison: split folders from files, order each group by name, then join the two groups.
+- Ordering the array you were handed in place edits the prop. Make the ordered copy during render.

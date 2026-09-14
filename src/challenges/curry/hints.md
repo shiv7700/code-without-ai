@@ -1,0 +1,5 @@
+- The test that decides this is the one reusing a partial application twice with different arguments.
+- Collecting arguments by appending to an array that lives outside the returned function means both of those calls append to the same array.
+- Each call has to produce a fresh collection holding what it was given, with no way for a sibling call to see it.
+- How many is "enough" is a property of the function you were handed, read once at the start — and it is also why a function declaring no parameters runs immediately.
+- The shape is recursive: either you have enough and you call through, or you do not and you hand back something that will ask the same question again.

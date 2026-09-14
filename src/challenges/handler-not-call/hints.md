@@ -1,0 +1,4 @@
+- The second test is the one that fails before you have clicked anything: at render time, nothing is allowed to have happened yet.
+- What you put on onClick is a value React stores and calls later. Finish it with parentheses and it has already run, while the JSX was still being assembled — and again on every render after.
+- Which is why "every button carries its own amount" is a separate rule. The amount has to be kept somewhere until the click arrives.
+- You need a function that takes no argument and knows its amount anyway, built fresh for each preset as you walk the list.

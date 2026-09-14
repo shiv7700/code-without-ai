@@ -1,0 +1,4 @@
+- Two of these tests pass a `role` and two do not, but the one that decides the shape of your code is the one passing `role={null}` and expecting an empty box.
+- A default written in the parameter list fires for exactly one absent value. A falsy check in the body would swallow the null as well, and the null is a value somebody chose to send.
+- `location` is not a fallback question at all. The test looks for the element itself, not its text, so there is nothing to fall back to.
+- An expression that produces nothing puts nothing in the DOM. You already have the value in hand; the markup just has to depend on whether it is there.

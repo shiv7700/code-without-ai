@@ -1,0 +1,5 @@
+- The last test is the point of the whole pattern: the request failed, the alert is up, and the old value is still readable on screen.
+- A single status going loading then error cannot express that, because the error has to coexist with a value that is still perfectly good.
+- The value and the verdict on the latest request are two different facts. A failure is news about the request; it says nothing about whether what you already had is worth showing.
+- The cached value comes in as a prop and has to be on screen on the very first render, before any effect has run — so it is where the state begins, not something copied in afterwards.
+- Which also decides rule 4: with nothing handed in, the state begins empty, and empty is what "loading" means here.

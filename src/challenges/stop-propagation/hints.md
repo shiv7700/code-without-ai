@@ -1,0 +1,4 @@
+- The test that separates a working answer from a plausible one is the one where removing a row while nothing is selected must leave nothing selected.
+- A click on the button is also a click on the row containing it. The row's handler runs too, and it runs after yours, so anything you set first gets overwritten.
+- The event object your handler is given is what decides whether the click carries on travelling upward.
+- Selection is one value for the whole list, not a flag on each row. A row rendered with a false attribute still has the attribute, and rule 2 says the others carry none at all.

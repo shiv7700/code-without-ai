@@ -1,0 +1,4 @@
+- The last two rules are about what you store when it fails, not about what you render.
+- A boolean saying "it failed" throws away the only useful thing the failure was carrying. What you caught is an object, and the part worth keeping is a string on it.
+- The two outcomes have to be able to erase each other — a failure must leave no temperature behind, and an answer must leave no alert behind.
+- That is much easier when they are not two independent variables that can both be set at once.

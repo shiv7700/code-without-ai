@@ -1,0 +1,5 @@
+- Two tests carry this: both spellings of a space decoding to a space, and a value containing an ampersand surviving a round trip.
+- The decoder you will reach for handles percent escapes and knows nothing at all about `+`. That is form encoding, not URL encoding, and a search for two words arrives at the backend with a plus in the middle and matches nothing.
+- Splitting a pair on `=` and taking two pieces throws away everything after the second one. An encoded value is exactly where a second `=` comes from.
+- A key seen once is a string and seen twice is an array, so the shape is not decided until something is already stored. Handle it on the second occurrence, not the first.
+- On the way out, undefined values are skipped entirely while an array becomes the same key repeated — which is easier if you build a flat list of pairs first and join once at the end.

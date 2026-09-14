@@ -1,0 +1,5 @@
+- The test that separates a real answer from a plausible one is the branch off the path coming back as the very same object.
+- Copying the whole structure satisfies "the original is untouched" and fails that one. The cost does not show up here; it shows up as everything re-rendering.
+- So exactly the objects along the path get copied — the root, and each one below it — and everything hanging off to the side is carried across as-is.
+- That shape is recursive: copy this level, then replace one key in the copy with the result of doing the same thing one level down.
+- The base case is the final key. The "missing objects are created" rule decides what you recurse into when there is nothing there, and a numeric key wants a different empty container from a name.

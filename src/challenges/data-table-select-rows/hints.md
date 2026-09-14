@@ -1,0 +1,5 @@
+- Assume the filter and a three-state header checkbox both already work. Two tests decide this one: the header reflecting the visible rows, and a selection surviving being filtered out.
+- Those two pull in opposite directions — the selection is about every row, the header checkbox is about the rows currently on screen.
+- So checked and indeterminate are computed against the filtered list, never against `rows.length`.
+- Clearing from the header removes only the visible ids and leaves the hidden ones exactly where they were. It is a subtraction, not a reset.
+- The reported array is still ordered by the original rows, not by the filtered view.

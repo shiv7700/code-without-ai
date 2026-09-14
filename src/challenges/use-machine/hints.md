@@ -1,0 +1,5 @@
+- The test that fails a guard and then checks both the state name and the retry count is the one that fixes the design.
+- If the state name and the context are two separate pieces of state, the transition has to be worked out twice, once in each update — and the two can disagree about whether the guard passed.
+- Keep them in one object. A single update decides everything: look the event up in the current state's own table, and if it is not there, hand back what you already had.
+- The guard is asked before anything changes at all, and a false answer cancels the whole transition, context included — not just the state half.
+- The sender has to keep its identity, so it cannot read the current machine state from the render it was created in. Ask state for its previous value at update time and everything the transition needs is right there.

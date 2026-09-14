@@ -1,0 +1,5 @@
+- Rule 4 is the one that decides the design: `reset()` goes back to the `from` the caller is passing now, not the one it was mounted with.
+- Rules 5 and 6 rule out reading `left` — three ticks in one handler would all see the same number, and a function that reads it cannot keep its identity anyway.
+- So `tick` subtracts from whatever it is handed at the moment it is applied, and clamps at zero there rather than afterwards.
+- `reset` has the opposite problem. It needs a value that lives outside state and changes on every render, while itself never changing.
+- That value has to be readable at call time from somewhere the function did not capture. Same trick as the latest-callback hooks, pointed at a number instead of a function.

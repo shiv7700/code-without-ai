@@ -1,0 +1,4 @@
+- Four of the five tests pass whichever way you write it. Only the last one separates the eager version from the lazy one.
+- Write the obvious one-liner, then say out loud what happens on the fourth render. The value is right, and something still ran four times.
+- The trouble is not where the value is kept. It is that the argument was worked out before the call that goes on to ignore it.
+- So the building has to happen in the component body, after you have looked to see whether it has been built already.

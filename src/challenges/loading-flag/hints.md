@@ -1,0 +1,4 @@
+- The first two rules pass with the obvious version. Rule 3 is the exercise, and it is a one-line difference.
+- Turning the flag off on the line after the await is a line that only runs when nothing threw. One failed request and the spinner is up forever.
+- Turning it off inside the catch as well works, and now the same line exists in two places that must never drift apart.
+- There is a third branch available, one that runs whichever way the promise went. The flag going down is true either way, so that is where it belongs.

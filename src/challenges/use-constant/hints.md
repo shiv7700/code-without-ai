@@ -1,0 +1,4 @@
+- Start from the version you would write in a hurry, then read rule 5 again.
+- Something has to stand for "nothing here yet", and the factory is allowed to hand you null, zero or an empty string.
+- So "is the slot still empty" cannot be a question about the value. It has to be a question about a marker only you could have put there.
+- Anything will do as that marker, as long as no factory anywhere could ever return the same thing.

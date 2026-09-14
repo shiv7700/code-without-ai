@@ -1,0 +1,3 @@
+- The last test is the one that rules out rendering both: with items present the empty element must not exist, and with none the list element must not exist either.
+- An empty list element is not an empty state — it is a blank rectangle that reads as a bug. There are two different outputs here and exactly one of them renders.
+- Rule 3 hands you no array at all, so whatever you ask about its length has to survive the prop not being there. Fixing that where the prop is named is cheaper than guarding at every use.

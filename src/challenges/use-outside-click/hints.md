@@ -1,0 +1,5 @@
+- The last test decides the design: the newest handler is the one that runs, and the listener was attached exactly once across three renders.
+- Attaching `handler` itself forces a detach and reattach whenever it changes, and the caller passes a brand new arrow on every render.
+- Attach something that never changes instead — a small function that goes and finds the current handler when the event fires, and calls it with the event.
+- `enabled` being false means no listener exists at all, not a listener that returns early, so it is one of the few things that genuinely belongs in that effect's dependency list.
+- `ref.current` can be null, and "is the click inside it" has to answer that without throwing.

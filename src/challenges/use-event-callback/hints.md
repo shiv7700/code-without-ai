@@ -1,0 +1,5 @@
+- Rules 2 and 3 are a trap laid for the dependency array. Write it with only a dependency array and see which of the two you end up giving away.
+- The function you hand back has to be built once. Nothing about it can change, ever.
+- What does change every render is the body it should run — so the returned function cannot hold that body, only a way of asking for it.
+- You need a box that survives renders, whose contents you can quietly replace, and replacing them must not re-render anything.
+- Filling the box is the render's job, not an effect's. The whole point is that it is already current before anybody calls the function.

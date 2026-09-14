@@ -1,0 +1,5 @@
+- Work out the last two tests first: closing returns focus to the trigger, and reopening starts at the first item again.
+- Together they mean the active position is reset on open, and that "what had focus before" is always the trigger — so there is nothing to capture.
+- Focus cannot be described in JSX. Keep the real elements to hand as the list renders, then move focus once the DOM exists, in an effect keyed on the active position.
+- The arrow keys only move that position and let the effect do the focusing. Focusing directly from the key handler aims at an element the new render has not produced yet.
+- The outside click is a listener on the document, removed when the menu closes — and the very click that opens the menu is itself an outside click if you start listening too early.

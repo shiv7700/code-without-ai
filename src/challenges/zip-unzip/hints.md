@@ -1,0 +1,5 @@
+- Two tests carry this: the short list padded rather than cut off, and zip called with no lists at all.
+- Reading the length off the first list looks right until a later list is longer, and then you have silently dropped data rather than crashed.
+- So the row count comes from the longest input, which is a value you compute across all of them.
+- Whatever you compute it with, hand it nothing and look at what comes back. It is not zero, and it is not an error either.
+- Once zip is right, unzip is one call to zip. The rows you were given are already the lists it wants.

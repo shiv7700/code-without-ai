@@ -1,0 +1,5 @@
+- One piece of state: the square the knight is on. Everything highlighted is worked out from it while rendering, so there is nothing to clear when it changes.
+- Rank 8 at the top means the outer loop counts down and the inner one counts up. Get that right first, because the first test is the only one that checks it.
+- A knight's move is two steps one way and one step the other, in every combination of directions. There are eight of them and they are worth writing out once, at the top, rather than generating.
+- Working in a single flat list of 64 is the trap. Adding an offset to a position in that list cannot tell the right-hand edge from the left-hand one of the next row.
+- Keep a file and a rank as two separate numbers, move both, and then throw away anything where either one has left the board.

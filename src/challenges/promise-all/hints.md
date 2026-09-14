@@ -1,0 +1,5 @@
+- Two tests do the work: input order held while the fast one finishes first, and rejecting without waiting for what is still running.
+- Pushing results as they arrive records finishing order. You already know each one's slot before it settles, so write to that slot.
+- Which also means "are we done yet" cannot be the length of the results array. Count separately.
+- A counter that starts at zero and never gets incremented is why an empty input hangs forever. Answer that case before you start anything.
+- Rejecting costs nothing to get right: a promise settles once, so the first rejection you forward wins and every later one lands on something already settled.

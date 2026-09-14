@@ -1,0 +1,5 @@
+- Every test here asks one question: what counts as a use. Reads count, and so does writing to a key that is already there.
+- You need the entries ordered by when they were last used, and you need to find one by key without scanning. One built-in container gives you both at once.
+- That container remembers the order things went in. Removing a key and putting it straight back moves it to the end — which is the entire recency update, with no list to maintain.
+- Eviction then takes the entry at the other end, and getting the first item out of an ordered collection is a single step rather than a loop.
+- A stored undefined still occupies a slot, so "is this key here" and "what is under it" stay two separate questions, exactly as in memoize.

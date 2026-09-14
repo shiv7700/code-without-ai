@@ -1,0 +1,4 @@
+- One pass over the text finds every hole. You do not need to walk the keys of the object at all — and if you do, a key that appears twice in the text is already trouble.
+- The second argument to the replacer is where the decision lives: you are looking at one hole and you have to answer either with a value or with the hole itself, untouched.
+- Whatever you hand back as the replacement gets read before it is written, and a few characters in it mean something. Hand back the same thing a different way and nothing reads it.
+- The difference between "no value" and "a falsy value" is one comparison, and only one of the two spellings of it passes both of those tests.

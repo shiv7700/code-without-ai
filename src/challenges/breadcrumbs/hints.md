@@ -1,0 +1,4 @@
+- The last test is the only one the natural build fails: it checks the separator's tag name as well as its aria-hidden.
+- A screen reader counts list items. Three crumbs and two separators, each in a slot of its own, gets announced as a list of five.
+- The separator belongs to the crumb it follows, and lives inside that crumb's item rather than beside it.
+- The last crumb differs twice over — it is not a link, and nothing follows it. Both are the same index comparison.

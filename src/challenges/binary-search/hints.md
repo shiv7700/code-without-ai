@@ -1,0 +1,5 @@
+- Two answers have to come out of one number, so decide what the number means before you write the loop. One of the two is a position that exists; the other is a position that does not exist yet.
+- Do not stop the loop when you find a match. A match tells you where the run of equal values ends, not where it starts, so keep narrowing towards the front.
+- If the loop never returns early, it has to end somewhere useful. Let the two ends of the range close on each other and the survivor is both the first equal element and the place it would have gone.
+- One comparison after the loop, guarded against the range having closed past the last element, tells you which of the two answers you are holding.
+- The upper end starting one past the last index, rather than on it, is what makes "past the end" a legal answer.

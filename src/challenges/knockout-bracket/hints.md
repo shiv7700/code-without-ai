@@ -1,0 +1,5 @@
+- The only state is which name was clicked in which match. The shape of the draw, who is in which seat, and the champion all follow from that plus the list of players.
+- Work out the size of every round before anything else. Each is half the one below, rounded up, and you stop when you reach one.
+- Then write one function: given a round and a match, who is sitting in its seats. For the first round that is a slice of the players; for every other round it is the winners of two matches below.
+- A seat exists or it does not, and that is a question about the count, not about the names. A seat that exists but is undecided is a different answer again, and the rules want them drawn differently.
+- Once a match has only one seat, its winner needs no clicking. Say that in the function that answers "who won this match" and byes stop being a special case anywhere else.

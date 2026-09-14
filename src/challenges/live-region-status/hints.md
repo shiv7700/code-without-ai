@@ -1,0 +1,4 @@
+- The last test compares elements, not text. Nothing about your markup may depend on whether there is a message.
+- So the conditional you are about to write around the whole region has to move inwards, as far in as it will go.
+- How far in? Until the only thing it decides is which of the two holds the words.
+- Two regions, both always present, because the urgent one and the ordinary one are different elements with different manners — and you cannot turn one into the other without replacing it.

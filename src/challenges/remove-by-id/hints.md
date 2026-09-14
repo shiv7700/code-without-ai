@@ -1,0 +1,5 @@
+- The third test is the one that catches position-based answers: three removals in a row have to take the three you asked for.
+- Cutting an element out in place edits the array that came back from state — the same array React already rendered — so the positions you looked up no longer describe what you are cutting.
+- It also hands that same array back to the setter, which React compares against itself, finds unchanged, and declines to re-render.
+- What you want instead is a new array built from the old one, keeping every row whose id is not the one being removed.
+- Identity, not position: the id the button was rendered with, compared against each row's own.

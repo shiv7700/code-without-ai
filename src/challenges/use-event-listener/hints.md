@@ -1,0 +1,5 @@
+- Two tests separate a working answer from a plausible one: "calls the latest handler" and "a fresh inline handler does not reattach". The rest pass either way.
+- Callers write the handler inline, so it is a different function on every render. The dependency list of the subscribing effect decides which of those two you fail.
+- With `handler` in it, you always call the newest one and you detach and reattach on every render. Without it, you attach once and call the arrow from the first render, still holding the props from back then.
+- So the function you hand to `addEventListener` should not be the handler. It should be a small unchanging one that fetches the current handler and calls it with the event.
+- Keeping that fetch pointing at the newest handler runs every render; attaching and detaching runs only when `type` or `target` actually change.

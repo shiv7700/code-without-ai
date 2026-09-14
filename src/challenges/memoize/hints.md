@@ -1,0 +1,5 @@
+- Two tests carry it: the cached undefined, and the two separately built objects counting as the same call.
+- Deciding a hit by reading the stored value and checking whether it is truthy makes a stored undefined indistinguishable from a miss, so the function runs every single time.
+- So "is this key present" has to be a different question from "what is stored under it", and the store you pick has to be able to answer the first one.
+- Objects compared by contents means the default key is built from the whole argument list, in order, and whatever you build has to be something the store compares exactly rather than loosely.
+- The store is created when memoize is called, not when the module loads, which is why two memoized functions cannot see each other's entries.

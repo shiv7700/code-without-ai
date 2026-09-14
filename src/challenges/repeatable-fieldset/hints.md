@@ -1,0 +1,4 @@
+- Every test but the last two passes with the first thing you will write. Those two are the whole exercise.
+- The text lives in the DOM node, not in your state, so the only question that matters is whether React keeps that node or reuses it for a different row.
+- The label says "Email 2" because of where the row sits today. That is a display detail, and it is the worst possible thing to identify a row by.
+- A row needs something of its own that is decided when it is created and never changes afterwards — not its position, and not anything derived from the list.

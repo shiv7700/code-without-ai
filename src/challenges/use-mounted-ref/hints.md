@@ -1,0 +1,5 @@
+- The last two tests are the point: a callback made while the component was up has to find out later that it is not.
+- A boolean is copied into that callback at the moment the callback is created. It will answer "still here" for as long as it is alive, whatever happens afterwards.
+- What the callback captures instead is a container that outlives the render it came from, and it asks the container for the answer at the moment it runs.
+- The flip to false belongs where React tells you the component is going away — the same place you would detach a listener.
+- One container per component instance, which comes free as long as nothing lives at module scope.

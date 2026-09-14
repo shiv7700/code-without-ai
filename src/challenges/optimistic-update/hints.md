@@ -1,0 +1,5 @@
+- The sixth test clicks twice with a success in between. Every simpler test passes with the wrong rollback, so write that one first.
+- Rolling back to the prop is rolling back to what the server said at mount, which stopped being true the moment the first save succeeded.
+- What you want is the pair of values that were on screen an instant before this particular click — captured when you made the optimistic change, not read out of state later when the failure arrives.
+- The handler that ran on that click is already holding exactly those values. The failure branch lives inside it.
+- The message is a third piece of state with its own lifetime: raised by a failure, cleared by the next success, and untouched by the rollback itself.

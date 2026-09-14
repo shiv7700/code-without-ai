@@ -1,0 +1,3 @@
+- Two tests set the shape. The one passing neither header nor footer expects both of those elements gone, and the one passing no children still expects the body element present.
+- A prop can hold anything the caller is able to write down, elements included, so a slot is not a mechanism of its own — it is an ordinary prop that happens to contain markup.
+- Which means you never look inside a slot, only at whether it arrived. Three regions, two of them conditional, one always drawn.

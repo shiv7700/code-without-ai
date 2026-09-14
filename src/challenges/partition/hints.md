@@ -1,0 +1,5 @@
+- The last two tests are the real spec: the predicate runs exactly once per item, and the index it sees is the index in the input.
+- Filtering twice — once with the predicate, once with its negation — passes the first four tests and fails those two.
+- It fails quietly, too. A predicate that counts, logs or hits a cache runs twice per item, and nobody notices until every number is doubled.
+- The second filter also renumbers. The item that was third in the input is not third in the array that filter is walking.
+- One walk over the list, both buckets filled as you go. That is the whole shape.

@@ -1,0 +1,4 @@
+- Two of the tests set three props at once, so no single prop tells you the answer. The last test also counts the elements and insists on exactly one.
+- Three independent conditions rendered side by side give you three lines on screen. The conditions have to rule each other out, not merely each be true.
+- The priority listed in the rules is already the order you have to ask in, and every "otherwise" means the later question is never reached once an earlier one answers.
+- Early return, one variable assigned along the way, or nesting — the shape is the same either way: the answer is chosen before any markup gets produced.

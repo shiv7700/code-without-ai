@@ -1,0 +1,4 @@
+- Write the obvious version first, then read rule 5 and count how many different ref callbacks React has seen after three renders.
+- A new callback every render is not a tidiness problem. React empties the old one and fills the new one each time, so anything that reacts to the ref being filled runs again and again.
+- So the callback has to be the same object across renders. The interesting question is what decides when it is finally allowed to change.
+- The answer is: exactly the refs it was handed, and nothing else. They are already the right list — you just have to hand them over in the right place.

@@ -1,0 +1,4 @@
+- Three numbers end up in the output and the tests want two of them in pixels and one as a percentage, so they cannot all be written the same way.
+- React only appends "px" when it is handed a bare number. Hand it a string and it uses that string exactly — which is the only way a percentage ever gets there.
+- The prop takes an object, not a line of a stylesheet, and the keys in that object use the JavaScript spelling of each property rather than the hyphenated one.
+- Clamping is ordinary arithmetic that happens before the value reaches the object: pin it between the two bounds first, then turn the result into what the browser needs to read.

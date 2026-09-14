@@ -1,0 +1,5 @@
+- The test with two components is the one that decides everything. One of them navigates and the other has to notice.
+- Changing the address through the history interface fires no event at all. The browser only announces navigations the user caused, so nothing will tell the other component for you.
+- Each instance keeps its own copy of the path, which means something shared between all of them has to do the announcing: a list of interested parties living at module scope, joined on mount and left on unmount.
+- Navigating is then two steps, always in that order — change the address, then tell everybody listening to re-read it.
+- The browser's own back event is the other half: a listener that feeds the same re-read, and that has to be removed on unmount for the last test to pass.

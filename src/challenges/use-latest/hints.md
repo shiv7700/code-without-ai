@@ -1,0 +1,5 @@
+- The last test is the only one that matters: a callback created on mount, and never recreated, reads the newest value through what you returned.
+- Returning a fresh `{ current: value }` every render passes four tests out of five and fails that one, because the callback is still holding the first object.
+- So the container is made on the first render and never replaced. Only what is inside it is allowed to change.
+- Putting the new value in is a plain assignment, and it must not cause a render — which is the other half of why this is not state.
+- Everything else in this section is built out of this one. Get it right here and `use-timeout`, `use-event-listener` and `use-outside-click` stop being puzzles.

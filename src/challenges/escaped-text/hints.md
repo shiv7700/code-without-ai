@@ -1,0 +1,3 @@
+- The entity test is the trap. It expects five characters on screen, which only survives if nobody ever let the browser parse that string.
+- JSX already does what rule 3 asks. A string placed as an element's content becomes a text node, and a text node has no tags inside it to obey.
+- So the work here is refusing the escape hatch the first doc link describes. Nothing needs decoding, nothing needs stripping — the string goes straight in.

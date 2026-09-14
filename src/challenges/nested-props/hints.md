@@ -1,0 +1,4 @@
+- The test that passes a comment holding nothing but a body has to fill all three boxes without throwing. That test alone decides how you take the object apart.
+- Reaching two levels down in the signature breaks when the middle level is absent. A default only covers the level it is written on, and it cannot rescue a lookup happening underneath it.
+- So either hand the middle level a default of its own, or leave the signature shallow and ask carefully on the way down at the point of use.
+- The replies line has three outcomes, and "zero" and "not there" are the same outcome. Get an actual number in hand first and branch on that, rather than branching on whether the array exists.

@@ -1,0 +1,5 @@
+- Keep the digits, and build the pretty version on the way to the screen. Storing the spaces means parsing them back out on every keystroke.
+- The box hands you the text and the caret position at the moment of the edit, before you have reformatted anything. That pair is all the information you get, so take what you need from it there and then.
+- Counting characters up to the caret is the wrong unit, because you are about to change how many spaces there are. Count the things that survive reformatting.
+- Putting the caret back has to happen after the new text is on the element but before anyone sees it, which rules out the effect you would normally reach for.
+- Going from "how many digits are to my left" back to a character position is arithmetic on the group size, not a search.

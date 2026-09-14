@@ -1,0 +1,5 @@
+- The last test is the tell: after Escape and one more keystroke, the list is back and the highlight has gone back to the first match.
+- Three things change and nothing else — the typed text, whether the list is showing, and which position in the matches is active. The matches themselves are arithmetic on the first of those.
+- Because the active position is an index into a list whose length changes as you type, it has to be put back to the start by the same handler that changes the text, or it points at a match that no longer exists.
+- Every key is handled on the input, not on the list. The options never take focus here, which is why the active one is marked with an attribute instead.
+- Picking sets the text and closes the list — and the closing has to survive the text change it just caused, or the list reopens the instant you fill it in.

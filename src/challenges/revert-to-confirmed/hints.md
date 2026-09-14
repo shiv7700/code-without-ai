@@ -1,0 +1,5 @@
+- Unlike the previous challenge the button stays clickable, so two saves can be in flight — and the last test makes the first of them fail.
+- Rolling back to what was on screen before that click is now wrong. It would undo the second click as well, and the user watches the switch move to a value nobody asked for.
+- Two different things need remembering: what is currently displayed, and what the server has actually confirmed. A rollback goes to the second, never to a snapshot of the first.
+- And a result only gets to touch the screen if it belongs to the newest save. That is a question a handler created several clicks ago has to be able to ask, which rules out reading it from state.
+- Numbering the saves and keeping the newest number somewhere those old closures can still read is enough. Compare first, then write — the alert included.

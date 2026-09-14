@@ -1,0 +1,5 @@
+- The test that plays, advances two seconds and then asks the handle for the current time is the one that separates this from a plausible answer.
+- The object exposed through the ref is not rebuilt on every render. Whatever a getter on it closed over is whatever existed when that object was last built.
+- So a getter reading the time out of the render it was created in reports a number from the past, while the display right next to it is correct.
+- Two ways out: name the changing values as dependencies so the object is rebuilt, or read them through something written on every render and read on demand. The second keeps the object itself stable.
+- The exposed keys are checked exactly, so nothing extra may leak out; the ticking is still an ordinary effect keyed on whether it is playing, including the stop when the end is reached.

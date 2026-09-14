@@ -1,0 +1,4 @@
+- Two pieces of state and no more: the counts, and which option you picked. Whether the results are showing follows from the second one.
+- Nothing may be stored as a percentage or as a total. Both are arithmetic on the counts, done during render — store them and they drift the moment a count changes.
+- Your vote is one increment on one count, applied to a copy. The array arrived as a prop and is not yours to edit.
+- Since the buttons stop being rendered once a choice exists, the vote-once rule needs no guard of its own.

@@ -1,0 +1,5 @@
+- Write the last test in your head first: something checked on the right must leave the left-hand button disabled.
+- So "is anything checked" is not one question. It is two, each asked about one side only.
+- Whether a button is enabled is not state. It follows from the checked items and which side they sit on, worked out on every render.
+- Moving is one operation performed twice with the sides swapped: everything checked leaves one array in its current order and joins the end of the other, and its checked marks go away.
+- If the checked marks live in one collection keyed by item, the enabled question has to cross-reference the lists. If they live per side, that question answers itself.

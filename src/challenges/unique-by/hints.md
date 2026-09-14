@@ -1,0 +1,5 @@
+- Two tests decide this one: the number 1 sitting next to the string '1', and two items both keyed not-a-number.
+- Keeping the seen keys in a plain object fails the first — every key is text by the time you read it back out.
+- Keeping them in an array and searching it fails the second, because not-a-number is not equal to itself. Except that the several ways of searching an array do not all agree about that, and one of them does find it.
+- So you want a store that compares the way that one search does, and answers in constant time rather than by scanning.
+- The survivor is the first item with its key, which means the decision happens as you walk, not afterwards.

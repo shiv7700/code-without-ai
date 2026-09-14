@@ -1,0 +1,5 @@
+- The last test is the one that fails quietly: an unticked checkbox reports the string "on" for its value, so reading the wrong property submits a truthy subscribe for someone who ticked nothing.
+- One state object, one change handler. The element that fired tells the handler which key to write, so the key is a variable.
+- A key held in a variable has to be marked as computed, or you end up with a literal key spelled like the variable's name.
+- The setter replaces the whole object. Return only the key that changed and the other three are gone — the new object has to start from what was already in state.
+- Which property to read is a decision the handler can make from the event's target, so one handler still covers all four controls.

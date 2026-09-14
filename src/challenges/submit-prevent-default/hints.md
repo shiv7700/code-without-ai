@@ -1,0 +1,4 @@
+- Rule 5 is the one that catches the shortcut, and its test clicks nothing — it presses Enter inside the field.
+- Enter in a form with a single text input submits the form. A handler hanging off the button is not on that path at all.
+- So the work belongs on the form itself, which is where both the click and the key press end up.
+- That event's default is the browser reloading the page, and it has to be cancelled every time — including the whitespace-only case where you report nothing and stop.

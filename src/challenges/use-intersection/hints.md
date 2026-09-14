@@ -1,0 +1,4 @@
+- Write it with an effect that runs once on mount, then render the element only after a click and look at what the effect was pointing at.
+- The component mounting and the element arriving are two different moments, and nothing says the first one comes second.
+- React will tell you the exact moment a node arrives, if you ask in the right shape. The same thing tells you when it leaves.
+- The observer is a separate problem. It has to already exist when the node turns up, and there must only ever be one of it.

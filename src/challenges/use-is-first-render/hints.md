@@ -1,0 +1,5 @@
+- Rules 3 and 4 are the two ways this goes wrong, and they point in opposite directions. Pick a mechanism that breaks neither.
+- State breaks rule 3: flipping it schedules a second render, and the first render had already returned its answer before the flip ever happened.
+- A flag declared outside the hook breaks rule 4: there is one of it for the whole module, and the second component to mount finds it already spent.
+- What you want is per-component storage you can write to during the render itself, whose write costs nothing and tells React nothing.
+- Read it first, then mark it. The first render is the one that finds it untouched.

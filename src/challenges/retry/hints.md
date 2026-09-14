@@ -1,0 +1,5 @@
+- Read rule 2 twice. The number counts extra attempts, so zero of them still means the function runs once.
+- The loop is a try around an awaited call. Without the await the catch never sees a rejection and the loop exits believing the first attempt worked.
+- What you reject with at the end is the last error, so whatever the catch is holding has to survive past the end of the loop.
+- The delay goes between attempts — not before the first, not after the last. Easiest to place if you ask, at the point you catch, whether another attempt is actually coming.
+- The attempt number starts at zero and is what the function is called with, so the loop counter and that argument are the same thing.

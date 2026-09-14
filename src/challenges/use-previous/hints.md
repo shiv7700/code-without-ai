@@ -1,0 +1,5 @@
+- The last test is the boundary everything else has to fit inside: the hook never causes a render of its own. That rules out state before you start.
+- You are storing a value across renders and reading it on the next one, and nobody may be re-rendered because of the storing. Something that persists between renders without being part of them.
+- The order is the whole puzzle: hand back what is stored, and only afterwards overwrite it with what you were just given.
+- Doing that overwrite while rendering is what makes it wrong in a way that looks right. React may render your component twice and throw one away, and your stored value has quietly moved twice for one real change.
+- Move the write to after the render has been committed, and the read during the next render sees exactly what the last committed one left there.

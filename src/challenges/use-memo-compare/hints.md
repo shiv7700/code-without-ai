@@ -1,0 +1,4 @@
+- The first three rules are satisfied by holding on to the very first value and comparing everything against it. Rule 4 is not.
+- Picture the prop changing once, then settling down. From that moment on, what are you comparing against, and does anything ever match it again?
+- What you are holding is not a record of the first value. It is a record of the last one you agreed to.
+- So the line that decides to hand back the new object has a second job to do.

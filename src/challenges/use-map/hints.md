@@ -1,0 +1,5 @@
+- Last test first: the Map you were holding before the update still has to say what it said.
+- Editing a Map and handing the same one back gives React the object it already has. It compares equal to itself, no render happens, and the entry sits in state where nobody can see it.
+- So each operation makes a new Map seeded from the old one and changes the copy. The constructor takes an existing Map directly.
+- Two sets in one handler both have to land, which means neither function may use the `map` from the render it was created in — that one is the same for both calls.
+- Copy from whatever the setter is handed when it applies, and stable identities come free, since nothing is captured.

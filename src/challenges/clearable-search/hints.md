@@ -1,0 +1,4 @@
+- Five of these tests pass with the obvious build. Write the last two first and the shape of the answer changes.
+- A button inside a form does something by default that you almost never want. There is one attribute that turns it off, and it is one word long.
+- Pressing a button also hands it the focus, and that happens on the way down, before the click is anything you can react to.
+- Whatever removes the button from the page when the value goes empty also removes the thing that had focus a moment earlier — so decide where focus should be before you let the press through.

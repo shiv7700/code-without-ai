@@ -1,0 +1,4 @@
+- Rules 1 and 2 pass with almost anything. The test that separates a working answer from a plausible one is the one where changes arrive faster than the delay.
+- Every new `value` starts a new wait. Whatever was already waiting has to be cancelled before the new one starts, or the older deadline lands and publishes a value that has already been superseded.
+- React already runs something for you between one run of an effect and the next, and again on the way out. Cancelling there covers rule 3 and rule 4 with the same line.
+- `value` and `delay` are what the wait depends on, so they are what the effect depends on. Nothing else belongs in there.

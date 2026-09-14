@@ -1,0 +1,5 @@
+- Two tests decide the shape: a cached key shows its data on the very first render, and a slow response for a key you have left is ignored.
+- The first rules out correcting the state afterwards. Anything that runs after the render has already let a loading flash through.
+- Which means the initial value has to be computed rather than constant — consult the shared store at the moment the state is first created.
+- That store is neither state nor a per-component box. Components that know nothing about each other share it, so it is created once when the module loads and lives there.
+- A changing key is the same problem one render later: the value has to be put right during the render that sees the new key, not after it — and any response still in flight has to ask whether it is still wanted before setting anything.

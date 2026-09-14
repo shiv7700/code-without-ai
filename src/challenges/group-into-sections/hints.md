@@ -1,0 +1,5 @@
+- Two steps, in this order: turn the flat list into groups, then render the groups. Trying to do both in the JSX is where this gets unreadable.
+- Write the grouping the obvious way first and run it. The second test fails, and it fails on data that is in no way unusual, which is the point of the exercise.
+- The reason is not React and not your loop. It is what the thing you grouped into does with keys that could be read as numbers — it puts them in numeric order and throws your insertion order away.
+- So the container you accumulate into has to be one that promises to remember the order things went in, for every kind of key. You have used it in an earlier challenge on this ladder.
+- Two keys are needed once you are rendering: one for each section, one for each row inside it.

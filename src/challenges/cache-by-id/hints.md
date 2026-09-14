@@ -1,0 +1,5 @@
+- "Immediately" in rule 2 means on that very render. The last test rerenders with a known id and checks the name is there, with no render showing Loading in between.
+- An effect runs after the render is committed, so anything you read from the cache in one is a paint too late. That flash is the bug.
+- A state initialiser runs once for the life of the component, so it gets the first id right and lies about every id after it.
+- Which leaves working the displayed value out during rendering, from the id you were just handed — with state carrying only the answer that has not come back yet, tied to the id it belongs to.
+- Reading the Map during render is fine. Writing to it is not the render's job; do that where the answer lands.

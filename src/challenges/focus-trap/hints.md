@@ -1,0 +1,5 @@
+- The test that closes the dialog and expects the button behind it to have focus tells you when to read the document: before you take the focus, not after.
+- None of this can be expressed in markup. Every rule here is the same three steps — find the focusable elements inside, work out which is next, and tell that one to take focus.
+- That list is queried at the moment a key is pressed, not captured when the dialog opened. The contents are ordinary children and may have changed since.
+- Wrapping is an index that walks off one end of the array and comes back in at the other. The default behaviour has to be suppressed first, or the browser moves focus as well as you do.
+- The backdrop closing while a click inside does not is one handler asking whether the click landed on the element it is attached to, or on something within it.

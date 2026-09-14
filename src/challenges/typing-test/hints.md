@@ -1,0 +1,5 @@
+- Of everything on screen only the typed text is really state. The seconds, the speed and the accuracy are all worked out from it and two remembered instants.
+- Those two instants are the whole exercise. Neither of them is now, and neither of them is when the component first rendered.
+- The first one is set exactly once, on the keystroke that finds nothing typed yet. Write the condition for that before you write anything else.
+- The second one is what makes the score stop. While it is missing the elapsed time is a live reading; once it exists the elapsed time is a subtraction between two fixed numbers.
+- Zero seconds elapsed and one character typed is a division you have to cover, and the answer the rules want is the boring one.

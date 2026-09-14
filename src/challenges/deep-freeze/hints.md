@@ -1,0 +1,4 @@
+- The recursion needs a memory of what it has already started on, and that memory has to be shared across the whole walk rather than created fresh at each level. A default argument is the tidiest way to pass it down.
+- Before you descend into something, ask whether you have seen it before. Record it as seen at that moment, not after you have finished with it, or a cycle still catches you on the way back round.
+- Whether you freeze on the way down or on the way back up barely matters — but the check that stops the loop has to happen before either.
+- The collection test fails silently because the thing you are walking has no enumerable properties at all. What it has is a way to be iterated, and that is a different question you have to ask it directly.

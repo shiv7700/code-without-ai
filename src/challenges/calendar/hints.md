@@ -1,0 +1,5 @@
+- The whole grid comes out of two numbers: which weekday the 1st falls on, and how many days the month has.
+- The weekday number a date gives you counts Sunday as zero, and this grid starts on Monday — so it needs shifting before it can be used as a count of leading blanks.
+- Do not hard-code the month lengths. Asking for day zero of the following month hands you the last day of this one, and leap years come out right for free.
+- The state is one month: a year and a month number. Stepping off either end is arithmetic that lets the year absorb the overflow, not a case you special-case.
+- The date reported on a click is built from those numbers as text, padded to two characters. Turning a date object into a string instead invites a timezone to move it by a day.

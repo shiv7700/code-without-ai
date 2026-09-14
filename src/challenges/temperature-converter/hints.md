@@ -1,0 +1,4 @@
+- Follow "36.6" through an implementation where each box has its own state and each updates the other. Two conversions later, is it still "36.6"?
+- Rule 2 says one box is showing raw text while the other is showing a calculation, and they swap roles as you click between them.
+- So the state is not a temperature. It is a temperature plus the answer to "which box was this typed into".
+- The other box is then worked out while rendering, and there is nothing left that has to be kept in step with anything.

@@ -1,0 +1,5 @@
+- The last test is the one to write in your head first: the row appears on screen, and the array you were handed is still the length it started.
+- The array that came back from state is the same array React already rendered. Adding to it in place leaves React nothing to compare against, so it skips the render and the task is in your state and nowhere on screen.
+- That is also why the method everyone reaches for is no good here, before you even notice it hands back a length rather than a list.
+- What you need is a brand new array holding everything the old one held, with the new task after it.
+- Clearing the input is the same handler's job, and the blank check comes before both.

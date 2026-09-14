@@ -1,0 +1,5 @@
+- The last test only counts calls. Three, for one mount and two clicks — which means the request exists once in your file and is called from two places.
+- A function declared in the component body is a brand new function on every render, so an effect that lists it as a dependency runs again on every render.
+- That leaves two ways out: the effect stops depending on the function, or the function stops being new each time. Only one of them keeps the mount and the button running the same code.
+- What you want is something that hands back the same function on every render until the things it closes over actually change.
+- The spinner is not a mount-only concern either. Whoever starts the request raises it, and it comes down when that request settles, mount or click.

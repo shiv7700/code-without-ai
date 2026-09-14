@@ -1,0 +1,4 @@
+- The test that separates the two versions is Cancel: the row has to be exactly as it was, and reopening afterwards has to start from the stored name again.
+- Seed the draft with the row object itself and the input is editing the object still sitting in the list. Cancel then has nothing to undo, because the damage was done on every keystroke.
+- The draft is just the text being typed. It does not need to be a row at all — which row it belongs to is an id you keep beside it.
+- Save is the only moment the list changes, and it has to produce a new list holding a new object in one position, with every other position untouched.

@@ -1,0 +1,4 @@
+- Two tests fail for a boolean, and they fail in opposite directions: one is about undoing an edit, the other about what happens after a save.
+- Dirty is not an event to be recorded. It is an answer to a question you can ask at any moment — provided you still have both halves of it.
+- So you need the values on screen and the values as they were last agreed, side by side.
+- Saving does not clear a flag. It moves the second half of that comparison.

@@ -1,0 +1,5 @@
+- Nothing about the numbers is state. They are a property of the board you were handed, so write the "how many mines touch this square" function first and call it wherever you need it.
+- What is state is the set of squares turned over. One click may add one of them or a dozen, so the handler's job is to work out the whole set before it stores anything.
+- The spread is the same decision made over and over on a growing list of squares. Keep the list of squares still to look at yourself rather than leaning on the call stack.
+- Two empty squares next to each other will each put the other back on that list forever. The fix is to record a square as done at the moment you take it off, not after you have dealt with it.
+- A numbered square goes on the list and comes off it, but it does not put its own neighbours on. That single condition is the difference between opening a pocket and opening the whole board.

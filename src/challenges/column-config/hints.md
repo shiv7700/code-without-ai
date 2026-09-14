@@ -1,0 +1,5 @@
+- The missing-field test is the whole challenge: a row with no `city` still has to produce three cells, with the blank one sitting in the middle where it belongs.
+- Which means the row object never gets a vote. How many cells there are, what order they come in, and which value goes in each are all decided by the other prop.
+- So the inner loop runs over the columns, and the row is only a thing you look values up in. Walking the row's own keys is what shifts every cell one along.
+- A column may bring its own way of producing its cell. Check for that before the plain lookup — and a lookup that finds nothing already renders as nothing.
+- Both loops need keys on what they produce, and both props already carry a field that is unique within their own list.

@@ -1,0 +1,3 @@
+- The last test passes no `excited` at all and compares the whole string exactly, so an extra bang that leaks in when nobody asked for one fails there.
+- Everything the component is handed arrives as one object, whatever you choose to call it in the signature. The sentence has two variable parts: who, and how many bangs.
+- The stand-in for a missing name is not a check you write inside the markup. It belongs where the value is first named, and it applies to one specific absent value.

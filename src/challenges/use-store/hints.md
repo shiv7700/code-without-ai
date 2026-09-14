@@ -1,0 +1,5 @@
+- The three render-count tests are the specification: a change to what you watch renders, anything else does not, and setting the same value again does neither.
+- All three come out of one comparison React makes for you — the value you return now against the value you returned last time, by identity.
+- Which also means a selector building a fresh object on every call can never compare equal, and the component would render forever. That is a constraint on the caller, not something to defend against in here.
+- This is not state to be copied in and kept in step by hand. React has a dedicated way to read a value that lives outside it, given a way to subscribe and a way to read the current value.
+- The two functions you hand that mechanism have to be stable, or it tears down and rebuilds the subscription after every single render.

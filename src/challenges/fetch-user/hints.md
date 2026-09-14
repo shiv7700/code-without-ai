@@ -1,0 +1,4 @@
+- Nothing here is new. It is the reset-on-id-change problem and the stale-response problem in one component, and the difficulty is only that both have to hold at once.
+- The two late tests check different symptoms — a late success must not overwrite the good name, a late failure must not put an error screen up over it. One guard covers both if it is early enough.
+- Which means it goes in front of touching any state at all, not in front of each individual setter, and not only in the success branch.
+- Going back to loading and abandoning the old request are the same event in the effect's life, happening at the same moment. Writing them as one thing is shorter than writing them as two.

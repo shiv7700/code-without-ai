@@ -1,0 +1,4 @@
+- The last two tests are the ones with teeth: editing several fields one after another has to accumulate, and the profile you were handed has to come out unmodified.
+- The setter replaces what is in state. Hand it an object with one key and the other two fields do not survive the render.
+- So every change has to produce a whole new object, carrying across the two fields you did not touch alongside the one you did.
+- Writing the value into the object you got back from state is the other way to lose. That is the same object React already has, so there is nothing for it to notice, and it is the prop you promised not to modify.

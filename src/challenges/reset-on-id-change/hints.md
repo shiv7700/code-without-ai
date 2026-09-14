@@ -1,0 +1,4 @@
+- Write the third test in your head first: the id has changed, nothing has arrived yet, and the previous name must already be gone from the screen.
+- Effects run after the render they belong to has been committed. At the moment the new id first renders, the name in state is still the old user's.
+- So clearing it as the first thing inside the effect is one paint too late. The browser has already shown the new id's page wearing someone else's details.
+- The render that first sees the new id has to already be rendering nothing. Either what you display is derived from something that changed in the same breath as the id, or the component holding that state is not the same component any more.

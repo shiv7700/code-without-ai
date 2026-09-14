@@ -1,0 +1,4 @@
+- Do the three clicks from rule 4 on paper first — plain, shift, shift — and write down what should be selected after each one.
+- A range has two ends. One is the row under the cursor. The other is not the row you selected most recently.
+- A shift-click only ever asks a question. It never changes the answer the next shift-click will get.
+- It does not add to the selection either: the range replaces whatever was there, which is how it can shrink as well as grow.

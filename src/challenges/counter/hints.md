@@ -1,0 +1,3 @@
+- Three rules, and only two of them take any thought: the floor at zero, and where Reset goes back to.
+- The floor belongs where the next value is decided, not where it is displayed. A count sitting at -1 that prints 0 passes the eye and fails the very next click.
+- Reset needs the starting value long after the count has moved off it. That value is a prop, and a prop is still there, unchanged, on every render.

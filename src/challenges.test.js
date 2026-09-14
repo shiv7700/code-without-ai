@@ -38,3 +38,33 @@ test('every challenge has a summary, topics and a spec', () => {
 test('the sections add up to the whole list', () => {
   expect(tiers.flatMap((t) => t.challenges)).toHaveLength(challenges.length)
 })
+
+test('every challenge has three to five hints', () => {
+  for (const c of challenges) {
+    expect(c.hints.length, `${c.name} has ${c.hints.length} hints`).toBeGreaterThanOrEqual(3)
+    expect(c.hints.length, `${c.name} has ${c.hints.length} hints`).toBeLessThanOrEqual(5)
+  }
+})
+
+// A hint that names the hook is not a hint, it is the answer with extra steps.
+// The whole repo exists to make him reach for the name himself.
+const GIVEAWAYS = [
+  /\buse(Ref|Callback|Memo|State|Effect|Reducer|Context|LayoutEffect)\b/,
+  /\buse(SyncExternalStore|ImperativeHandle|Transition|DeferredValue)\b/,
+  /\bPromise\.(all|any|race|allSettled)\b/,
+  /\bAbortController\b/,
+  /\bstructuredClone\b/,
+  /\bspread operator\b/,
+  /```/,
+  /=>/,
+]
+
+test('no hint names the API or writes the code', () => {
+  for (const c of challenges) {
+    for (const hint of c.hints) {
+      for (const pattern of GIVEAWAYS) {
+        expect(hint, `${c.name}: ${hint}`).not.toMatch(pattern)
+      }
+    }
+  }
+})

@@ -1,0 +1,5 @@
+- The last two tests are the whole exercise: a first result of undefined, and a first call that throws.
+- Using the stored result to decide whether the call has already happened means undefined reads as "not yet", and the function runs again on every call forever.
+- So whether it has run is a separate piece of state from what it returned, and it is set before you hand anything back.
+- The throwing case is the same mistake from the other side. If the error escapes before you have recorded anything, the wrapper looks untouched and "runs once" quietly becomes "retries on failure".
+- Which means what you remember is not only the result but which of the two ways the first call ended, and every later call reproduces that ending.

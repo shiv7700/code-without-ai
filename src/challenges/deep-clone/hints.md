@@ -1,0 +1,5 @@
+- The last test is the one that decides it: the same object appearing twice in the input has to come out as the same single clone twice.
+- A guard that only watches the path you are currently walking stops the cycle from recursing forever and still clones the shared object twice.
+- What you want is a record of everything already cloned, looked up by the original, shared across the entire walk rather than created fresh at each level.
+- Write the entry into that record before you recurse into the children, or a cycle reaches itself while there is still nothing to find.
+- Dates, functions and primitives each leave the recursion early, and only one of those three gets a new object built for it.

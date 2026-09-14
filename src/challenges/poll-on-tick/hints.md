@@ -1,0 +1,4 @@
+- The last test counts two things at once: four loads, and exactly one listener still attached at the end.
+- Putting the value in the subscribing effect's dependencies tears the subscription down and rebuilds it after every single answer. It happens to work, right up until nothing tears the old one down and the listeners pile up.
+- The subscription depends on what you are subscribing to and nothing else. Ask what the subscribed callback actually reads — if the answer is nothing, the list is empty.
+- The callback only starts a request. Where the answer ends up is a separate question, and the subscribe step never needs to know what is currently on screen.

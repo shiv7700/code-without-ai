@@ -1,0 +1,5 @@
+- The last test is the one that rules out every easy answer: the branch that did not change has to come back as the very same object, not a copy holding the same values.
+- A copy one level deep hands the nested objects straight through. Assigning into one of those writes into the object you were given, at a depth you thought you had escaped.
+- So every object between the top and the value that changed has to be rebuilt, and only those. A value two levels down means three new objects on that path.
+- Everything off the path is carried across as it stands. That is not laziness, it is rule 5 — an untouched branch keeps its identity so a consumer can tell nothing changed there.
+- Copying the whole tree deeply satisfies rules 3 and 4 and fails rule 5, which is precisely why rule 5 exists.

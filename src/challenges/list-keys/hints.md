@@ -1,0 +1,4 @@
+- The first three rules pass with almost any implementation. Only the last one can tell two of them apart, so write that test in your head first.
+- On the second render React has to work out which of the new items is which of the old ones. It does not compare their contents to do it.
+- Whatever you hand it to make that decision is the only thing standing between a row and the DOM node holding what was typed into it.
+- Position is not identity. The item that was second is now fourth, and it is still the same item.

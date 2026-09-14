@@ -1,0 +1,5 @@
+- Two things here change at completely different rates: the delay changes rarely, the callback is a brand new function on every single render.
+- Putting the callback in the dependency array satisfies rule 4 and breaks rule 3. Leaving it out satisfies rule 3 and breaks rule 4. Both rules are real, so neither array is the answer.
+- Which means the interval has to be set up without depending on the callback at all — and still reach the newest one at the moment it fires.
+- You need something that survives a render without causing one, and whose current value you can read later, from inside a closure created long ago.
+- Whatever that is, keeping it up to date is a separate job from setting up the interval.

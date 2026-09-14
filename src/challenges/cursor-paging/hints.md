@@ -1,0 +1,4 @@
+- The last test separates a working answer from a plausible one: a page that came back with no items and still handed you a cursor.
+- The server decides when there is more, not you, and it says so in exactly one field. Nothing else — not the item count, not an empty array — is allowed to mean the end.
+- Appending builds the new list from the previous one, which you should not read out of the variable this render is holding. Two pages landing close together would both start from the same list and one would vanish.
+- Disabling the button while a page is in flight is not decoration. The second click would send the cursor you already sent and append the same page twice.

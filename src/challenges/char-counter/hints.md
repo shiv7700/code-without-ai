@@ -1,0 +1,4 @@
+- Only one value changes here. Length, remaining and the warning are three questions asked of it at the moment you render.
+- The cap belongs in the change handler, not the render. What you refuse to store is what never appears.
+- Cut the incoming value down to `max` rather than ignoring the change — the test types ten characters into a field of five and expects the first five to stick.
+- "10 or fewer remain" is about the gap between length and max, and above that the attribute must be absent rather than false. React drops an attribute whose value is undefined.

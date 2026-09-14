@@ -1,0 +1,5 @@
+- Two tests set the rule between them: typing an invalid email shows nothing, and leaving the field shows the complaint.
+- So the errors are not what is being tracked. What is tracked is which fields the user has finished with.
+- Work out all three errors from the three values on every render, then decide per field whether to show one. That is why an error vanishes the moment the value becomes valid, with no handler doing anything about it.
+- Submit is the same decision with the answer forced: mark every field as finished, and let the render logic show whatever is left over.
+- A submit must not call out while any error exists, and what it passes up does not include the confirmation — that field exists only to be compared against another.

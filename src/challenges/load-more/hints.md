@@ -1,0 +1,5 @@
+- The double-click test is the one a working-looking build fails quietly: two clicks, two renders, one page too many.
+- The flag that disables the button has to be set in the same update that starts the fetch, before anything is awaited.
+- Which page to ask for next is worth storing rather than deriving from the list length — a page that failed must not shift it.
+- Appending builds a new array from the old one plus what came back. Reading the old list is safe here as long as the update reads it rather than the closure.
+- Failure is a fourth piece of state, and it must leave the loaded items alone. "No more" and the button are mutually exclusive.

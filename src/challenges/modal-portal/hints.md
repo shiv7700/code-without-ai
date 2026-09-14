@@ -1,0 +1,5 @@
+- The two body-overflow tests fail quietly: closing and unmounting both have to put the page back the way they found it.
+- Whatever sets that style owns undoing it, and as far as that ownership goes, closing the modal and unmounting it are the same event.
+- The dialog must not be a descendant of the element that rendered it. The test asserts that directly, and ordinary rendering cannot satisfy it.
+- Backdrop and content are nested, so the backdrop's handler fires for clicks on the content too. Decide from where the event started, not from where the listener sits.
+- The key listener only exists while the modal is open. Closed means nothing is bound at all, rather than a handler that checks a flag.

@@ -1,0 +1,5 @@
+- Assume toggling already works. Build for the last test: with focus in a textbox inside an open panel, the arrows must do nothing at all.
+- A handler on the wrapper sees every key that bubbles out of the panels and cannot tell a header press from a caret move. Where it sits is the fix, not what it checks.
+- Moving focus means calling focus on a particular DOM node, so you need a way to reach each header's node by its position in the list.
+- Every one of these keys moves focus and nothing else — and while you are there, their default scrolling is worth suppressing.
+- Wrapping is arithmetic on the index modulo the length; Home and End are just the two ends of the same list.

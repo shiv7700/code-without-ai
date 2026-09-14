@@ -1,0 +1,5 @@
+- The second test is the whole challenge: both requests are real, both answer, and the one asked first answers second.
+- A promise already in the air cannot be recalled. What you can still decide is whether its answer is wanted by the time it lands.
+- That decision has to be made by the run of the effect that started the request, about itself. Comparing the answer against the current query does not work — the closure is holding the query from the render it was created in, so it always agrees with itself.
+- Each run of the effect gets one chance to say something on its way out, just before the run that replaces it begins. That is where you mark this request abandoned.
+- Whatever you mark it with has to be readable inside handlers that were attached long before, and private to that one run. A plain variable declared at the top of the effect is both of those.

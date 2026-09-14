@@ -1,0 +1,5 @@
+- Start by listing what is genuinely state. There is one list, and everything with a number in it is a question you can ask that list during render.
+- The last test presses the same button twice. Write your answer, then decide whether it still holds if that button is pressed ten times.
+- A total you adjust by one on each action needs a guard on every single path. A total you count each render needs no guard anywhere.
+- Grouping wants the groups in the order they first appeared, so reach for the container that remembers insertion order for keys, not the one that reorders anything numeric.
+- The badge vanishing at zero is not the same as the badge showing a zero, and the shortcut you would reach for to hide it has a well-known habit of printing the number instead.

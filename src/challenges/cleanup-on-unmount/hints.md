@@ -1,0 +1,4 @@
+- Same abandonment as the last challenge, but the trigger is the component disappearing rather than a prop changing, and the thing being protected belongs to the parent.
+- The test does not look for a warning or a swallowed state update. It checks that onValue was never called, so the guard sits in front of the callback too, not only in front of the setters.
+- The exit path runs once, with nothing scheduled after it. Flipping a variable there is enough, because the continuation that has already been queued will read it whenever it eventually runs.
+- The last test asserts only that nothing blows up. A request nobody is waiting for can still reject, and somebody has to have taken responsibility for that rejection.

@@ -1,0 +1,5 @@
+- Two tests pin the Backspace rule together: on an empty field it deletes the last tag, on a non-empty one it just edits. Same key, told apart by what is in the field.
+- Rejecting an entry and accepting one clear the field in exactly the same way. Only the list and the report differ.
+- Trimming happens before both the empty check and the duplicate check — "  react  " and "react" are the same tag.
+- The rejection test asserts silence, so the report has to fire from the place that actually changed the array rather than from the handler that ran.
+- Removing by name is safe only because rule 3 already guarantees the tags are unique.

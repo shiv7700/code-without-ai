@@ -1,0 +1,5 @@
+- The test that separates a real answer is both edges on with a single call: it fires once, not twice.
+- Which means the trailing fire is not unconditional. It depends on whether anything happened after the call that already fired the leading edge.
+- So you are tracking two things across a burst: whether the burst is already open, and whether there were calls after the one that opened it.
+- The trailing fire uses the last call's arguments, not the first call's, so they have to be recorded on every call even when that call fires nothing.
+- Cancel clears the pending timer and has to leave the wrapper in the state a fresh one would be in, or the next burst's leading edge behaves wrongly.

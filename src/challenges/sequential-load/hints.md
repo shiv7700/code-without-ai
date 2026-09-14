@@ -1,0 +1,4 @@
+- The first test is the exact opposite assertion to the previous challenge: here the second function must not have been called yet.
+- The reason is not style. The argument the second call needs does not exist until the first answer comes back, so there is nothing to start it with.
+- That makes the loading screen span both round trips. There is no intermediate state to render, because an order with no customer yet is not something the user asked to see.
+- One failure path covers both steps. A throw anywhere in the sequence lands in the same place, and if the first step threw the second call never happens at all.

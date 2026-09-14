@@ -1,0 +1,5 @@
+- The test that scrolls a long way and checks the rendered row count has not changed is the reason this component exists.
+- The scroll offset is the only new state. Which rows to render, and where each one sits, are both arithmetic on it.
+- The tall empty element is what gives the browser something to scroll at all. Without it the offset never leaves zero and nothing else works.
+- Each rendered row is positioned from its real index in the full list. Using its position within the rendered slice stacks everything at the top.
+- Both ends of the window need clamping — never before the first item, never past the last — plus one extra row at each end so a partly-visible row is still there.

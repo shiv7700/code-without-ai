@@ -1,0 +1,5 @@
+- The last real test is the one where a subscriber removes itself while the emit is still running.
+- Removing from the array the loop is walking shifts everything after it back one slot while the loop's index moves forward, so the next subscriber is stepped straight over.
+- The emit therefore has to walk something the removal cannot change underneath it.
+- The same callback added twice being called twice, and one removal taking only one of them, tells you the subscriber collection is an ordered list and not a set.
+- All of it lives on the instance rather than the class or the module, which is the whole of rule 5.

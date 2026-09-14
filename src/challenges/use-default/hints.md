@@ -1,0 +1,5 @@
+- The last test is the separator: the setter keeps its identity across a re-render AND falls back to the newest `defaultValue`, not the one from the first render.
+- `||` and a default parameter both look right and neither is — one swallows `0`, `''` and `false`, the other never fires for `null` at all. Only two values are special.
+- Rule 4 decides where the fallback is applied. Keep the null in state and the updater is handed a null; substitute the fallback before it goes in, and there is never a null underneath to leak.
+- That leaves the setter needing `defaultValue`, which changes every time the parent passes a new one, while having an identity that must never change. Capturing it gives up one or the other.
+- So the newest fallback has to live somewhere the setter can look up when it runs, rather than somewhere it copied when it was made.

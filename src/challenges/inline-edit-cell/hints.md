@@ -1,0 +1,5 @@
+- Two pieces of state look like one: whether the cell is open, and what is currently typed in it. Try treating them as one thing and see which rule you cannot satisfy.
+- Handing a prop to the state initialiser reads it exactly once, on the very first render. Nothing about opening the editor later goes anywhere near it.
+- So the copy has to be made at the moment the editor opens, in the same place that decides to open it.
+- Escape and leaving the box look alike, and they are not: one of them is allowed to tell the parent anything.
+- If the editor flickers shut and open again on one Enter, nothing is broken in your state: the key is still travelling, and it finishes its journey on whatever has focus by then. Stop it before it gets there.

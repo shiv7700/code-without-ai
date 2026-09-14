@@ -1,0 +1,3 @@
+- The summary and the list want the same data in two different forms. One of them is a single string; the other is a row of elements. Nothing you write for one helps the other.
+- React does join the array into the output for you — with nothing at all between the entries. Putting something between them is a plain array operation, done before the value reaches the markup.
+- The empty case pulls both ways at once: the summary becomes a word, and the list container has to disappear entirely rather than render empty.

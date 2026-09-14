@@ -1,0 +1,4 @@
+- Same prototype collision as the grouping challenge, but it fails differently. Look at the constructor test.
+- Reading a missing count and defaulting it to zero works for every ordinary key. For this one the read hands back a function, so the default never applies.
+- Adding one to a function does not throw. It produces a number that is not a number, and nothing in your loop will complain about it.
+- The way out is the same shape as before: either the object you build has no inherited keys at all, or you ask whether the key is its own before you read it.

@@ -1,0 +1,4 @@
+- The comparison is the easy half. Decide first what the effect's dependency list is going to contain, because it cannot contain the object.
+- React only asks whether the entries are the same as last time. Give it one entry you control, and change it only when you have decided something really changed.
+- You need somewhere to keep the deps you last accepted, and somewhere to keep that entry, and neither may cause a render.
+- Rule 5 is the previous challenge again: whatever you compare against has to move forward every time you accept a change.

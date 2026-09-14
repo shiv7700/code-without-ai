@@ -1,0 +1,4 @@
+- The only thing you need to keep is how far down the box has been scrolled. Every row on screen is arithmetic on that number.
+- Work out the range of indexes first, as numbers, and render from that. Slicing the array early loses the one thing each row needs to know: which index it actually is.
+- Rows are taken out of the normal flow and placed by index, or they will all pile up at the top of a box that is only five rows tall.
+- The chosen row is an extra entry in that range, added only when it is not already in it — and the test that catches a careless "always add it" is the one that scrolls to it.

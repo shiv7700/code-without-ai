@@ -1,0 +1,5 @@
+- Three things need remembering and none of them belong on screen: how much time is left, when the current run started, and how to cancel it.
+- Pausing is the only place the subtraction can happen, because it is the only moment you know both ends of the stretch that just elapsed.
+- Resuming is the same code as starting, just with a smaller number. Write one function and let the second one call it.
+- Pointer and focus both pause, which means pause can be asked to run when nothing is booked. Make that harmless before you wire up four handlers.
+- The cleanup on the way out is the same cancel you already have. Reach for it from the effect that booked the first one.

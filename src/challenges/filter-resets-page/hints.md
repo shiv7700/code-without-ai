@@ -1,0 +1,4 @@
+- The last test settles nothing. It only inspects the list of what you asked for, and a request pairing the new filter with page 2 must never appear in it.
+- Resetting the page in an effect that watches the filter guarantees one committed render where the new filter sits beside the old page number. Whatever fetches off that render has already gone out by the time your reset lands.
+- Two values that always move together should move in the same update, from the same event, before any render gets to see the mismatched pair.
+- That still leaves the request for the page you were on in the air. It has to be abandoned when the run of the effect that started it is replaced, or its rows and its page count arrive on top of the ones you wanted.

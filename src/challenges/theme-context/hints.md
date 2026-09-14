@@ -1,0 +1,5 @@
+- The last test is the only one that can fail while everything visible works perfectly: a parent re-rendering must not re-render consumers.
+- What you put on the provider is compared by identity. Build it in the provider's body and it is a different object every render, so every consumer is told the context changed when nothing did.
+- Caching that object is only half the job. If the functions inside it are rebuilt on every render, the cached object is rebuilt too — they need the same treatment, or they need to stop depending on the current theme.
+- Rule 3's guard is a check on whatever came back from the context, which means the context's default has to be something you can tell apart from a real value.
+- The error has to name the provider. A consumer crashing on a missing property later tells whoever reads the stack trace nothing useful.

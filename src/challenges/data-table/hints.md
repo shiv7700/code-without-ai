@@ -1,0 +1,5 @@
+- Aim at the composing test: search first, then sort what survived. The other order gives a different answer.
+- Filtering and sorting are two steps between the prop and what you render, and neither is state. What you store is the query, the column and the direction.
+- Sorting the prop reorders the parent's array, because the built-in sort works in place and returns the same array it was given.
+- Comparing names with `<` orders by character code and puts every capital ahead of every lowercase. Ages are numbers and want subtraction, not string comparison.
+- aria-sort belongs on the header cell rather than the button inside it, and the idle column carries "none" instead of nothing.

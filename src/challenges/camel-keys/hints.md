@@ -1,0 +1,5 @@
+- Start from the two tests about what is not a plain object: the array of objects, and the Date next to the null.
+- Asking what type a value is gives you the same answer for an object, for an array and for null. That one answer is being asked to do three different jobs here.
+- Rebuild an array from its entries into a fresh object and the list comes back with keys '0' and '1'. It survives being printed and looks almost right; it breaks whatever maps over it three components later.
+- So decide explicitly which of the three you are holding before you recurse, and let everything else through by reference, untouched.
+- The renaming itself is a string replacement with a callback. Both directions share the same walk and differ only in that one function, so write the walk once.

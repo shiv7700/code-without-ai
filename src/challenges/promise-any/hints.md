@@ -1,0 +1,5 @@
+- This is the wait-for-all-of-them challenge inverted: one success ends it, and it is the failures you count.
+- A rejection is only fatal once nothing else could still win, so the counter runs on the rejection side while resolving happens on the first value to arrive.
+- The reasons come out in input order, which is the same rule as the other one: each has a slot, known before it settles.
+- The empty input is the case where nothing will ever settle it. Answer it before the loop, and note that it fails rather than hangs.
+- A rejection arriving after a win needs no handling at all, because a settled promise ignores everything that comes after.

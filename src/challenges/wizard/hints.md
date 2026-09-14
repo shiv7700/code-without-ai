@@ -1,0 +1,5 @@
+- Go to the test that types an email, goes Back, finds the name intact, then goes forward and finds the email intact too.
+- State that lives in a step dies with the step, and only the current step is in the DOM. So the values cannot live there.
+- Which step you are on and what has been typed are separate concerns. Moving between steps changes only the first.
+- Validity is a question asked of the current values during render, not a flag kept in step with them.
+- The review step reads the same values, so rule 3 costs nothing once the data sits above the steps.

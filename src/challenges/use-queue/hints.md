@@ -1,0 +1,4 @@
+- Rule 6 takes away the easy answer to rule 5, so work on the two of them together.
+- A function that never changes was created during one particular render, and it can only ever see what that render could see.
+- Which means it cannot read the queue at all. It can only describe what should happen to whatever the queue turns out to be at the time.
+- The setter takes two kinds of argument for exactly this reason. One is the answer; the other is a way of working the answer out.

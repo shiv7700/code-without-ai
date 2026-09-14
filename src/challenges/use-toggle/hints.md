@@ -1,0 +1,4 @@
+- Rules 3 and 4 are the whole test. The first two pass with the first thing you write.
+- Two toggles in the same handler both happen before the next render, so both read the same `on` — the one from the render they were created in. The second one undoes nothing.
+- Fixing that by putting `on` in the dependency list makes the function correct and destroys the stable identity, since `on` changes on every toggle.
+- The way out is not to read `on` at all. The setter accepts a function instead of a value, and React calls it with what is genuinely in state at the moment it applies.

@@ -1,0 +1,5 @@
+- Three separate things: the cells already chosen, where the drag started, and where the pointer is now. The last two only exist while a button is held.
+- Whether a cell is showing as selected is a question with two halves — is it already in, or is it inside the block being dragged right now. Neither half needs remembering separately.
+- "Is a drag happening" is the same question as "is there an anchor", so you do not need a flag for it, and the cell-entered handler can ask it directly.
+- Write down the comparison you use to decide whether a cell is inside the block, then trace it with the pointer above and to the left of where you started.
+- Sort the two ends before you compare. Smallest to largest on each axis, and the direction of the drag stops mattering at all.

@@ -1,0 +1,5 @@
+- The test that decides this is the one measuring the peak number in flight, and batching passes it while still being the wrong answer.
+- Waiting for a whole group of `limit` before starting the next group leaves workers idle behind the slowest one in each group. One task finishing should start exactly one more.
+- Which means there are no groups. There is one shared pointer into the input, and each worker takes the next index and keeps going until there are none left.
+- Start `limit` of those workers — or fewer, if the list is shorter — and wait for all of them to run out. Nothing else needs coordinating.
+- Results go into the slot the index already gave you, so input order costs nothing extra.

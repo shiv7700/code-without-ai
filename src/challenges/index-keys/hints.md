@@ -1,0 +1,4 @@
+- The repeat tests are the ones with teeth: three lines out of ["a", "b", "a"], and four rows out of four identical dashes.
+- Keying on the content reads better and is wrong here, because the content is not unique. React will warn, and the tidy-looking fix for that warning silently drops a row the caller asked for.
+- The doc comment has already told you which key belongs on this list and why — nothing moves and nothing holds state. Take it at its word rather than improving on it.
+- The empty case still expects the container in the DOM, so unlike the last few challenges the outer element is not conditional at all.

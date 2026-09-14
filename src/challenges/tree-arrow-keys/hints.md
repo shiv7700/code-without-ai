@@ -1,0 +1,5 @@
+- Two things are being kept: which branches are open, and which item the keyboard is on. Everything else on screen is worked out from those two and the props.
+- Before any key handler, write the function that turns the tree into the flat list of items currently on screen, in top-to-bottom order. Up, down, Home and End are then one line each.
+- That function has to run again after every change, because opening a branch adds four items to the middle of it.
+- The list is easier to use if each entry remembers a little more than the node itself — the depth for the markup, and who its parent is for one of the two hard keys.
+- Left and Right each do two different things depending on where they are pressed. Write out the four cases in words first; the code after that is almost dictation.

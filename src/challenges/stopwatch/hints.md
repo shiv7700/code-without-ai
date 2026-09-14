@@ -1,0 +1,5 @@
+- The resume test is the one that separates a working answer from a plausible one: stop, start again, and the reading picks up where it left off.
+- That rules out one piece of state doing both jobs, and it rules out working the elapsed time out from a single start timestamp.
+- Elapsed time and whether it is running are two different facts. Reset clears both; Stop clears only one of them.
+- The ticking is then an effect that depends on the running flag alone — it starts when the flag goes true, and its cleanup stops it when the flag goes false.
+- Keep the number in state and format it at the point of display. Each tick adds to what is already there rather than recomputing from zero.

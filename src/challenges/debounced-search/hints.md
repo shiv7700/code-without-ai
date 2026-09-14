@@ -1,0 +1,4 @@
+- Two separate ways to show the wrong thing: a pause that finishes for text the user already replaced, and a request that answers for text the user already replaced. The last test only fails if you fixed the second one.
+- Both of them happen inside a single run of the effect, one after the other, so a single abandoned marker checked twice covers both.
+- Check it once when the pause ends, before you search at all — that is rules 1 and 2. Check it again when the answer lands, before you render it — that is rule 4.
+- An empty box is not a search that returns nothing, it is not a search at all. Deal with it before the pause even starts, and clear what is still on screen from the last one.

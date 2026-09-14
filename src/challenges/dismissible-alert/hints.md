@@ -1,0 +1,4 @@
+- The last two tests differ only in whether a click came first. Same prop change, opposite outcome.
+- Dismissed is a fact about what the user did. Nothing in props knows about it, so nothing in props can undo it.
+- A fresh `message` is not news about the alert's life. Seed the flag from it, or key the component on it, and you have told React to start over.
+- Once dismissed the component renders nothing at all — not an empty alert with the text removed.

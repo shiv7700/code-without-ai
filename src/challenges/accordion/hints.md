@@ -1,0 +1,4 @@
+- The two modes differ in one thing only: what the click handler writes down. The render is shared.
+- Single-open is one identity or none. Multiple-open is a collection. Pick a shape that can be both and the second component disappears.
+- Clicking the open one closes it in both modes, so toggle is the operation and the mode only decides what survives alongside.
+- aria-expanded goes on every header with a value, not only on the open one.

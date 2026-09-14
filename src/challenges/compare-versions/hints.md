@@ -1,0 +1,5 @@
+- Turn each string into something structured first, then compare two structures. Trying to do both jobs in one pass is where this gets tangled.
+- The two versions need not have the same number of segments, so walk to the longer of the two lengths and treat the gap as a zero rather than bailing out early.
+- Compare segment by segment and return the moment two differ. Only when every segment has matched does the tag after the dash get a say.
+- That tag inverts the usual rule: here the one that has something is the smaller of the two, and two that both have something compare the ordinary way.
+- The last test only cares that you never hand back a raw difference. One comparison at the end of each branch fixes that.

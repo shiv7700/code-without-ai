@@ -1,0 +1,4 @@
+- Count the calls, not the notes. Three notes with exactly the right text can still have cost three ids too many.
+- React deliberately runs your reducer twice in development. It is checking that running it twice makes no difference, and there is no opting out.
+- So anything the reducer decides for itself gets decided twice, and the copy you keep is not the one you would have guessed.
+- Move that decision to the place that already knew a note was being added, and let the action carry the result in.

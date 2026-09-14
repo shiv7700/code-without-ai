@@ -1,0 +1,5 @@
+- Design against the test that moves the pointer twice without releasing: the result is measured from where the pointer started, not accumulated one move at a time.
+- So two numbers are captured at the moment of grabbing — where the pointer was, and what the size was then. Every move after that is one subtraction and one addition against those.
+- They cannot be state. They are read inside listeners created at grab time, and a listener does not see a value written after it was made.
+- Those listeners belong on the document, not on the handle. The pointer leaves a thin handle immediately, and a release outside the window still has to end the drag.
+- The second-drag test is the check on all of it: the size captured on the second grab has to be the size the first drag left behind, not the one the hook started with.

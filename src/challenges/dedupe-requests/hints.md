@@ -1,0 +1,5 @@
+- The last two tests are the point: a settled call is forgotten, and a failed one is forgotten too.
+- That is what separates this from a cache. The entry exists only for as long as the call is in flight.
+- Overlapping callers get back the same promise object, not an equivalent one, so what you store is the promise itself before you attach anything to it.
+- Cleaning up in the success handler leaves failures stuck forever, and a failure is the case you most want retried. There is a handler that runs whichever way it ends.
+- Attaching that cleanup must not change what the callers receive, so be deliberate about which value you store and which one you hand out.

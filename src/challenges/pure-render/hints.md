@@ -1,0 +1,4 @@
+- The last two tests are the ones with teeth: the array you were handed has to come back untouched, and two separate renders have to produce identical text.
+- Anything declared outside the function body exists once for the whole module and is shared by every render of every instance. A counter kept there is right the first time and wrong from then on.
+- The numbering needs no counting at all. The loop already tells you where you are; `start` only shifts that.
+- Sorting, reversing or renumbering in place edits an array that belongs to whoever called you. Produce a new thing rather than changing the one you were lent.

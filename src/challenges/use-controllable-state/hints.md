@@ -1,0 +1,5 @@
+- The tests that matter are the two about updater functions, and the last one about the setter keeping its identity.
+- Which mode the hook is in is one question asked on every render — whether the value prop is there at all. Not whether it is truthy; a null is a perfectly good value.
+- Internal state exists in both modes. It simply gets ignored in one of them. What comes back is chosen at render time, not at creation time.
+- The setter has to resolve an updater against the current value, yet must not list that value as a dependency or it changes identity every time the value does.
+- So the current value has to be reachable from inside the setter by a route that does not go through the closure it was created in — something written on every render and read later, on demand.

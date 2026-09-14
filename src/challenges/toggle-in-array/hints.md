@@ -1,0 +1,4 @@
+- Two of the tests are about order, and they are the ones that decide which array method you reach for.
+- Whatever you do to the selection has to leave the array you were handed exactly as it arrived, and the last test does go back and check.
+- The two methods that edit a list where it lies also hand you back the wrong thing: one gives you a length, the other gives you what it took out.
+- Removing is a question of which items to keep. Adding is a question of what comes after the ones already there. Neither of those needs the old array to change.

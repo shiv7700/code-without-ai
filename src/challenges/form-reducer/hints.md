@@ -1,0 +1,4 @@
+- The reducer starts out holding the object it was handed, not a copy of it. Everything else here follows from that one fact.
+- Reset is the test that fails second. Ask what values it is restoring, and whether anything could have got at them since.
+- Returning a copy at the end does not undo an assignment made before it. That write has already landed, in someone else's object.
+- A reducer builds the next state out of the old one and never edits the old one. Nothing inside it belongs on the left of an equals sign.

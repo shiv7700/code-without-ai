@@ -1,0 +1,4 @@
+- Rules 3 and 5 are the whole challenge. `allowed={0}` and no `allowed` at all fail a truthiness test identically, and the two expected answers are different.
+- So the first question is not whether the value is true. It is whether a value arrived at all, and only the second question is about truthiness.
+- A prop that was never written on the tag arrives as one specific value — the same one any missing argument gets. Nothing else in these tests is that value.
+- Once "did it arrive" has its own answer, everything left over — false, 0, "" — collapses into one bucket by the ordinary rules, and the bare `allowed` is just true.

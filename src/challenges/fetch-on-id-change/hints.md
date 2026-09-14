@@ -1,0 +1,4 @@
+- Any two of these three tests can be passed by the wrong dependency array. Rules 2 and 3 together are what pin it down.
+- An empty array does not mean "run on mount". It means "never run again, because the list of things being watched is empty" — and the id changing is precisely the thing you want noticed.
+- No array at all gets rule 2 right and rule 3 catastrophically wrong, since re-rendering for any reason fires another request.
+- The array is the list of values the effect reads that could differ between renders. Write down what your effect actually uses and the answer is already there.

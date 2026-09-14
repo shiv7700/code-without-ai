@@ -1,0 +1,5 @@
+- Two tests separate a working answer from a plausible one: the lazy `initialValue` runs at most once, and corrupt JSON falls back instead of throwing.
+- Reading storage in the render body means reading and parsing on every single render. State creation has a form that runs your function once, on mount, and never looks at it again.
+- Inside that, `initialValue` may itself be a function, so it has to be unwrapped there too — and the parse needs a guard, because one bad write should give the fallback rather than a permanent white screen.
+- `setValue` takes an updater and must keep its identity, so it cannot read `value`. Resolve the next value from what the setter is handed, then write that same result to storage.
+- The cross-tab rule is a plain subscription on the window: attach on mount, detach on unmount, and ignore events whose key is not yours.

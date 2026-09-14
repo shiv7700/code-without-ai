@@ -1,0 +1,5 @@
+- Three separate traps, one line of the doc comment each: the input array, the default comparison, and a key that is undefined.
+- Sorting in place reorders the array you were handed. In React that is the array in state, so the next render compares it against itself and nothing moves.
+- With no comparator the sort converts everything to text before comparing, which is why 10 lands before 9.
+- The undefined keys need a branch of their own. Subtracting them, or comparing them with less-than, comes out false in both directions, so the pair never swaps and they stay wherever they started.
+- Equal keys keeping their input order is free in a modern engine, but only if your comparator actually returns zero for them instead of guessing a side.

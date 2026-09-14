@@ -1,0 +1,5 @@
+- The last test unmounts and then runs the clock on for ten seconds. Whatever you schedule has to be cancellable.
+- Three colours, three different durations. A repeating timer with one fixed delay can only ever produce equal gaps.
+- So the thing that schedules the next change has to be created fresh every time the colour changes, with a delay looked up from the colour it is currently on.
+- That is what an effect keyed on the colour gives you: it runs on every change, arms one delayed job, and its cleanup cancels the one that came before.
+- The order of the colours and their durations never change between renders, so they have no business being rebuilt inside the component.

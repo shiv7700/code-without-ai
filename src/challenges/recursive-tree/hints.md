@@ -1,0 +1,5 @@
+- The component takes a list of nodes, not a single node. That is what lets it call itself for a node's children without any extra wrapper component in between.
+- There is no explicit stop condition to write. Mapping over an empty list renders nothing, so the recursion ends on its own — as long as you only descend when there is something to descend into.
+- "Something to descend into" has to cover both a missing key and an empty array, and the ul-counting test is there because only one of those two is the one you will remember.
+- The depth is never stored and never counted up as you go. Each level is told what it is and tells its children what they are, which is one arithmetic expression in one place.
+- Careful with the truthiness check in front of the recursive call. A length of zero rendered straight into JSX is a visible character, not nothing.

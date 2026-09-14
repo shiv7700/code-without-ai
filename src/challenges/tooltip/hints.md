@@ -1,0 +1,5 @@
+- Rules 3 and 6 are the two tests that fail against the obvious build, and both are about the keyboard rather than the mouse.
+- Four events open or close one thing: two pointer, two focus. One piece of state, four handlers, all on the trigger.
+- The description only works if the attribute points at an id that is actually in the document. Closed means no tooltip, so it means no attribute — not an empty one.
+- That id has to be stable across renders and different per instance. Hardcoding it breaks the moment two tooltips share a page.
+- Escape is handled on the trigger, because the trigger is what has focus. The tooltip goes; focus does not move.

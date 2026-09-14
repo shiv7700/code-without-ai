@@ -1,0 +1,5 @@
+- Six keys all do the same two things: work out a candidate number, then hand it over. Write the handing-over part once and the key handler shrinks to a lookup.
+- That shared part is also the only place that should know about the range, so nothing that produces a candidate has to think about the ends.
+- Adding a tenth to a tenth is not two tenths in binary, and the error compounds every press. Somewhere in that shared part the number has to be pulled back onto the grid.
+- How many digits to keep is not a constant you get to pick — it is sitting in one of the props, in plain sight, as text.
+- The last rule about reporting nothing falls out for free if the shared part compares before it calls.

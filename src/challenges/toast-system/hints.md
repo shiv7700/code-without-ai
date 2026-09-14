@@ -1,0 +1,5 @@
+- Design against the test where a dismissed toast's old timer fires two seconds later and must not take the toast that replaced it.
+- That timer belongs to an id. Cancelling it at dismiss time is the only thing that stops it, so you have to be able to find it again from the id alone.
+- Where you keep those handles has to survive renders without causing them, and read back as it currently is. It is never rendered, so it is not state.
+- Ids come from a counter that survives the same way. Two calls inside one update must not produce the same number.
+- Unmounting cancels everything still pending, and `duration: null` never scheduled anything to begin with. Both are the same bookkeeping, seen from the two ends.

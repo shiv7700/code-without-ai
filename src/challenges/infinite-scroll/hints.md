@@ -1,0 +1,5 @@
+- The test that triggers the sentinel twice while page two is still in flight is the one that separates a working answer from a plausible one.
+- Guarding with a flag read inside the callback does not work on its own: that callback was created on an earlier render and sees the value from then.
+- Read the rule the other way round. While a page is loading there is nothing worth watching, so the watcher should not exist at all during that window.
+- An effect that depends on the loading flag gives exactly that — it tears its watcher down when loading begins and builds a new one when loading ends.
+- The same effect has to stop existing for good once a page comes back empty, and by then the element it was watching must be gone from the DOM too.

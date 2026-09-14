@@ -1,0 +1,5 @@
+- Two numbers describe the whole widget: where the divider is, and whether a drag is going on. The second one is not a detail — it decides whether anybody is listening.
+- Only one of the events happens on the separator itself. The other two happen wherever the pointer has got to, which is nowhere near it.
+- Attaching those two by hand means also detaching them by hand, and the tidiest place to do both is the hook that already pairs setting something up with tearing it down.
+- Let that setup depend on whether a drag is going on, and starting and stopping the listening becomes something you get for free from flipping one boolean.
+- The clamping is the same two numbers the separator already reports to a screen reader. Compute them once, above everything else.

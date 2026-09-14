@@ -1,0 +1,5 @@
+- The last test is the spec: the array you were holding a moment ago still reads the same afterwards, and `initial` does too.
+- `push` on the array that came out of state edits the object React already has. It compares the two, finds the same object, and there is nothing for it to render.
+- So every operation produces a new array and leaves the old one alone. `initial` counts — the caller usually wrote it inline and may well be using it elsewhere.
+- Then rules 3 and 4 collide the usual way: a function that reads `items` cannot keep its identity, and two pushes in one handler would both read the same `items` anyway.
+- Build the new array out of what the setter hands you at the moment it applies, not out of the `items` your function saw when it was created.

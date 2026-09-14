@@ -1,0 +1,4 @@
+- Most of this is the previous challenge again. Rule 5 is the new part.
+- Ask what becomes of the first element when a second one takes its place. Nothing drops it from the observer on its own.
+- Whatever told you the node arrived can also tell you it is going. That is where the old one gets let go.
+- Look at the order the test expects: the leaving happens before the arriving. That comes for free if React is the one running it, and never does if you wrote it by hand in an effect.

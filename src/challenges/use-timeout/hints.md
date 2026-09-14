@@ -1,0 +1,5 @@
+- The last test is the whole thing in one line: the new callback fires instead of the old one, and the clock was not restarted to make that happen.
+- `delay` changes rarely and on purpose. `callback` is a new arrow every time the parent renders. They cannot both drive the scheduling.
+- Put `callback` in the dependency list and a busy parent restarts the countdown so often the timer never fires. Leave it out and the arrow from the first render fires, still holding the props it closed over back then.
+- So the timer is scheduled from `delay` alone, and what it runs is a lookup of the current callback performed at the instant it fires — not the callback itself.
+- Keeping that lookup current is its own small job that runs on every render, separate from the scheduling.

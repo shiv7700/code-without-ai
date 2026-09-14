@@ -1,0 +1,4 @@
+- Count the calls to the commit prop. Two implementations put the same heading on screen and differ only in how many times they say so.
+- The heading's text is not a decision anybody makes. It is an answer, and everything needed to work it out is already to hand while rendering.
+- An effect that copies one piece of state into another is always a render late, because it cannot run until after the render it was meant to fix.
+- The last test rules out the halfway house too: a label copied when the selection changed is stale the moment the options change instead.

@@ -1,0 +1,5 @@
+- The empty case is the test to look at, and it is quietly wrong in most versions people write.
+- Folding the list with the input value as the starting point handles the empty case by accident — the starting value simply falls out — but it also hands the first function exactly one argument.
+- Rule 3 says the first function gets all of them. So the first function is not part of the fold at all; it is what produces the fold's starting value.
+- Which leaves the empty case with no first function to run, and that is now a case you have to answer deliberately rather than for free.
+- The two directions differ in one thing only: which end of the list you start from. Write one properly and the other can be expressed in terms of it.

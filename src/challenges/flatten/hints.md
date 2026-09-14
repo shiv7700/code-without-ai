@@ -1,0 +1,4 @@
+- No hidden edge case in this one. It is the recursion carrying a shrinking depth, which is the part that comes back in every tree walk.
+- Every element is one of two things, and only one of the two is worth descending into.
+- The depth you hand down is not the depth you were given. Work out where it decreases — once per level, not once per element.
+- Depth zero still has to hand back a new array, so your base case is a copy rather than the input itself.

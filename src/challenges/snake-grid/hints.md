@@ -1,0 +1,5 @@
+- Nothing here runs on a clock. A number arrives as a prop and each new value is one move, so the whole game is "what changed since the render before".
+- The first render must not move anything, which means you need to remember the last number you acted on somewhere that does not itself cause a render.
+- The snake is a list of cells with the head at one end. Moving is adding one cell at the front and dropping one off the back; eating is the same move with the dropping left out.
+- Work out the whole of the next snake before you ask whether the head crashed. Nearly every version of this checks the head against the snake as it currently stands.
+- The last cell is about to be empty. Whether it counts as a crash depends entirely on whether the tail is moving this tick, and the answer is already sitting in the list you just built.

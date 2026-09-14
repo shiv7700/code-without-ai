@@ -1,0 +1,5 @@
+- The difference from the previous challenge is what the timer means. There it measures quiet; here it measures a window that runs out regardless of what arrives.
+- A call arriving inside an open window does not extend it. That is the one line people copy across from debounce without noticing.
+- Only the last call inside a window is remembered, and if nothing arrived the window closes with nothing to do — so "there is something pending" is state you keep, not something you infer from the timer existing.
+- Turning the leading edge off does not drop the first call. It makes that call wait out a window like everyone else.
+- Check yourself against the last paragraph of the doc comment: a call every 10ms for a second, at a 100ms wait, and count the fires.

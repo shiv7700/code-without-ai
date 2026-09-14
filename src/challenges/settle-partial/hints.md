@@ -1,0 +1,5 @@
+- Design for the third test: three services, one of them down, and all three rows still on screen.
+- Waiting for all of them with the helper that gives up the moment anything rejects loses the answers that arrived perfectly fine. You never even see them.
+- Two ways out. Wrap each check so it can never reject, turning a failure into an ordinary value that says "down" — or reach for the sibling helper that reports an outcome per promise instead of one verdict for the batch.
+- Either way the row order comes from the services array, not from who answered first. What you get back lines up with what you asked for, whatever the timings were.
+- Rule 4 means one state update at the end, not one per service as it settles.

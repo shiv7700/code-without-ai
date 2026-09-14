@@ -1,0 +1,5 @@
+- The last test is the one that fails silently: the list moves on screen, and the array you were handed does not move at all.
+- Giving the array from state a new variable name does not copy it. Both names point at the same array React already rendered.
+- Writing a swap into it therefore changes state behind React's back, and the comparison that follows finds nothing new — so the first click looks like it did nothing and the second looks like it did two things.
+- Build a genuinely separate array first. After that the swap can be as blunt as you like, because nothing else is pointing at it.
+- The disabled ends come from the position, which you already have while building the rows.

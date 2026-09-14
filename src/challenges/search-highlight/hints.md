@@ -1,0 +1,5 @@
+- The last two tests are the whole challenge: a query of "." and a query of "(net)" are literal text, not patterns.
+- Build a pattern out of raw user input and every metacharacter they type changes what matches. Neutralise them before the pattern exists.
+- Splitting on the match while keeping the separators gives you alternating plain and matched pieces — which is exactly what you render.
+- The casing that gets rendered comes from the text, never from the query, so take the matched substring from the original.
+- You are returning an array of nodes, so each piece needs the thing React uses to tell siblings apart.

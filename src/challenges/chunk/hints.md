@@ -1,0 +1,5 @@
+- The test that can hang your terminal is the one passing a size of 0. Read that one before you write the loop.
+- Advancing the index by `size` each turn means a size of zero never advances, and nothing in the loop body will ever notice.
+- The guard is not "is the size missing". Zero, a negative and a not-a-number all have to fall out the same way, and the check that catches the first two does not catch the third.
+- A not-a-number answers false to every comparison you write, so a guard phrased as "reject anything below one" waves it straight past. Phrase the guard around what you will accept instead.
+- Once the guard is right the rest is copying windows out of the input, and the short last window needs no special case.

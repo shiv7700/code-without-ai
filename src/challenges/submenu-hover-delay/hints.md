@@ -1,0 +1,5 @@
+- There is at most one booking alive in the whole menu at any moment, and at most one submenu open. Two small pieces of information, and they are not the same kind of thing.
+- The booking's cancel handle changes on every twitch of the pointer and nothing on screen depends on it. State would be the wrong home for it.
+- Arriving at an entry should start by throwing away whatever was already booked. Write that first line before you write the booking itself.
+- Leaving has two jobs, not one, and they are needed in different situations: one for the submenu that is already open, one for the opening that has not happened yet.
+- Whatever leaving does, unmounting needs the same thing. If it is one small function you can call it from both.

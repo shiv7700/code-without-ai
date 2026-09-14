@@ -1,0 +1,4 @@
+- Three states per column and several columns, but only one thing is ever true at a time. One small piece of state can say all of it — and "nothing is sorted" has to be one of the values it can hold.
+- The order on screen is not state. It is the rows you were given, with something done to them on the way out.
+- "Something done to them" has to leave the original alone. The method you are reaching for does not, and it is the parent's array you would be rearranging.
+- Once nothing is being sorted, the answer is simply the array you were handed — which only works if it still says what it said at the start.

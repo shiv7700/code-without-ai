@@ -1,0 +1,5 @@
+- Two things look like state here and only one of them is. Work out which of the filter and the todos this component is actually allowed to own.
+- The filter arrives on every render already decided. Storing it is copying something that changes for reasons you will never hear about.
+- That makes the filter buttons dumber than they look: they report an intention upwards and do nothing at all to what is on screen.
+- The last test never touches the buttons. It simply hands the component a different path and expects the list to have moved.
+- The visible list is a filter over the todos done during render. There is nothing to recompute and nothing to keep in step.

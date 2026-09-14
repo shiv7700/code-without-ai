@@ -1,0 +1,4 @@
+- Rule 2 is the constraint that shapes the whole thing: one state variable, the query, and nothing else.
+- The matching items and the count are both answers to a question you can ask fresh on every render, from the query and the items you already have.
+- Keeping the matches in state means keeping them in sync, which means an effect, which means one render showing the previous results before the right ones arrive.
+- The count reads "2 of 5", and the second number is the whole list rather than the filtered one — so it never moves while typing.

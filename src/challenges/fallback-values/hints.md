@@ -1,0 +1,3 @@
+- Four of the seven tests pass either way. The 0 test and the empty-string test are the only ones that separate a right answer from a plausible one.
+- "Missing" in rule 3 means exactly two values. A falsy check catches six, and four of them are answers somebody actually gave.
+- You want the operator that falls back for only those two and hands everything else through untouched. It goes exactly where the falsy check would have gone.

@@ -1,0 +1,5 @@
+- The second test separates the two builds: after the click and before the promise settles, the button still reads "Copy".
+- So the label is not set when you call the write. It is set when the write comes back, and there are two answers it can come back with.
+- Both answers lead to the same place after `resetAfter` milliseconds, so the reset is one path rather than two.
+- The reset timer belongs to the click that started it. If another click lands first, the old one is still pending and will drag the label back early.
+- The status region exists before anything has happened — the last test looks for it on the very first render, empty.

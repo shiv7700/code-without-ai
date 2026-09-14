@@ -1,0 +1,5 @@
+- Do the merging per prop, not per object. Two values and a fallback, resolved one at a time, is longer to type and is the only version that passes the fourth test.
+- Spreading three objects together looks tidier and has a hole in it: a key that is there but empty still counts as being there, and it overwrites everything below it.
+- The operator you want treats only two specific values as "nothing said", and it chains, so three sources fit on one line. The one that also rejects empty strings and zeroes is the wrong one here, even if nothing in the spec currently proves it.
+- The class string is a list you build and then join once. Filtering the empty entries out before joining is what keeps the trailing space away.
+- Styles are the exception: those genuinely do merge as objects, and only one level deep.

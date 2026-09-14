@@ -1,0 +1,5 @@
+- Three tests, three unrelated bugs: the array replacement, the undefined in the source, and the deeply nested no-mutation one.
+- Asking what type a value is answers "object" for an array too, which is how two arrays end up merged index by index instead of one replacing the other whole.
+- Skipping falsy source values is a shortcut that cannot tell rule 4 from rule 5. One of null and undefined replaces and one does not, and both of them are falsy.
+- The last test is the serious one. Recursing into the target's own nested object and writing into it merges into the caller's defaults, so the second call already sees the first call's overrides.
+- Which means every level produces a new object rather than editing one it was handed — at every depth, not just the top.

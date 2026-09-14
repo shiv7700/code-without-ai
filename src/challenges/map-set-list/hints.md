@@ -1,0 +1,5 @@
+- Neither of these two can be rendered directly. Get an array out of each one first, and everything after that is the list rendering you already know.
+- There is more than one way to get that array, and the shortest one is an operator you already use on arrays every day. It works here for the same reason a string works with it.
+- What comes out for each entry is a pair, so you can name both halves right in the callback parameters instead of indexing into it.
+- The empty test is the one that catches the habit. The property that tells you how many things are in these two is not the one arrays use, and asking for the wrong one gets you undefined rather than an error.
+- Membership is a question you ask the set itself. Turning it into an array to search it works and rather misses the point of having been handed one.

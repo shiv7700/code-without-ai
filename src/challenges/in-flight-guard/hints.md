@@ -1,0 +1,5 @@
+- The test that fires the sentinel twice in one tick is the entire challenge. Everything else passes with a plain boolean in state.
+- Those two calls both run against the same render. They read the same snapshot of your loading flag, both see false, and both start a request — writing the flag in between changes nothing either of them can see.
+- What you need is a value readable the instant after it is written, in the same tick, with no render in between. It is not the same thing that drives whatever the UI shows.
+- The page number has the same problem for the same reason: two loads in a row have to ask for different pages, so the number you send must be derived somewhere you can be sure it is current.
+- Reaching the end is two jobs off one empty page — the text on screen is state, and stopping the watching is undoing the subscription you set up.

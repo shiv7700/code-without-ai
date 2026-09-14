@@ -1,0 +1,5 @@
+- Only one element in this widget is ever allowed to have the focus, and the user put it there by clicking the box. Nothing you write may take it away.
+- So "which option am I on" is a number you keep, and the browser is told about it through attributes rather than by moving anything.
+- Those attributes need the option to have a stable id, which means you are generating ids — one per position in the filtered list, not per option in the props.
+- Careful what the number indexes. The user types another letter, the list shrinks, and position two is a different fruit than it was.
+- Nothing highlighted is a real state, and it is the one you start in. Decide what the attribute says then, before you write the arrow handler.

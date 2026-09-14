@@ -1,0 +1,5 @@
+- The last two tests are the challenge: a fresh array of the same values must not move the position, and `next` must wrap around the list as it is now.
+- The first one tells you what the state is. The position is state; `values` is not, and nothing about a new array arriving should touch the index.
+- The second one is the squeeze. Put `values` in the dependency list and `next` wraps correctly but is a new function every render, because the caller writes the array inline.
+- So `next` must not capture `values` and must still know its length at the instant it is called. It has to look the list up rather than remember it.
+- Keeping that lookup pointing at the newest array is a small job that runs every render, entirely separate from what `next` does.

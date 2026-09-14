@@ -1,0 +1,4 @@
+- Two tests pull against each other on purpose: `icon` and `label` must never show up as attributes, and a caller's own aria-label must beat the one you derived from `label`.
+- Spreading the whole props object gets rule 3 and loses rule 4 — React hands anything it does not recognise straight through to the DOM element, stray attributes included.
+- Keeping the two you consume out of the forwarded bundle is a job for the signature, not for a delete afterwards.
+- Rule 5 is not about which props you forward but about where on the element your own attribute is written. Whatever is spelled out last wins, so the derived one has to be somewhere the caller's copy can land on top of.

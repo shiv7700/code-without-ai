@@ -1,0 +1,5 @@
+- Only one thing here is state: which tags are picked. The visible items, the counts and the disabled flags are all worked out from it while rendering.
+- Write the filter as a function of a set of tags rather than reading the picked set directly. You are going to want to ask it more than one question.
+- The number beside a tag is the answer to "and what if I picked this too". Ask it against what is currently on screen, not against the original list.
+- For a tag that is already picked that question has a boring answer, and it is the right one — the number matches the list length.
+- Disabling has to leave you a way out. A tag showing zero because you picked it is not the same as a tag showing zero because nothing has it.

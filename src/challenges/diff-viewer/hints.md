@@ -1,0 +1,5 @@
+- The rendering is five lines. Everything hard here is a plain function from two arrays of strings to one array of rows, so write and test that on its own first.
+- Two pointers walking in step cannot work: the moment one side gains a line the two indexes mean different things forever after.
+- What you actually want is the longest run of lines, not necessarily adjacent, that appears in both files in the same order. Everything not in that run is an addition or a removal.
+- You cannot find that run greedily from the front. Answer it for every pair of starting positions first, build the table from the far end backwards, then walk forward through it.
+- When neither side matches, the table tells you which way to step. Break the tie towards the left-hand file and rule 4 comes out for free.

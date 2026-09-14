@@ -1,0 +1,4 @@
+- Rule 3 is actually measured — the test counts the calls — so invoking it once for the content and again for anything else fails, however reasonable the second call looked.
+- A prop holding a function is no different from any other prop. You call it while building the markup and use whatever comes back, exactly as you would use a string you were handed.
+- The fallback for a missing one does not belong in the loop. A default in the signature can itself be a function, and then the loop has only one path through it.
+- The empty case needs no guard at all: a loop over nothing calls nothing and produces nothing, and the container is unconditional here.

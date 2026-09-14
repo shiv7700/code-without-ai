@@ -1,0 +1,5 @@
+- Two tests set the shape: a run starting in the middle of the board wins, and a run that would only be long enough by wrapping round the edge does not.
+- A fixed list of winning lines dies here. Instead, from each occupied square, count how many of the same mark follow it in a direction, stopping the moment you step off the board.
+- Four directions is enough, not eight — a run found going right is the same run found going left, so counting each direction from every square already covers both ends.
+- The history rules are a second, separate design. What is stored is the list of boards, and the current board is whichever one the position you are looking at points to.
+- That position is the other piece of state, and playing a move truncates the list at it before appending. Which is why the abandoned future disappears, and why whose turn it is never needs storing.

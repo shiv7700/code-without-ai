@@ -1,0 +1,5 @@
+- Start from the last test: a slow page-two response arriving after you have gone back to page one must not land.
+- That is why none of this belongs in the click handlers. A handler changes three values; the request is a consequence of those values, not of the click.
+- So one effect watching page, column and direction does all the fetching, and its cleanup is what marks an older response as no longer wanted.
+- Sorting resets the page, and the reset has to happen within the same change. If the page lags one render behind, the effect fires once for a combination nobody asked for.
+- The selection is keyed by row id and sits outside everything the effect touches, which is why it survives paging. The rows on screen are only ever what came back — never order or slice them yourself.

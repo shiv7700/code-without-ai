@@ -1,0 +1,4 @@
+- Nothing is stored here but the password. Score, label and the missing list are three readings of the same string.
+- Four independent checks worth a point each are naturally a list, and the same list gives you both the count and what is left over, in order.
+- The label is a band over the score rather than a fourth thing to track: two boundaries, three names.
+- The empty field is not a special case. Zero checks pass, so it scores 0 and misses all four for free.

@@ -1,0 +1,4 @@
+- The test that decides this one is the repeated step: with steps of 1, 2 and 1, a single "Apply all" has to reach 4.
+- Inside a handler, the total is a number that was fixed when this render happened. Setting it does not change what the next line reads.
+- So a loop that adds each step to that number is three calculations all starting from the same place, and only the last one lands.
+- The setter accepts either the finished value or a description of how to get there from whatever is already queued. Only one of those two stacks up.

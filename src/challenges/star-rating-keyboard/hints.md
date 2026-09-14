@@ -1,0 +1,5 @@
+- Assume the five stars already render. The test that breaks the build you have is the one that Tabs twice and expects to be past the whole rating.
+- Five focusable buttons is five stops in the tab order for one answer. The widget that takes one stop is the container, and the stars stop being controls at all.
+- So the key handling lives on the thing that holds focus, and the stars only need to be taken out of the accessibility tree.
+- Arrows, Home and End all resolve to one number. Clamp it, compare it to the current value, and report only when it actually moved — the clamping test asserts silence, not a repeated call.
+- A plain container is not reachable by Tab, and giving it a role does not change that. It needs to be put in the tab order explicitly.
