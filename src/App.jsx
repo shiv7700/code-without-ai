@@ -3,6 +3,7 @@ import { challenges } from './challenges'
 import { Login, SessionProvider, useSession } from './auth'
 import Home from './Home'
 import Challenge from './Challenge'
+import Check from './Check'
 import { Toaster } from '@/components/ui/sonner'
 import './app.css'
 
@@ -48,7 +49,13 @@ export default function App() {
   return (
     <BrowserRouter>
       <SessionProvider>
-        <Gate />
+        {/* /check holds no user data and has to run before anyone has signed
+            in — it is the deploy's own smoke test — so it sits outside Gate.
+            Everything else falls through to the login. */}
+        <Routes>
+          <Route path="/check" element={<Check />} />
+          <Route path="*" element={<Gate />} />
+        </Routes>
         <Toaster position="bottom-right" />
       </SessionProvider>
     </BrowserRouter>

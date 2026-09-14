@@ -28,7 +28,7 @@ position is stored nowhere, so it is free to move.
 
 ## The ladder is not finished, and that is normal
 
-208 challenges today, heading towards roughly 500. **Expect new folders to keep
+301 challenges today, heading towards roughly 500. **Expect new folders to keep
 arriving in large batches** — a commit adding eighty at once is the intended
 rhythm, not a runaway script.
 
@@ -52,6 +52,7 @@ Two steps.
 src/challenges/use-throttle/
   useThrottle.js        the stub — doc comment, then a body that does nothing
   useThrottle.test.jsx  the spec
+  hints.md              3–5 lines, revealed one at a time. See below.
   demo.jsx              optional, only if the preview needs props
 ```
 
@@ -95,7 +96,7 @@ the bottom — visible, not silently missing. `src/challenges.test.js` fails on 
 ### The bar for a new spec
 
 Write the spec, write a reference solution, watch it go green, **then** put the
-stub back. A spec that has never passed is not a spec. All 1,439 current challenge tests
+stub back. A spec that has never passed is not a spec. All 2,022 current tests
 were verified this way.
 
 Mock nothing global. A challenge that needs data takes the async function as a
@@ -124,6 +125,37 @@ not used anywhere and should stay that way.
 commit, not thirty. Same for a refactor: land the whole thing, verify, commit.
 Committing after every file buries the one message that explains the change,
 and none of it is any safer — nothing here is deployed by a commit.
+
+## Hints
+
+A `Hint` button in the challenge header opens a modal and gives up **one hint at
+a time**, with a counter and a Next button. Reopening starts from the first
+again — carrying the count over means coming back tomorrow starts you at the
+answer.
+
+They live in `hints.md` in the challenge folder, and **deliberately not in the
+doc comment**: the doc comment is open in the editor, and a hint you cannot
+avoid reading is not a hint. `challenges.js` globs them separately from the code
+files, so they never reach Sandpack's file system either.
+
+The format is only `- ` lines; anything else in the file is dropped.
+
+```markdown
+- The first three rules pass with almost any implementation. Only the last one
+  can tell two of them apart.
+- On the second render React has to work out which of the new items is which of
+  the old ones. It does not compare their contents to do it.
+```
+
+Ordered, each giving away a little more: where to look, what is really going on,
+why the obvious approach fails, the shape of what is needed. **Never code, and
+never the name of the API** — not `useRef`, not `useCallback`. Describe what the
+thing has to do and let him reach for the name, because that reach is the rep.
+The repo exists to make him write it; a hint that hands it over spends the whole
+point of the exercise to save five minutes.
+
+`src/challenges/list-keys/hints.md` and `src/challenges/use-interval/hints.md`
+are the reference for tone. `src/Hints.test.jsx` covers the reveal behaviour.
 
 ## How a challenge reaches the screen
 
@@ -238,6 +270,84 @@ Not enforced, but true:
   `update solutions set challenge = 'new' where challenge = 'old';`
 - 27 of the tests pass against an empty stub. They are negative assertions
   (`renders nothing when closed` and friends) — not a bug, and not progress.
+
+## Checking the browser runner — `npm run check`
+
+A spec green under Vitest proves nothing about Sandpack. That is how the
+fake-timer gap shipped, so there is now a command for it.
+
+```bash
+npm run check                                     # localhost:5173, ~30 seconds
+npm run check -- https://reactwithoutai.vercel.app
+npm run check -- --all                            # every challenge, ~10 minutes
+```
+
+`playwright-core` drives the already-installed Chrome headless — no browser
+download — to `/check`, which sits **outside the login gate** and holds no user
+data. It runs `src/environmentSpec.js` inside the real browser runner: 33 tests,
+one per API, covering the whole surface the 301 specs actually use. One API per
+test on purpose — a single "user-event works" would tell you nothing about which
+call broke.
+
+`--all` instead runs every challenge's spec against its stub. Almost everything
+fails, which is correct; what it reports is only a failure that looks like a
+broken *environment* rather than an honest empty stub.
+
+**Know what each half can and cannot see.** `--all` catches loud failures —
+`is not a function`, a module that will not resolve, a suite that never
+compiles. It cannot catch a silent one: `userEvent.tab()` does nothing in
+Sandpack, so the test fails on its assertion and reads exactly like an
+unfinished answer. Only the environment spec, which asserts the API directly,
+catches that class. Add to it whenever a spec starts using something new.
+
+`src/checks.test.js` is the static half, and runs under `npm test`: every
+`vi.<method>` a spec uses must exist on the shim's `vi`, and every non-relative
+import must be `vitest`, `react`, or a package in `DEPS`.
+
+## Known gap: user-event's ambient-document calls
+
+`npm run check` reports seven **known gaps** and still exits 0. They are real
+and they are not regressions, and they are printed on every run so nobody gets
+to forget them. A gate that is red every single time gets ignored within a week,
+and then the next real break is invisible too.
+
+Sandpack renders the DOM in one realm and runs the spec's globals in another.
+Probed from inside the runner:
+
+```
+el.ownerDocument === globalThis.document     false
+el instanceof globalThis.Element             false
+el instanceof el.ownerDocument.defaultView.Element   true
+globalThis.document.defaultView === globalThis        true
+```
+
+Testing Library renders into one document; the spec's globals belong to
+another. user-event takes its window from whatever element it is handed, so
+`click(el)` and `type(el, …)` are fine. Everything that resolves the ambient
+globals instead is not:
+
+| call | what happens |
+|---|---|
+| `userEvent.setup()`, `selectOptions`, `dblClick`, `hover`/`unhover` | throws `The provided value is not of type 'Element'` |
+| `userEvent.keyboard(…)` | silently does nothing |
+| `userEvent.tab()` | silently does nothing, focus stays on `<body>` |
+
+Blast radius across the specs: 34 `keyboard`, 17 `setup`, 13 `selectOptions`,
+5 `tab`, 5 `hover`, 1 `dblClick`, and the 44 `toHaveFocus` assertions that
+depend on `tab`. **Those challenges cannot currently be solved in the browser.**
+They are solvable in the terminal with `npm run test:watch <name>`.
+
+Two fixes were tried and reverted, both here in the shim: aligning the global
+constructors to `document.defaultView` (no effect — as the probe shows, that
+view already *is* globalThis), and delegating `getComputedStyle` to each
+element's own realm (no effect — user-event does not resolve it through the
+global). The next thing to try is giving user-event the right document
+explicitly, which its API does support; the obstacle is that specs import the
+package directly, so it would mean shadowing it in Sandpack's virtual
+`node_modules` the way `vitest` already is.
+
+Do not guess at a third patch without running `npm run check` against it. That
+command exists precisely so this stops being a matter of opinion.
 
 ## Fake timers, and why the shim has a clock in it
 
