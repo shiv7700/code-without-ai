@@ -5,11 +5,9 @@ import { loadProgress } from './store'
 import { Kbd, MOD } from './Kbd'
 import {
   Dialog,
-  DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -61,20 +59,21 @@ export function Jump({ current }) {
     .filter((tier) => tier.challenges.length > 0)
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger render={<Button variant="ghost" size="sm" />}>
+    <>
+      <Button variant="ghost" size="sm" onClick={() => onOpenChange(true)}>
         Challenges
         <Kbd>{MOD}K</Kbd>
-      </DialogTrigger>
+      </Button>
 
-      <DialogContent
+      <Dialog
+        open={open}
+        onOpenChange={onOpenChange}
+        side="right"
         initialFocus={search}
-        className="top-0 right-0 left-auto h-dvh w-full max-w-md translate-x-0 translate-y-0 grid-rows-[auto_1fr_auto] gap-0 rounded-none p-0 data-closed:slide-out-to-right data-open:slide-in-from-right"
+        className="grid grid-rows-[auto_1fr_auto]"
       >
         <DialogHeader className="gap-3 border-b border-border p-4">
-          <DialogTitle className="font-mono text-sm">
-            Jump to a challenge
-          </DialogTitle>
+          <DialogTitle>Jump to a challenge</DialogTitle>
           <DialogDescription className="sr-only">
             Search the whole ladder and open any challenge.
           </DialogDescription>
@@ -161,11 +160,11 @@ export function Jump({ current }) {
           ))}
         </div>
 
-        <p className="border-t border-border px-4 py-2 font-mono text-[0.625rem] tracking-[0.15em] text-muted-foreground uppercase tabular-nums">
+        <p className="label border-t border-border px-4 py-3 text-muted-foreground tabular-nums">
           {visible.reduce((n, t) => n + t.challenges.length, 0)} /{' '}
           {challenges.length}
         </p>
-      </DialogContent>
-    </Dialog>
+      </Dialog>
+    </>
   )
 }

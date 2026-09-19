@@ -4,6 +4,36 @@ import { supabase } from './supabase'
 
 const TABLE = 'solutions'
 
+// The row still holds one text column. One file is written as its own source,
+// exactly as before, so every row saved until now loads untouched; more than
+// one is written as a JSON map of path to source.
+const isFileMap = (value) =>
+  value !== null &&
+  typeof value === 'object' &&
+  !Array.isArray(value) &&
+  Object.keys(value).length > 0 &&
+  Object.keys(value).every((k) => k.startsWith('/')) &&
+  Object.values(value).every((v) => typeof v === 'string')
+
+export const encodeFiles = (files) => {
+  const paths = Object.keys(files)
+  return paths.length === 1 ? files[paths[0]] : JSON.stringify(files)
+}
+
+// `primary` is where a single stored file goes. Anything that does not parse
+// as a map of paths is treated as one file, which also covers a saved solution
+// that happens to begin with a brace.
+export const decodeFiles = (code, primary) => {
+  if (typeof code !== 'string') return {}
+  try {
+    const parsed = JSON.parse(code)
+    if (isFileMap(parsed)) return parsed
+  } catch {
+    // not JSON — one file, the old shape
+  }
+  return { [primary]: code }
+}
+
 const userId = async () =>
   (await supabase.auth.getSession()).data.session?.user?.id
 
@@ -42,7 +72,8 @@ export const saveSolution = async (challenge, fields) => {
   if (error) throw error
 }
 
-export const saveCode = (challenge, code) => saveSolution(challenge, { code })
+export const saveCode = (challenge, files) =>
+  saveSolution(challenge, { code: encodeFiles(files) })
 
 export const saveDone = (challenge, passed) =>
   saveSolution(challenge, { passed })

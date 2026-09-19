@@ -38,9 +38,13 @@ for (const [path, code] of Object.entries(raw)) {
 // Title, summary and topics all live in the stub's own doc comment — no second
 // source of truth to keep in sync. The ladder file owns order and nothing else.
 const build = (c, tier) => {
-  const stub = Object.keys(c.files).find(
-    (f) => !f.includes('.test.') && f !== '/demo.jsx',
-  )
+  // Everything in the folder that is neither the spec nor the preview's demo is
+  // yours to write. Most folders hold one; a few hold a component and the hook
+  // it leans on, and those are edited as a set and saved as a set.
+  const sources = Object.keys(c.files)
+    .filter((f) => !f.includes('.test.') && f !== '/demo.jsx')
+    .sort()
+  const stub = sources[0]
   const specName = Object.keys(c.files).find((f) => f.includes('.test.'))
   // A folder mid-write — a stub and no spec yet — used to throw here, at module
   // load, which takes down every route including the ones that would tell you
@@ -60,6 +64,10 @@ const build = (c, tier) => {
   return {
     ...c,
     stub,
+    sources,
+    // The runner shows it in the editor, read-only. It was already in Sandpack's
+    // file system; it just had nowhere to be seen.
+    spec: specName,
     // The spec is the brief. Listing what it checks up front beats making
     // someone run the suite to find out what they are aiming at.
     tests,

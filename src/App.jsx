@@ -1,9 +1,18 @@
-import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router'
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from 'react-router'
 import { challenges } from './challenges'
 import { Login, SessionProvider, useSession } from './auth'
+import Marketing from './Marketing'
 import Home from './Home'
 import Challenge from './Challenge'
 import Check from './Check'
+import { Loading } from '@/components/ui/loading'
 import { Toaster } from '@/components/ui/sonner'
 import './app.css'
 
@@ -17,44 +26,72 @@ function ChallengeRoute() {
   return challenge ? (
     <Challenge key={name} challenge={challenge} />
   ) : (
-    <Navigate to="/" replace />
+    <Navigate to="/ladder" replace />
   )
 }
 
-// Every route is behind the login, so a deep link bounces through GitHub and
-// comes back to the challenge that was asked for.
-function Gate() {
+// The first challenge runs signed out. Someone who has typed a real answer and
+// watched a test go green is a different visitor from one asked to authorise
+// GitHub against a page they have not touched. Nothing saves until they sign in;
+// `store.js` already no-ops every write without a session.
+const FREE = challenges[0]?.name
+
+function MaybeGated() {
+  const { name } = useParams()
+
+  if (name === FREE) return <ChallengeRoute />
+
+  return (
+    <Gate>
+      <ChallengeRoute />
+    </Gate>
+  )
+}
+
+// A deep link while signed out carries where it was going, so GitHub sends you
+// back to the challenge you asked for and not to the front page.
+function Gate({ children }) {
   const session = useSession()
+  const { pathname } = useLocation()
 
   if (session === undefined) {
     return (
-      <main className="flex min-h-dvh items-center justify-center">
-        <span className="size-6 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />
-      </main>
+      <Loading
+        title="Checking your session"
+        hint="One moment."
+        className="min-h-dvh"
+      />
     )
   }
 
-  if (session === null) return <Login />
+  if (session === null) {
+    return <Navigate to={`/login?next=${encodeURIComponent(pathname)}`} replace />
+  }
 
-  return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/:name" element={<ChallengeRoute />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  )
+  return children
 }
 
 export default function App() {
   return (
     <BrowserRouter>
       <SessionProvider>
-        {/* /check holds no user data and has to run before anyone has signed
-            in — it is the deploy's own smoke test — so it sits outside Gate.
-            Everything else falls through to the login. */}
+        {/* `/`, `/login` and `/check` are public — the first two are how anyone
+            arrives, and /check is the deploy's own smoke test, which has to run
+            before a session exists. Everything else is behind Gate. */}
         <Routes>
+          <Route path="/" element={<Marketing />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/check" element={<Check />} />
-          <Route path="*" element={<Gate />} />
+          <Route
+            path="/ladder"
+            element={
+              <Gate>
+                <Home />
+              </Gate>
+            }
+          />
+          <Route path="/:name" element={<MaybeGated />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <Toaster position="bottom-right" />
       </SessionProvider>

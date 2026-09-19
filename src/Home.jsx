@@ -169,13 +169,9 @@ export default function Home() {
           onChange={(e) => setQuery(e.target.value)}
           className="h-8 min-w-56 flex-1 font-mono text-xs"
         />
-        <ToggleGroup
-          size="sm"
-          value={[status]}
-          onValueChange={([next]) => setStatus(next ?? 'all')}
-        >
+        <ToggleGroup value={status} onValueChange={setStatus}>
           {STATUSES.map(([value, label]) => (
-            <ToggleGroupItem key={value} value={value} className="text-xs">
+            <ToggleGroupItem key={value} value={value}>
               {label}
             </ToggleGroupItem>
           ))}
@@ -184,19 +180,13 @@ export default function Home() {
 
       <div className="mb-8 flex flex-wrap items-center gap-2">
         <ToggleGroup
-          size="sm"
-          value={[section]}
-          onValueChange={([next]) => setSection(next ?? 'all')}
+          value={section}
+          onValueChange={setSection}
+          className="flex-wrap"
         >
-          <ToggleGroupItem value="all" className="text-xs">
-            Every section
-          </ToggleGroupItem>
+          <ToggleGroupItem value="all">Every section</ToggleGroupItem>
           {tiers.map((tier) => (
-            <ToggleGroupItem
-              key={tier.name}
-              value={tier.name}
-              className="text-xs"
-            >
+            <ToggleGroupItem key={tier.name} value={tier.name}>
               {tier.name}
             </ToggleGroupItem>
           ))}

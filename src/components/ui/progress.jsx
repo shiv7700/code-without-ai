@@ -1,82 +1,25 @@
-import { Progress as ProgressPrimitive } from "@base-ui/react/progress"
+import { cn } from '@/lib/utils'
 
-import { cn } from "@/lib/utils"
+// Only ever used to show how much of the ladder is done, so it takes a plain
+// 0–100 and nothing else. A label goes above it, in the caller's own layout.
+export function Progress({ value = 0, className, ...props }) {
+  const pct = Math.max(0, Math.min(100, value))
 
-function Progress({
-  className,
-  children,
-  value,
-  ...props
-}) {
   return (
-    <ProgressPrimitive.Root
-      value={value}
+    <div
+      role="progressbar"
+      aria-valuenow={Math.round(pct)}
+      aria-valuemin={0}
+      aria-valuemax={100}
       data-slot="progress"
-      className={cn("flex flex-wrap gap-3", className)}
-      {...props}>
-      {children}
-      <ProgressTrack>
-        <ProgressIndicator />
-      </ProgressTrack>
-    </ProgressPrimitive.Root>
-  );
-}
-
-function ProgressTrack({
-  className,
-  ...props
-}) {
-  return (
-    <ProgressPrimitive.Track
-      className={cn(
-        "relative flex h-1 w-full items-center overflow-x-hidden rounded-full bg-muted",
-        className
-      )}
-      data-slot="progress-track"
-      {...props} />
-  );
-}
-
-function ProgressIndicator({
-  className,
-  ...props
-}) {
-  return (
-    <ProgressPrimitive.Indicator
-      data-slot="progress-indicator"
-      className={cn("h-full bg-primary transition-all", className)}
-      {...props} />
-  );
-}
-
-function ProgressLabel({
-  className,
-  ...props
-}) {
-  return (
-    <ProgressPrimitive.Label
-      className={cn("text-sm font-medium", className)}
-      data-slot="progress-label"
-      {...props} />
-  );
-}
-
-function ProgressValue({
-  className,
-  ...props
-}) {
-  return (
-    <ProgressPrimitive.Value
-      className={cn("ml-auto text-sm text-muted-foreground tabular-nums", className)}
-      data-slot="progress-value"
-      {...props} />
-  );
-}
-
-export {
-  Progress,
-  ProgressTrack,
-  ProgressIndicator,
-  ProgressLabel,
-  ProgressValue,
+      className={cn('h-1 w-full overflow-hidden rounded-full bg-muted', className)}
+      {...props}
+    >
+      {/* scaleX, not width — a width transition relayouts every frame. */}
+      <div
+        className="h-full origin-left rounded-full bg-primary transition-transform duration-(--dur-slow) ease-out-quick"
+        style={{ transform: `scaleX(${pct / 100})` }}
+      />
+    </div>
+  )
 }

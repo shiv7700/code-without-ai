@@ -1,36 +1,98 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
-@import 'shadcn/tailwind.css';
-@import '@fontsource-variable/archivo';
+@import '@fontsource-variable/lexend';
 @import '@fontsource-variable/jetbrains-mono';
 
 @custom-variant dark (&:is(.dark *));
 
-/* Sandpack's editor is dark and fills half of every screen, so the shell is
-   dark too and shadcn's tokens are pointed at the same six colours. One
-   palette, not two fighting each other. */
+/* Dark is the product; the editor fills half of every screen and is dark, so
+   the shell matches it rather than fighting it. Light is the courtesy mode. */
 @theme {
-  --color-ink: #16161a;
-  --color-panel: #1f1f25;
-  --color-line: #32323c;
-  --color-chalk: #d9d9e0;
-  --color-dim: #9a9aa6;
-  --color-go: #6ee7a8;
+  /* Not neutral grey. A held violet cast (hue 274) runs through every surface
+     so near-black reads as a tool and not as an unstyled page. */
+  --color-sunk: oklch(0.135 0.008 274);
+  --color-void: oklch(0.16 0.009 274);
+  --color-slab: oklch(0.2 0.01 274);
+  --color-raise: oklch(0.245 0.012 274);
+  --color-hair: oklch(0.29 0.013 274);
+  --color-edge: oklch(0.38 0.015 274);
+  /* Three text levels, not two. With only chalk and dim, every paragraph on the
+     page lands on dim and the whole thing reads grey. Mist is where body copy goes. */
+  --color-chalk: oklch(0.95 0.004 274);
+  --color-mist: oklch(0.84 0.008 274);
+  --color-dim: oklch(0.72 0.011 274);
+  --color-faint: oklch(0.55 0.012 274);
+
+  /* Brand violet carries every interactive thing. Green is reserved — it means
+     a test passed and nothing else, or "solved" stops being readable at a glance. */
+  --color-volt: oklch(0.68 0.19 288);
+  --color-volt-lift: oklch(0.74 0.19 288);
+  --color-go: oklch(0.8 0.17 155);
+  --color-stop: oklch(0.68 0.2 22);
 
   /* Light is not the dark flipped. Dark lifts a card by lightening it; light
      lifts by going white against a grey desk, so the page is the darker one. */
-  --color-desk: #f3f3ef;
-  --color-sheet: #ffffff;
-  --color-shade: #e6e6df;
-  --color-rule: #d5d5cc;
-  --color-graphite: #1c1c22;
-  --color-pencil: #5b5b64;
-  --color-fern: #0b7a49;
+  --color-desk: oklch(0.96 0.004 274);
+  --color-sheet: oklch(1 0 0);
+  --color-shade: oklch(0.93 0.005 274);
+  --color-rule: oklch(0.87 0.007 274);
+  --color-graphite: oklch(0.22 0.012 274);
+  --color-slate: oklch(0.36 0.014 274);
+  --color-pencil: oklch(0.48 0.014 274);
+  --color-volt-ink: oklch(0.48 0.2 288);
+  --color-fern: oklch(0.52 0.14 155);
+
+  /* An explicit ladder, because everything at 14px is what reads as flat. Each
+     step changes size and tracking together — large text needs to sit tighter. */
+  --text-display: 3.25rem;
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.035em;
+  --text-display--font-weight: 620;
+  --text-title: 2rem;
+  --text-title--line-height: 1.12;
+  --text-title--letter-spacing: -0.025em;
+  --text-title--font-weight: 600;
+  --text-head: 1.375rem;
+  --text-head--line-height: 1.25;
+  --text-head--letter-spacing: -0.015em;
+  --text-head--font-weight: 580;
+  --text-sub: 1.0625rem;
+  --text-sub--line-height: 1.4;
+  --text-sub--letter-spacing: -0.008em;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.6;
+  --text-fine: 0.8125rem;
+  --text-fine--line-height: 1.5;
+  /* Code panes and dense lists. It was being hand-rolled as text-[0.75rem] in
+     three places, which is how a scale quietly grows an eighth step. */
+  --text-micro: 0.75rem;
+  --text-micro--line-height: 1.7;
+  /* The mono caps label used on every panel heading. Tracking is the whole
+     effect — set it small and tight and it just reads as shouting. */
+  --text-label: 0.6875rem;
+  --text-label--line-height: 1;
+  --text-label--letter-spacing: 0.18em;
+  --text-label--font-weight: 560;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  --ease-out-quick: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* Durations live outside @theme — they are read by hand in transitions, not as
+   generated utilities, and Tailwind's duration-* already covers the classes. */
+:root {
+  --dur-quick: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
 }
 
 :root {
   color-scheme: light;
-  --radius: 0.625rem;
+  --radius: 0.5rem;
 
   --background: var(--color-desk);
   --foreground: var(--color-graphite);
@@ -38,54 +100,88 @@
   --card-foreground: var(--color-graphite);
   --popover: var(--color-sheet);
   --popover-foreground: var(--color-graphite);
-  --primary: var(--color-fern);
+  --primary: var(--color-volt-ink);
   --primary-foreground: var(--color-sheet);
   --secondary: var(--color-shade);
   --secondary-foreground: var(--color-graphite);
-  /* Every hover and pressed state in the shadcn components reads --muted. It
-     has to sit clear of both the desk and the sheet or they all vanish. */
   --muted: var(--color-shade);
   --muted-foreground: var(--color-pencil);
   --accent: var(--color-shade);
   --accent-foreground: var(--color-graphite);
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(0.55 0.22 27);
+  --success: var(--color-fern);
   --border: var(--color-rule);
   --input: var(--color-rule);
-  --ring: var(--color-pencil);
+  /* Not --primary. A violet ring around a violet button is no ring at all, and
+     that button is the one control on the page that has to answer the keyboard. */
+  --ring: var(--color-graphite);
+  --surface: var(--color-sheet);
+  --surface-raised: var(--color-shade);
+  --subtle: var(--color-slate);
+  --well: var(--color-desk);
+  --grid-ink: oklch(0 0 0 / 0.06);
+  --glow-strength: 9%;
+
+  /* Elevation is a ring first. A black blur under a white card is the only half
+     that works in light; in dark it is the half that does nothing. */
+  --lift:
+    0 0 0 1px oklch(0 0 0 / 0.07),
+    0 1px 2px 0 oklch(0 0 0 / 0.06);
+  --pop:
+    0 0 0 1px oklch(0 0 0 / 0.08),
+    0 12px 32px -8px oklch(0 0 0 / 0.14);
 }
 
 .dark {
   color-scheme: dark;
-  --background: var(--color-ink);
+  --background: var(--color-void);
   --foreground: var(--color-chalk);
-  --card: var(--color-panel);
+  --card: var(--color-slab);
   --card-foreground: var(--color-chalk);
-  --popover: var(--color-panel);
+  --popover: var(--color-slab);
   --popover-foreground: var(--color-chalk);
-  --primary: var(--color-go);
-  --primary-foreground: var(--color-ink);
-  --secondary: var(--color-panel);
+  --primary: var(--color-volt);
+  --primary-foreground: var(--color-void);
+  --secondary: var(--color-slab);
   --secondary-foreground: var(--color-chalk);
-  --muted: var(--color-panel);
+  --muted: var(--color-raise);
   --muted-foreground: var(--color-dim);
-  --accent: var(--color-panel);
+  --accent: var(--color-raise);
   --accent-foreground: var(--color-chalk);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: var(--color-line);
-  --input: var(--color-line);
-  --ring: var(--color-dim);
+  --destructive: var(--color-stop);
+  --success: var(--color-go);
+  --border: var(--color-hair);
+  --input: var(--color-hair);
+  --ring: var(--color-chalk);
+  --surface: var(--color-slab);
+  --surface-raised: var(--color-raise);
+  --subtle: var(--color-mist);
+  --well: var(--color-sunk);
+  --grid-ink: oklch(1 0 0 / 0.045);
+  --glow-strength: 20%;
+
+  /* Linear, Vercel and Raycast all build dark elevation from a ring plus an
+     inset top highlight. A black blur on near-black renders as nothing. */
+  --lift:
+    0 0 0 1px oklch(1 0 0 / 0.055),
+    0 1px 0 0 oklch(1 0 0 / 0.07) inset,
+    0 1px 2px 0 oklch(0 0 0 / 0.4);
+  --pop:
+    0 0 0 1px oklch(1 0 0 / 0.08),
+    0 1px 0 0 oklch(1 0 0 / 0.1) inset,
+    0 16px 48px -12px oklch(0 0 0 / 0.7),
+    0 2px 8px -2px oklch(0 0 0 / 0.5);
 }
 
-/* Half of every challenge screen is a code editor, so the mono face carries
-   the structure: levels, counts, titles. Archivo does the prose. */
 @theme inline {
   --font-heading: var(--font-mono);
-  --font-sans: 'Archivo Variable', ui-sans-serif, sans-serif;
+  --font-sans: 'Lexend Variable', ui-sans-serif, sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-success: var(--success);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -100,10 +196,13 @@
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-subtle: var(--subtle);
+  --color-well: var(--well);
+  --shadow-lift: var(--lift);
+  --shadow-pop: var(--pop);
+  --radius-DEFAULT: var(--radius);
 }
 
 @layer base {
@@ -112,6 +211,9 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
   }
   html {
     @apply font-sans;
@@ -120,6 +222,22 @@
   button {
     @apply cursor-pointer;
   }
+  /* One rule beats a focus class on forty components, and it never goes
+     missing on the one that needed it most. */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+}
+
+/* The mono caps label that heads every panel. Three properties that were being
+   retyped as four utilities each time, drifting a little on every copy. */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  font-weight: var(--text-label--font-weight);
+  text-transform: uppercase;
 }
 
 /* Ninety rows landing at once reads as a wall. They arrive in sequence, and
@@ -131,13 +249,152 @@
   }
 }
 
+/* Driven by scroll position, not by mount. On the marketing page the ladder sits
+   two thousand pixels down, so a time-based stagger had always finished playing
+   before anyone got there — an animation nobody had ever seen. */
 @utility rung {
-  animation: rung-in 320ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
-  animation-delay: calc(var(--i, 0) * 18ms);
+  animation: rung-in linear backwards;
+  animation-timeline: view();
+  animation-range: entry 0% entry 55%;
+}
+
+@supports not (animation-timeline: view()) {
+  .rung {
+    animation: rung-in var(--dur-slow) var(--ease-out-quick) backwards;
+    animation-delay: calc(var(--i, 0) * 18ms);
+  }
+}
+
+/* The one thing a loading screen needs: proof the page is alive. Two bars
+   sliding under a track, so it reads as work happening rather than a freeze. */
+@keyframes sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(400%);
+  }
+}
+
+@utility sweep {
+  animation: sweep 1.4s var(--ease-out-quick) infinite;
+}
+
+@keyframes pulse-soft {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@utility pulse-soft {
+  animation: pulse-soft 1.8s var(--ease-out-quick) infinite;
+}
+
+/* Engineering-paper grid behind the hero. Masked to a soft ellipse, or the
+   lines run into the copy below and the whole thing reads as a spreadsheet. */
+@utility blueprint {
+  /* Its own ink, not --border: a decorative texture drawn at the weight of a
+     structural edge is what makes the page look like a spreadsheet. */
+  background-image:
+    linear-gradient(to right, var(--grid-ink) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-ink) 1px, transparent 1px);
+  background-size: 48px 48px;
+  /* Centred, because max-w-6xl is 1152 = 16 × 72 — so the content column lands
+     on a rule at every viewport width instead of missing it by twelve pixels. */
+  background-position: 50% 0;
+  mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, black, transparent);
+}
+
+@media (min-width: 768px) {
+  .blueprint {
+    background-size: 72px 72px;
+  }
+}
+
+/* The one light source on the page, sat behind the product shot. Kept to the
+   accent hue — two glows and it stops looking like a tool. */
+@utility glow {
+  background: radial-gradient(
+    ellipse 55% 50% at var(--glow-x, 50%) var(--glow-y, 45%),
+    color-mix(in oklch, var(--primary) var(--glow-strength), transparent),
+    transparent 70%
+  );
+}
+
+/* Sandpack's read-only chip is already positioned; it paints itself on
+   `surface2`, which this theme sets equal to the editor background — so the
+   pill vanished and the words were left floating over the code. */
+.sp-read-only {
+  background: var(--surface-raised) !important;
+  border: 1px solid var(--border);
+  color: var(--muted-foreground) !important;
+  font-size: var(--text-label) !important;
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: var(--radius-xs) !important;
+}
+
+/* A native dialog toggles `display`, so it only animates in and out with
+   allow-discrete plus a @starting-style for the frame before it opens. */
+dialog[data-slot='dialog'] {
+  opacity: 0;
+  transition:
+    opacity var(--dur-base) var(--ease-out-quick),
+    translate var(--dur-base) var(--ease-out-quick),
+    display var(--dur-base) allow-discrete,
+    overlay var(--dur-base) allow-discrete;
+}
+
+dialog[data-slot='dialog'][data-side='center'] {
+  translate: 0 8px;
+}
+
+dialog[data-slot='dialog'][data-side='right'] {
+  translate: 100% 0;
+}
+
+dialog[data-slot='dialog'][open] {
+  opacity: 1;
+  translate: none;
+}
+
+dialog[data-slot='dialog']::backdrop {
+  background: oklch(0 0 0 / 0.55);
+  opacity: 0;
+  backdrop-filter: blur(2px);
+  transition:
+    opacity var(--dur-base) var(--ease-out-quick),
+    display var(--dur-base) allow-discrete,
+    overlay var(--dur-base) allow-discrete;
+}
+
+dialog[data-slot='dialog'][open]::backdrop {
+  opacity: 1;
+}
+
+@starting-style {
+  dialog[data-slot='dialog'][open][data-side='center'] {
+    opacity: 0;
+    translate: 0 8px;
+  }
+  dialog[data-slot='dialog'][open][data-side='right'] {
+    opacity: 0;
+    translate: 100% 0;
+  }
+  dialog[data-slot='dialog'][open]::backdrop {
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rung {
+  .rung,
+  .sweep,
+  .pulse-soft {
     animation: none;
+  }
+  dialog[data-slot='dialog'],
+  dialog[data-slot='dialog']::backdrop {
+    transition: none;
   }
 }

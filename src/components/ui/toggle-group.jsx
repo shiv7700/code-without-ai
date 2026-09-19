@@ -1,76 +1,45 @@
-"use client";
-import * as React from "react"
-import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
-import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group"
-import { cn } from "@/lib/utils"
+import { createContext, useContext } from 'react'
+import { cn } from '@/lib/utils'
 
-import { toggleVariants } from "@/components/ui/toggle"
+const GroupContext = createContext(null)
 
-const ToggleGroupContext = React.createContext({
-  size: "default",
-  variant: "default",
-  spacing: 2,
-  orientation: "horizontal",
-})
-
-function ToggleGroup({
-  className,
-  variant,
-  size,
-  spacing = 2,
-  orientation = "horizontal",
-  children,
-  ...props
-}) {
+// Single-select only, and the value is a string — the previous one handed back
+// an array every call site had to unwrap, for a control that picks one thing.
+export function ToggleGroup({ value, onValueChange, className, ...props }) {
   return (
-    <ToggleGroupPrimitive
-      data-slot="toggle-group"
-      data-variant={variant}
-      data-size={size}
-      data-spacing={spacing}
-      data-orientation={orientation}
-      style={{
-        "--gap": spacing
-      }}
-      className={cn(
-        "group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-vertical:flex-col data-vertical:items-stretch",
-        className
-      )}
-      {...props}>
-      <ToggleGroupContext.Provider value={{ variant, size, spacing, orientation }}>
-        {children}
-      </ToggleGroupContext.Provider>
-    </ToggleGroupPrimitive>
-  );
+    <GroupContext.Provider value={{ value, onValueChange }}>
+      <div
+        role="group"
+        data-slot="toggle-group"
+        className={cn(
+          'inline-flex w-fit items-center gap-0.5 rounded-sm border border-border bg-surface p-0.5',
+          className,
+        )}
+        {...props}
+      />
+    </GroupContext.Provider>
+  )
 }
 
-function ToggleGroupItem({
-  className,
-  children,
-  variant = "default",
-  size = "default",
-  ...props
-}) {
-  const context = React.useContext(ToggleGroupContext)
+export function ToggleGroupItem({ value, className, ...props }) {
+  const group = useContext(GroupContext)
+  const on = group.value === value
 
   return (
-    <TogglePrimitive
+    <button
+      type="button"
       data-slot="toggle-group-item"
-      data-variant={context.variant || variant}
-      data-size={context.size || size}
-      data-spacing={context.spacing}
+      aria-pressed={on}
+      onClick={() => group.onValueChange?.(value)}
       className={cn(
-        "shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pr-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:pl-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-l-lg group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-lg group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-r-lg group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-lg group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-l-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t",
-        toggleVariants({
-          variant: context.variant || variant,
-          size: context.size || size,
-        }),
-        className
+        'inline-flex h-6 shrink-0 items-center justify-center rounded-xs px-2.5 text-fine font-medium whitespace-nowrap',
+        'transition-colors duration-(--dur-quick) ease-out-quick',
+        on
+          ? 'bg-primary/15 text-primary'
+          : 'text-muted-foreground hover:bg-surface-raised hover:text-foreground',
+        className,
       )}
-      {...props}>
-      {children}
-    </TogglePrimitive>
-  );
+      {...props}
+    />
+  )
 }
-
-export { ToggleGroup, ToggleGroupItem }

@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import {
   Dialog,
-  DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 
@@ -25,23 +24,28 @@ export function Hints({ title, hints }) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger render={<Button variant="ghost" size="sm" />}>
+    <>
+      <Button variant="ghost" size="sm" onClick={() => onOpenChange(true)}>
         Hint
-      </DialogTrigger>
+      </Button>
 
-      <DialogContent className="sm:max-w-md">
+      <Dialog
+        open={open}
+        onOpenChange={onOpenChange}
+        className="sm:max-w-md"
+        aria-label={`Hints for ${title}`}
+      >
         <DialogHeader>
-          <DialogTitle className="font-mono text-sm">{title}</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             Each one gives away a little more. Stop as soon as you can see it.
           </DialogDescription>
         </DialogHeader>
 
-        <ol className="space-y-3">
+        <ol className="space-y-3 px-5 pb-5">
           {hints.slice(0, shown).map((hint, i) => (
-            <li key={hint} className="flex gap-3 text-sm leading-relaxed">
-              <span className="mt-px font-mono text-[0.625rem] text-muted-foreground tabular-nums">
+            <li key={hint} className="flex gap-3 text-body leading-relaxed">
+              <span className="mt-1 font-mono text-label text-muted-foreground tabular-nums">
                 {String(i + 1).padStart(2, '0')}
               </span>
               <span>{hint}</span>
@@ -49,22 +53,26 @@ export function Hints({ title, hints }) {
           ))}
         </ol>
 
-        <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
-          <span className="font-mono text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase tabular-nums">
+        <DialogFooter className="justify-between">
+          <span className="label text-muted-foreground tabular-nums">
             {shown} / {hints.length}
           </span>
 
           {shown < hints.length ? (
-            <Button size="sm" variant="outline" onClick={() => setShown(shown + 1)}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setShown(shown + 1)}
+            >
               Next hint
             </Button>
           ) : (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-fine text-muted-foreground">
               That is all of them.
             </span>
           )}
-        </div>
-      </DialogContent>
-    </Dialog>
+        </DialogFooter>
+      </Dialog>
+    </>
   )
 }

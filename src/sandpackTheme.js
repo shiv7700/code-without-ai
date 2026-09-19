@@ -1,7 +1,7 @@
 // Sandpack renders in an iframe that cannot see our CSS variables, so the two
 // palettes from app.css are repeated here by hand. Half the screen is this.
 const font = {
-  body: "'Archivo Variable', ui-sans-serif, sans-serif",
+  body: "'Lexend Variable', ui-sans-serif, sans-serif",
   mono: "'JetBrains Mono Variable', ui-monospace, monospace",
   size: '13px',
   lineHeight: '1.7',
