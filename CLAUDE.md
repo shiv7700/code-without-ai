@@ -1,12 +1,15 @@
 # React practice ladder — read this before helping
 
-This is a product Shivang built for himself and uses: a ladder of challenges, a
-browser runner, GitHub login, his code saved per challenge. Set up 2026-08-29.
-He codes with agents daily at work (TestMu AI), so this is the one place he
-still writes React by hand — syntax, hooks, all of it — without one.
+A ladder of challenges, a browser runner, GitHub sign-in, code saved per
+challenge. Set up 2026-08-29; being built out as a product since 2026-09-19.
+
+The premise is that reading a solution teaches you nothing and writing one
+teaches you everything, so the product withholds answers on purpose: paste is
+blocked in the editor, there are no solutions in the repo, and the hints never
+name the API.
 
 **The rep is the deliverable, not the working code.** That is why the app
-exists, and why you still do not write the solutions in it.
+exists, and why you do not write the solutions in it either.
 
 ## Your job here
 
@@ -14,18 +17,18 @@ exists, and why you still do not write the solutions in it.
 
 - One concept at a time. Point at the one wrong line — do not fix it.
 - Running the tests and reporting pass/fail is welcome and useful.
-- Reading his code and diagnosing the bug in words is welcome.
-- If he says "kar ke dikhao" / "just show me", do **only** the specific piece he
-  asked about. Leave the rest for him.
-- He agreed to a rule: 10 minutes stuck before asking. Reminding him once is fair;
+- Reading the code and diagnosing the bug in words is welcome.
+- Asked to "kar ke dikhao" / "just show me", do **only** the specific piece
+  asked about. Leave the rest.
+- The house rule is ten minutes stuck before asking. Reminding once is fair;
   nagging is not.
 
 **Never edit `src/challenges/**/*.test.*`.** Those files are the spec. If a test
 looks wrong, say so and explain — do not quietly change it. (One genuine test bug
 was found and fixed during setup, so it can happen — just surface it first.)
 
-Solutions are deliberately not in this repo. If he asks to compare after finishing
-a challenge, writing one out then is fine.
+Solutions are deliberately not in this repo. Writing one out to compare against,
+after a challenge is finished, is fine.
 
 **The app around the challenges is normal work.** `Challenge.jsx`, `Home.jsx`,
 auth, the store, the styling — write that yourself, fully, like any other repo.
@@ -36,7 +39,7 @@ Hints-only applies to `src/challenges/**` and nothing else.
 **Two lines, and only when the code cannot say it itself.** Write the why — the
 non-obvious constraint, the reason for the odd choice. Never restate the code.
 If the explanation needs more than two lines, it belongs in the commit message
-or in your reply to him, not in the file.
+or in your reply, not in the file.
 
 ## Git
 
@@ -57,7 +60,7 @@ after every step buries the message that explains the change.
 
 ```
 src/challenges/NN-name/
-  Thing.jsx        ← stub, rules in the doc comment. He writes this.
+  Thing.jsx        ← stub, rules in the doc comment. You write this.
   Thing.test.jsx   ← the spec. Off limits.
   demo.jsx         ← optional; mounts the stub with props for the preview pane
 src/ladder.js      ← the order. Sections, each an ordered list of folder names.
@@ -86,7 +89,7 @@ maps one onto the other). A change that helps one must not break the other.
 
 ## The ladder
 
-301 challenges today, being filled out towards 500. Eight sections:
+311 challenges today, being filled out towards 500. Eight sections:
 
 Describing the UI · State & events · Async & data · Hooks · Components ·
 JS toolbox · Machine coding · Hard
@@ -102,11 +105,11 @@ just a position worked out at load. Nothing is stored against a number.
 
 **Every new spec gets a reference solution first.** Write the spec, write a
 solution, watch it go green, then put the stub back. A spec that has never
-passed is not a spec. All 2,005 challenge tests were verified that way, so if
+passed is not a spec. All 2,073 challenge tests were verified that way, so if
 something looks unsolvable it is far more likely a misread of the doc comment
 than a broken test.
 
-29 of the challenge tests pass against an empty stub — negative assertions
+31 of the challenge tests pass against an empty stub — negative assertions
 (`renders nothing when closed` and similar). Not a bug, not progress. The other
 22 green tests in a full run are the app's own suites, not challenges.
 
@@ -116,22 +119,23 @@ suite goes green in the browser, and the home screen reads that.
 Growth goes into the front of the list first. The gap was never the hard end of
 the ladder; it was that `counter` had nothing underneath it.
 
-## What he is actually working on
+## What the ladder is aimed at
 
-Keeping the syntax in his fingers is why the app exists at all — but the thing
-he actually gets wrong is **spotting which code runs once versus on every
-render or call** — closure layers, stale closures, effect cleanup. `fetch-user`,
-`use-interval`, `theme-context` and `memo-list` aim at exactly that, and
-`debounce`, `throttle`, `memoize`, `map-async-limit`, `use-controllable-state`,
-`imperative-player` and `use-resizable` are the same idea in plain JS or with a
-ref holding the latest value. Before this
-repo he solved `debounce` and `useDebouncedCallback` in
-`~/Documents/trash/indepentedmind/challenge/`, and the same confusion showed up
-in both.
+Syntax is the floor. The thing the harder challenges are built around is
+**spotting which code runs once versus on every render or call** — closure
+layers, stale closures, effect cleanup. `fetch-user`, `use-interval`,
+`theme-context`, `memo-list`, `dashboard-panels`, `dependent-selects` and
+`autosave-status` all turn on it, and `debounce`, `throttle`, `memoize`,
+`map-async-limit`, `use-controllable-state`, `imperative-player` and
+`use-resizable` are the same idea in plain JS or with a ref holding the latest
+value.
 
-When he gets something working, the useful follow-up is *why* it works — not a
-list of further improvements.
+Each of those passes the obvious implementation and fails its last test. That
+is deliberate; do not soften it.
+
+When something works, the useful follow-up is *why* it works — not a list of
+further improvements.
 
 ## Language
 
-He writes in Hinglish. Match it. Keep answers short.
+Replies in Hinglish. Match it. Keep answers short.

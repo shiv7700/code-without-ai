@@ -386,10 +386,12 @@ function Close() {
           Free, and staying free
         </p>
 
-        {/* A page with no users and no name on it reads as a content farm. */}
+        {/* A page with no users and no name on it reads as a content farm, so
+            there is a person on it — but only the attribution. The origin story
+            was about what its author had stopped doing, which is a poor thing
+            to put under your own name on your own front page. */}
         <p className="mx-auto mt-16 max-w-md border-t border-border pt-8 text-fine leading-relaxed text-muted-foreground">
-          Built by Shivang, a frontend dev who ships with agents all day and
-          noticed he had stopped writing React by hand.{' '}
+          Built by Shivang.{' '}
           <a
             href="https://github.com/shivanglambdatest"
             target="_blank"

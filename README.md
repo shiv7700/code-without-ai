@@ -1,9 +1,9 @@
 # React practice ladder
 
 Challenges and somewhere to write them, so hand-writing React stays in the
-fingers. Built for one user. No AI in the loop — that is the whole point.
+fingers. No AI in the loop — that is the whole point.
 
-301 of them today, being filled out towards 500. The front of the list is where
+311 of them today, being filled out towards 500. The front of the list is where
 the new ones are going: props, destructuring, conditional rendering, keys, fetch.
 Fundamentals first, because everything above them is easier once those are
 automatic.
@@ -123,10 +123,10 @@ has the rest: the data flow, the invariants, and the two test runners.
 
 ## Notes
 
-Every challenge has been verified solvable — reference solutions pass all 2,005
+Every challenge has been verified solvable — reference solutions pass all 2,073
 challenge tests. They are deliberately not in this repo.
 
-29 of them pass against an empty stub (`renders nothing when closed` and
+31 of them pass against an empty stub (`renders nothing when closed` and
 friends). They are negative assertions, so nothing can make them fail early —
 ignore them as a progress signal.
 
@@ -136,4 +136,4 @@ browser it is Jest inside Sandpack, with a virtual `vitest` module mapping one
 onto the other. A spec has to stay green in both.
 
 `setupTests.js` also replaces Node 25's stub `localStorage` global with a real
-in-memory one — without that, challenge 11 cannot work.
+in-memory one — without that, `use-local-storage` cannot work.

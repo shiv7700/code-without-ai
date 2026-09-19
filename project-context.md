@@ -28,7 +28,7 @@ position is stored nowhere, so it is free to move.
 
 ## The ladder is not finished, and that is normal
 
-301 challenges today, heading towards roughly 500. **Expect new folders to keep
+311 challenges today, heading towards roughly 500. **Expect new folders to keep
 arriving in large batches** — a commit adding eighty at once is the intended
 rhythm, not a runaway script.
 
@@ -96,7 +96,7 @@ the bottom — visible, not silently missing. `src/challenges.test.js` fails on 
 ### The bar for a new spec
 
 Write the spec, write a reference solution, watch it go green, **then** put the
-stub back. A spec that has never passed is not a spec. All 2,005 challenge tests
+stub back. A spec that has never passed is not a spec. All 2,073 challenge tests
 were verified this way.
 
 Mock nothing global. A challenge that needs data takes the async function as a
@@ -150,9 +150,9 @@ The format is only `- ` lines; anything else in the file is dropped.
 Ordered, each giving away a little more: where to look, what is really going on,
 why the obvious approach fails, the shape of what is needed. **Never code, and
 never the name of the API** — not `useRef`, not `useCallback`. Describe what the
-thing has to do and let him reach for the name, because that reach is the rep.
-The repo exists to make him write it; a hint that hands it over spends the whole
-point of the exercise to save five minutes.
+thing has to do and let the reader reach for the name, because that reach is the
+rep. The repo exists to make them write it; a hint that hands it over spends the
+whole point of the exercise to save five minutes.
 
 `src/challenges/list-keys/hints.md` and `src/challenges/use-interval/hints.md`
 are the reference for tone. `src/Hints.test.jsx` covers the reveal behaviour.
@@ -287,8 +287,15 @@ Not enforced, but true:
   `solutions.challenge` stores it. Renaming a folder orphans saved work and
   breaks every link to it. If it ever has to happen:
   `update solutions set challenge = 'new' where challenge = 'old';`
-- 27 of the tests pass against an empty stub. They are negative assertions
-  (`renders nothing when closed` and friends) — not a bug, and not progress.
+- 31 of the challenge tests pass against an empty stub. They are negative
+  assertions (`renders nothing when closed` and friends) — not a bug, and not
+  progress.
+- **`todo-reducer`'s spec does not collect.** Line 6 calls `run(...)` at module
+  top level, so the stub throws before any test is registered and all twelve
+  of its tests vanish: the challenge page lists twelve specs, and pressing Run
+  reports a suite error instead of twelve red lines. 2,073 tests are written,
+  2,061 actually run. The fix is to make `seeded` lazy, but that is an edit to
+  a spec file, so it waits to be asked for.
 
 ## Checking the browser runner — `npm run check`
 
@@ -313,7 +320,7 @@ that instead, unchanged.
 `playwright-core` drives the already-installed Chrome headless — no browser
 download — to `/check`, which sits **outside the login gate** and holds no user
 data. It runs `src/environmentSpec.js` inside the real browser runner: 33 tests,
-one per API, covering the whole surface the 301 specs actually use. One API per
+one per API, covering the whole surface the 311 specs actually use. One API per
 test on purpose — a single "user-event works" would tell you nothing about which
 call broke.
 
