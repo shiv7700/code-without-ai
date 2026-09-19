@@ -1,0 +1,4 @@
+- Two of the tests type text and expect nothing to happen. Whatever you write has to look at the key first and leave early when it is not the one.
+- The event object tells you which key it was, as a plain string. Enter has a name, not a number.
+- One test types spaces and expects nothing added; another types spaces around a word and expects the word alone. That is the same operation used twice — once to decide, once to store.
+- Clearing the box is not something you do to the box. It is the same value the box is already reading from.

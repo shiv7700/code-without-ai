@@ -1,0 +1,5 @@
+- The first four tests pass with the obvious answer. Write it, then read the last one and work out why it fails.
+- Two requests can be in the air at once, and the one that started first is not always the one that finishes first. Whatever arrives has to prove it is still the one being waited for.
+- The effect that starts a request also gets a chance to run something when it stops being the current one. That is where the proof lives.
+- Rule 5 says the chosen city goes immediately, not when the list lands. Immediately means in the same place the country changes, or in the effect's first line — not in the promise's callback.
+- An empty dropdown and a dropdown that has not loaded look identical on screen. Only one of them should be disabled, so they are not the same state.

@@ -1,0 +1,3 @@
+- The first click works with almost any guess. Only the second one can tell two of them apart, so write it and then click twice.
+- A text box and a tick box both hand you the same event, but they do not keep the answer in the same place on it. One of the two properties is a string that reads "on" whether the box is ticked or not.
+- The attribute that holds a text box's contents is not the attribute that holds a tick box's answer either. Both of them have to come from the same piece of state, or the box and the paragraph will disagree.

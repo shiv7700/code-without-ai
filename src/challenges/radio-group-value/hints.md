@@ -1,0 +1,4 @@
+- The last test is the one that matters. Three separate booleans will pass the first three and fail that one.
+- Ask what the component actually knows. It is one fact, not three, and the three inputs are all asking the same question of it.
+- Whether a given radio is filled in is a comparison, worked out while rendering. It is never something you set.
+- The browser also has its own idea of which radios belong together, and it goes by an attribute they share. Without it, arrowing between them does not behave.

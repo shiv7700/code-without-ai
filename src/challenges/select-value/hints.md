@@ -1,0 +1,3 @@
+- The first test reads the text a person sees. The others read a two-letter code. Those are two different things living on the same option.
+- Whatever you would have written on one option in plain HTML, React wants on the list itself instead — one attribute, one place, same as any other controlled box.
+- The event you get back reports the answer the same way every form control does. It reports the code, not the words, and that is exactly what the paragraph needs.

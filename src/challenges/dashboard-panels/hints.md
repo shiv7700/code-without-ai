@@ -1,0 +1,4 @@
+- Start with the last test, not the first. Three panels that each fetch on mount will pass everything above it and fail that one.
+- Each panel owns its own waiting, its own answer and its own failure. Nothing here needs a single shared object holding all three.
+- The reason a sibling restarts a request is what the effect was told to watch. If that list contains something rebuilt on every render, it is never the same twice.
+- The three loaders arrive together in one prop, but each panel only ever needs one of them. Where you pull them apart decides whether they stay stable.

@@ -1,0 +1,4 @@
+- The count has to be shown somewhere the test can find it by name. Read the spec for what that name is.
+- Two bounds arrive as props and both have a stand-in when they are left off. That belongs in the signature, not in the body.
+- Whether a button is disabled is a comparison between the count and a bound, worked out while rendering. Nothing extra is stored for it.
+- Two maths functions already exist that pick the larger and the smaller of two numbers. Between them they will keep a value inside a range without a single `if`.

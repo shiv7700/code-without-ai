@@ -1,0 +1,5 @@
+- Four words appear in the spec and only four. Write them down first and work out what has to be true for each one — that list is the state.
+- Nothing should happen on the very first render. "Up to date" before anyone has typed is not a save that already ran.
+- The wait restarts on every keystroke. Whatever schedules it has to be able to unschedule the previous one, and an effect hands you exactly one place to do that.
+- The test that types five letters and expects one call is the one that catches a missing cleanup. It will otherwise pass sometimes, which is worse than failing.
+- Saving is asynchronous, so between the timer firing and the answer arriving there is a third state. It is in the rules.

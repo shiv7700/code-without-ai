@@ -1,0 +1,4 @@
+- Read the second and third tests together. The same bad text is in the box both times, and the message differs — so the text alone cannot be what decides.
+- The extra fact is about the person, not the value: have they finished with this box yet. It starts false and it never goes back.
+- The fifth test types more text and expects the message to go without leaving the box again. That only works if being on screen is worked out fresh on every render rather than set once when they left.
+- There is an event for leaving a field, and it is the sibling of the one for entering it.

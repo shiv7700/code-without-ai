@@ -1,0 +1,5 @@
+- Read the success test and the failure test side by side. One empties the box, the other must not — so emptying it cannot happen where you started the request.
+- Three things change while a submit is in the air, and only one of them is the button's words. Work out what the component knows at each of the four moments: idle, in flight, worked, failed.
+- The guard against a second click is the same fact the button uses to disable itself. Disabling is a courtesy; the guard is what actually stops it.
+- The last test clicks again and expects the old message gone. Clearing it belongs at the start of an attempt, not at the end of one.
+- Whatever was thrown carries the words to show. Do not invent your own.
