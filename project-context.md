@@ -296,10 +296,19 @@ A spec green under Vitest proves nothing about Sandpack. That is how the
 fake-timer gap shipped, so there is now a command for it.
 
 ```bash
-npm run check                                     # localhost:5173, ~30 seconds
+npm run check                                     # builds, serves it, ~30 seconds
 npm run check -- https://reactwithoutai.vercel.app
+npm run check -- http://localhost:5173            # a server you are already running
 npm run check -- --all                            # every challenge, ~10 minutes
 ```
+
+**It builds rather than using the dev server, and that is not a preference.**
+Under Vite's dev server Sandpack's suite never finishes — the page boots, the
+runner starts, no verdict ever arrives. So the old default reported a broken
+runner on a runner that was fine, which is the exact failure this command
+exists to catch. Verified against a clean checkout of the previous commit: the
+same timeout, so it is nothing recent in the app. Give it a URL and it uses
+that instead, unchanged.
 
 `playwright-core` drives the already-installed Chrome headless — no browser
 download — to `/check`, which sits **outside the login gate** and holds no user

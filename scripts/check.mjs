@@ -3,15 +3,63 @@
 // `window.__CHECK__`. The point is that a spec green under Vitest proves nothing
 // about Sandpack's Jest — this drives the real runner.
 //
-//   npm run check                                    # http://localhost:5173
+//   npm run check                                    # builds, then serves it
 //   npm run check -- https://reactwithoutai.vercel.app
+//   npm run check -- http://localhost:5173           # your own server, if you have one
 //   npm run check -- --all
 //   npm run check -- https://... --all
+//
+// With no URL this builds the app and serves the build. It used to point at the
+// dev server, and under Vite's dev server Sandpack's suite never finishes — so
+// the documented default reported a broken runner on a runner that was fine.
+import { spawn } from 'node:child_process'
 import { chromium } from 'playwright-core'
+
+const PREVIEW_PORT = 4173
+const VITE = new URL('../node_modules/.bin/vite', import.meta.url).pathname
+
+const sh = (args) =>
+  new Promise((resolve, reject) => {
+    const child = spawn(VITE, args, { stdio: 'inherit' })
+    child.on('exit', (code) =>
+      code === 0 ? resolve() : reject(new Error(`vite ${args[0]} failed`)),
+    )
+  })
+
+const reachable = async (url) => {
+  try {
+    return (await fetch(url)).ok
+  } catch {
+    return false
+  }
+}
+
+async function servePreview() {
+  console.log('→ building')
+  await sh(['build', '--logLevel', 'warn'])
+
+  const server = spawn(
+    VITE,
+    ['preview', '--port', String(PREVIEW_PORT), '--strictPort'],
+    { stdio: 'ignore' },
+  )
+  const base = `http://localhost:${PREVIEW_PORT}`
+
+  for (let i = 0; i < 40; i++) {
+    if (await reachable(base)) return { base, stop: () => server.kill() }
+    await new Promise((r) => setTimeout(r, 250))
+  }
+  server.kill()
+  throw new Error(`the preview server never came up on ${base}`)
+}
 
 const args = process.argv.slice(2)
 const all = args.includes('--all')
-const base = args.find((a) => !a.startsWith('-')) ?? 'http://localhost:5173'
+const given = args.find((a) => !a.startsWith('-'))
+
+const served = given ? null : await servePreview()
+const base = given ?? served.base
+const stopServer = () => served?.stop()
 const url = `${base.replace(/\/$/, '')}/check${all ? '?all=1' : ''}`
 
 // Sandpack pulls its dependencies from a CDN on the first bundle, and ?all=1 is
@@ -68,6 +116,7 @@ try {
 } catch (error) {
   clearInterval(ticker)
   await browser.close()
+  stopServer()
   console.error(`\nFAIL — no verdict from ${url}`)
   console.error(error.message.split('\n')[0])
   process.exit(1)
@@ -75,6 +124,7 @@ try {
 
 clearInterval(ticker)
 await browser.close()
+stopServer()
 
 console.log(
   `\n${result.total} tests · ${result.passed} ok · ${result.failures.length} broken`,

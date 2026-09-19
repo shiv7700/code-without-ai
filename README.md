@@ -23,7 +23,7 @@ needs no React at all, so those are the ones to do on a train.
 npm run dev               # the app
 npm run test:watch keys   # or run one challenge in the terminal, by folder name
 npm test                  # everything
-npm run check             # is the browser runner itself still sound?
+npm run check             # is the browser runner itself still sound? (builds first)
 ```
 
 `npm run dev` wants `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in
