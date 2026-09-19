@@ -297,6 +297,25 @@ Not enforced, but true:
   2,061 actually run. The fix is to make `seeded` lazy, but that is an edit to
   a spec file, so it waits to be asked for.
 
+## Where the tests live
+
+Two kinds, and only one of them is meant to pass.
+
+```
+src/*.test.*              the app's own suites — 29 tests, always green
+src/challenges/*/*.test.* the 311 specs — red until you solve them
+```
+
+`npm test` runs the first set only, so it answers "is the repo sound" with a
+yes or a no. `npm run test:all` adds the specs, which are 2,030 red by design;
+that number is a feature and a useless signal to gate on. One challenge at a
+time is `npm run test:watch <folder-name-substring>`.
+
+The specs cannot be gathered into a tests folder, and it is worth knowing why:
+each one is globbed out of its challenge folder, written into Sandpack's file
+system beside the stub, and shown in the editor read-only. The folder is the
+unit. The app's five sit next to what they test, which is the Vitest default.
+
 ## Checking the browser runner — `npm run check`
 
 A spec green under Vitest proves nothing about Sandpack. That is how the

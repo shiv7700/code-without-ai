@@ -76,8 +76,9 @@ src/setupTests.js  ← `npm test` only. The browser runner has its own setup.
 
 ```bash
 npm run dev             # the app — write and run challenges in the browser
+npm test                # the app's own suites only, and they have to be green
 npm run test:watch keys # one challenge in the terminal, by folder-name substring
-npm test                # all of them
+npm run test:all        # the challenge specs too — mostly red, that is the point
 ```
 
 Needs `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in `.env.local`,

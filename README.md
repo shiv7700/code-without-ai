@@ -21,8 +21,9 @@ needs no React at all, so those are the ones to do on a train.
 
 ```bash
 npm run dev               # the app
-npm run test:watch keys   # or run one challenge in the terminal, by folder name
-npm test                  # everything
+npm test                  # the app's own suites — these have to be green
+npm run test:watch keys   # one challenge in the terminal, by folder name
+npm run test:all          # every challenge too, which is mostly red on purpose
 npm run check             # is the browser runner itself still sound? (builds first)
 ```
 
