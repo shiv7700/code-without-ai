@@ -36,7 +36,18 @@ export function Hints({ title, hints }) {
         aria-label={`Hints for ${title}`}
       >
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <div className="flex items-start justify-between gap-4">
+            <DialogTitle>{title}</DialogTitle>
+            {/* Escape closes it, but only if you already knew that. */}
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              aria-label="Close the hints"
+              onClick={() => onOpenChange(false)}
+            >
+              ✕
+            </Button>
+          </div>
           <DialogDescription>
             Each one gives away a little more. Stop as soon as you can see it.
           </DialogDescription>

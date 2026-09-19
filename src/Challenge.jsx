@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
 } from 'react'
 import { Link } from 'react-router'
 import {
@@ -30,6 +31,7 @@ import {
 } from './store'
 import { DEPS, SHIM_FILES } from './sandpackVitestShim'
 import { sandpackThemes } from './sandpackTheme'
+import { challenges } from './challenges'
 import { useTheme } from './theme'
 import { useSession } from './auth'
 import { ThemeToggle } from './ThemeToggle'
@@ -51,6 +53,23 @@ import { Separator } from '@/components/ui/separator'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 const SETUP = { dependencies: DEPS }
+
+// An editor, a spec list and a test runner do not fit on a phone, and pretending
+// otherwise gave a header that overlapped itself and two panes side by side at
+// 390px. Say so instead — and do not mount Sandpack, which would pull a bundle
+// from a CDN for a screen that cannot use it.
+const NARROW = '(max-width: 767px)'
+
+const useNarrow = () => {
+  const mq = useMemo(() => window.matchMedia(NARROW), [])
+  return useSyncExternalStore(
+    (notify) => {
+      mq.addEventListener('change', notify)
+      return () => mq.removeEventListener('change', notify)
+    },
+    () => mq.matches,
+  )
+}
 
 // Specs nest tests under describes; the ladder uses neither, but walking both
 // costs three lines and survives a spec that does.
@@ -162,11 +181,27 @@ function RunTests({ consoleRef, onRun }) {
 // changed — so the app only ever tracks the paths it put there itself.
 const STYLES = '/styles.css'
 
-const DEFAULT_CSS = `body {
+// The preview is an iframe with its own page, and a white one glares out of a
+// dark app. It cannot see our theme toggle, so it follows the OS instead — and
+// it is your stylesheet, so change it if you would rather it did not.
+const DEFAULT_CSS = `:root {
+  color-scheme: light dark;
+}
+
+body {
   margin: 0;
   padding: 24px;
   font-family: ui-sans-serif, system-ui, sans-serif;
   line-height: 1.5;
+  background: #ffffff;
+  color: #16161a;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #16161a;
+    color: #d9d9e0;
+  }
 }
 `
 
@@ -175,7 +210,7 @@ const blank = (path) => (path === STYLES ? DEFAULT_CSS : '')
 // A file the challenge did not ship and you have not deleted. Sandpack's own
 // explorer only draws the tree — creating and removing is not in it — and its
 // closable tabs close a tab rather than delete a file.
-function FileBar({ sources, extras, onAdd, onDelete }) {
+function FileBar({ extras, tabs, onAdd, onDelete }) {
   const { sandpack } = useSandpack()
   const [adding, setAdding] = useState(false)
   const [name, setName] = useState('')
@@ -239,7 +274,7 @@ function FileBar({ sources, extras, onAdd, onDelete }) {
       )}
 
       <span className="ml-auto label text-muted-foreground">
-        {sources.length + extras.length + 1} files
+        {tabs} files
       </span>
     </div>
   )
@@ -524,10 +559,14 @@ export default function Challenge({ challenge }) {
     setLogsHeight((h) =>
       Math.min(Math.max(h + by, 72), window.innerHeight * 0.7),
     )
+  const narrow = useNarrow()
   const [status, setStatus] = useState({})
+  // Set once the suite has run this visit. Until then a solved challenge is
+  // solved on the ladder and 0/4 in here, which reads as lost work.
+  const [ran, setRan] = useState(false)
   const {
     name, title, summary, level, stub, spec, sources,
-    files, needsUi, tests, hints,
+    files, needsUi, tests, hints, rules,
   } = challenge
 
   // Capture, like every other chord here — CodeMirror owns the keyboard while
@@ -634,6 +673,7 @@ export default function Challenge({ challenge }) {
     const ran = Object.values(specs ?? {}).flatMap(allTests)
     const next = Object.fromEntries(ran.map((t) => [t.name, t.status]))
     // watchMode reports after every rerun; only touch state on a real change.
+    setRan(true)
     setStatus((prev) => (shallowEqual(prev, next) ? prev : next))
     saveDone(
       name,
@@ -646,6 +686,27 @@ export default function Challenge({ challenge }) {
   }
 
   const passed = tests.filter((t) => status[t] === 'pass').length
+  // The row records that every test passed, never which — so a remembered pass
+  // fills them all in and says so, rather than claiming a run that never happened.
+  const remembered = !ran && saved?.passed === true
+  const solved = ran ? passed === tests.length && tests.length > 0 : remembered
+  const next = challenges[challenges.findIndex((c) => c.name === name) + 1]
+
+  if (narrow) {
+    return (
+      <main className="flex min-h-dvh flex-col items-center justify-center gap-5 px-8 text-center">
+        <p className="label text-primary">{String(level).padStart(3, '0')} · {title}</p>
+        <h1 className="text-head text-balance">This one needs a wider screen.</h1>
+        <p className="max-w-xs text-body text-subtle">
+          The editor, the spec and the test runner sit side by side. On a phone
+          they would sit on top of each other, so they are not here at all.
+        </p>
+        <Button as={Link} to="/" variant="outline" size="sm" className="mt-2">
+          ← back
+        </Button>
+      </main>
+    )
+  }
 
   if (!sandpackFiles) {
     return (
@@ -685,7 +746,7 @@ export default function Challenge({ challenge }) {
 
         <Separator orientation="vertical" className="h-5 self-center" />
 
-        <span className="flex min-w-0 items-baseline gap-2.5">
+        <span className="flex min-w-0 shrink items-baseline gap-2.5">
           <span className="font-mono text-sm text-muted-foreground tabular-nums">
             {String(level).padStart(3, '0')}
           </span>
@@ -697,13 +758,15 @@ export default function Challenge({ challenge }) {
           </span>
         </span>
 
-        <span className="ml-auto flex items-center gap-3">
+        <span className="ml-auto flex shrink-0 items-center gap-3">
           <span
             className={`font-mono text-xs tabular-nums ${
-              passed === tests.length ? 'text-primary' : 'text-muted-foreground'
+              solved ? 'text-primary' : 'text-muted-foreground'
             }`}
+            title={remembered ? 'From your last run — run again to confirm' : undefined}
           >
-            {passed}/{tests.length} passing
+            {remembered ? tests.length : passed}/{tests.length} passing
+            {remembered && <span className="ml-1.5 text-muted-foreground">·  remembered</span>}
           </span>
 
           <Separator orientation="vertical" className="h-5 self-center" />
@@ -794,8 +857,8 @@ export default function Challenge({ challenge }) {
       <SandpackLayout>
         <div className="flex min-w-0 flex-1 flex-col" style={{ height: PANE }}>
           <FileBar
-            sources={sources}
             extras={extras}
+            tabs={options.visibleFiles.length}
             onAdd={(p) => setAdded((list) => [...list, p])}
             onDelete={(p) => setRemoved((list) => [...list, p])}
           />
@@ -817,27 +880,71 @@ export default function Challenge({ challenge }) {
                 onRun={() => setView('tests')}
               />
             </div>
+            {/* On a long stub the code starts below the fold, so the rules were
+                only readable by scrolling the editor past them. Native details,
+                shut by default — the doc comment is still there for anyone who
+                would rather read it in place. */}
+            {rules.length > 0 && (
+              <details className="mb-3 border-b border-border pb-3">
+                <summary className="label cursor-pointer text-muted-foreground marker:text-muted-foreground/50 hover:text-foreground">
+                  the rules · {rules.length}
+                </summary>
+                <ol className="mt-3 space-y-1.5">
+                  {rules.map((rule, i) => (
+                    <li key={rule} className="flex items-baseline gap-2.5 text-fine">
+                      <span className="font-mono text-label text-muted-foreground tabular-nums">
+                        {i + 1}
+                      </span>
+                      <span className="text-subtle">{rule}</span>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            )}
+
             <ul className="space-y-1.5">
-              {tests.map((t, i) => (
+              {tests.map((t, i) => {
+                // A remembered pass fills every tick, because the row only ever
+                // said all of them passed — not which.
+                const mark = remembered ? 'pass' : status[t]
+                return (
                 <li key={t} className="flex items-baseline gap-2.5 text-sm">
                   <span className="font-mono text-[0.625rem] text-muted-foreground tabular-nums">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <span
-                    className={`w-3 shrink-0 font-mono ${MARK_COLOR[status[t]] ?? 'text-muted-foreground'}`}
+                    className={`w-3 shrink-0 font-mono ${MARK_COLOR[mark] ?? 'text-muted-foreground'}`}
                   >
-                    {MARK[status[t]] ?? '·'}
+                    {MARK[mark] ?? '·'}
                   </span>
                   <span
-                    className={
-                      status[t] === 'pass' ? 'text-muted-foreground' : ''
-                    }
+                    className={mark === 'pass' ? 'text-muted-foreground' : ''}
                   >
                     {t}
                   </span>
                 </li>
-              ))}
+                )
+              })}
             </ul>
+
+            {/* #6: the counter ticking over was the only thing that marked a
+                solve. This is the moment, and the way on. */}
+            {solved && (
+              <div className="mt-4 flex items-center gap-3 rounded-sm bg-success/10 px-3 py-2">
+                <span className="label text-success">solved</span>
+                {next && (
+                  <Button
+                    as={Link}
+                    to={`/${next.name}`}
+                    variant="ghost"
+                    size="xs"
+                    className="ml-auto text-success hover:bg-success/15"
+                  >
+                    next · {next.title} →
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Hidden, never unmounted: SandpackTests keeps its results in its own
@@ -865,6 +972,9 @@ export default function Challenge({ challenge }) {
             {view === 'preview' && (
               <SandpackPreview
                 showSandpackErrorOverlay={false}
+                // It ships the code to codesandbox.io, where pasting an answer
+                // in is one keystroke. The whole product is the other way round.
+                showOpenInCodeSandbox={false}
                 style={{ height: '100%' }}
               />
             )}

@@ -104,6 +104,9 @@ export default function Home() {
     .filter((tier) => tier.challenges.length > 0)
 
   const shown = visible.reduce((n, tier) => n + tier.challenges.length, 0)
+  // Three hundred rows and no way back to where you were. The first one you
+  // have not solved is almost always the one you want.
+  const resume = challenges.find((c) => !done.has(c.name))
   const filtering = needle !== '' || status !== 'all' || section !== 'all'
 
   // One running count across sections, so the stagger reads as a single list.
@@ -158,6 +161,13 @@ export default function Home() {
           value={(done.size / challenges.length) * 100}
           className="mt-3 h-1"
         />
+
+        {resume && (
+          <Button as={Link} to={`/${resume.name}`} size="lg" className="mt-6">
+            {done.size === 0 ? 'Start' : 'Continue'} · {String(resume.level).padStart(3, '0')}{' '}
+            {resume.title} →
+          </Button>
+        )}
       </header>
 
       <div className="mb-3 flex flex-wrap items-center gap-2">

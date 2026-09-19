@@ -60,6 +60,10 @@ const build = (c, tier) => {
   // The first line of the doc comment reads as a topic ("useState + event
   // handlers"), which makes a poor card heading, so it becomes the subtitle.
   const summary = doc.match(/\/\*\*\s*\n\s*\*\s+(.+)/)?.[1] ?? ''
+  // The numbered rules, pulled out so the spec panel can show them. They stay
+  // in the doc comment as well — that is still the brief, and the parser's
+  // source — but reading them should not mean scrolling the editor past them.
+  const rules = [...doc.matchAll(/^\s*\*\s+\d+\.\s+(.+)$/gm)].map((m) => m[1])
 
   return {
     ...c,
@@ -75,6 +79,7 @@ const build = (c, tier) => {
     // What you are actually building — Counter, useToggle, todoReducer.
     title: stub.replace(/^\/|\.jsx?$/g, ''),
     summary,
+    rules,
     topics: doc.match(/Topics:\s*(.+)/)?.[1].split(' · ') ?? [],
     hints: hintsFor(c.name),
     // A `.js` stub is a hook, a reducer or a plain function — nothing to

@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { challenges, tiers } from './challenges'
+import { useSession } from './auth'
 import { ThemeToggle } from './ThemeToggle'
 import { Button } from '@/components/ui/button'
 
@@ -18,9 +19,9 @@ const DEMO_CODE = DEMO.files[DEMO.stub].split('\n').slice(0, 12)
 const SPEC_PATH = Object.keys(DEMO.files).find((f) => f.includes('.test.'))
 const SPEC_SOURCE = DEMO.files[SPEC_PATH].trim()
 
-// 29 of the suite pass against an empty stub — negative assertions, not
+// 31 of the suite pass against an empty stub — negative assertions, not
 // progress. Saying so first is cheaper than being caught counting them.
-const FREEBIES = 29
+const FREEBIES = 31
 
 const STEPS = [
   [
@@ -38,6 +39,10 @@ const STEPS = [
 ]
 
 export default function Marketing() {
+  // Signed in, "Sign in" is the wrong offer — and the hero's CTA should point
+  // at the ladder rather than back through a login you already passed.
+  const session = useSession()
+
   return (
     <div className="min-h-dvh">
       <header className="sticky top-0 z-20 border-b border-border bg-background/70 backdrop-blur-xl">
@@ -47,16 +52,22 @@ export default function Marketing() {
           </span>
           <span className="ml-auto" />
           <ThemeToggle size="icon" />
-          <Button as={Link} to="/login" variant="ghost" size="sm">
-            Sign in
-          </Button>
+          {session ? (
+            <Button as={Link} to="/ladder" variant="ghost" size="sm">
+              Your ladder →
+            </Button>
+          ) : (
+            <Button as={Link} to="/login" variant="ghost" size="sm">
+              Sign in
+            </Button>
+          )}
         </nav>
       </header>
 
       {/* Evidence before argument. The inventory and the spec file are the two
           things that prove this is real; they used to sit behind 600 words. */}
       <main>
-        <Hero />
+        <Hero session={session} />
         <Confession />
         <Ladder />
         <How />
@@ -72,10 +83,10 @@ export default function Marketing() {
             · always free
           </span>
           <Link
-            to="/login"
+            to={session ? '/ladder' : '/login'}
             className="ml-auto text-fine text-subtle transition-colors hover:text-foreground"
           >
-            Sign in →
+            {session ? 'Your ladder' : 'Sign in'} →
           </Link>
         </div>
       </footer>
@@ -83,7 +94,7 @@ export default function Marketing() {
   )
 }
 
-function Hero() {
+function Hero({ session }) {
   return (
     <section className="relative overflow-hidden">
       <div className="blueprint pointer-events-none absolute inset-0" aria-hidden />
@@ -114,8 +125,8 @@ function Hero() {
           {/* One decision above the fold. The nav sign-in is for people who
               already have an account and are not deciding anything. */}
           <div className="mt-10">
-            <Button as={Link} to={`/${FIRST}`} size="xl">
-              Try challenge 001 →
+            <Button as={Link} to={session ? '/ladder' : `/${FIRST}`} size="xl">
+              {session ? 'Back to your ladder →' : 'Try challenge 001 →'}
             </Button>
           </div>
 
