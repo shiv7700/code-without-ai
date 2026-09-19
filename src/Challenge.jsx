@@ -310,38 +310,43 @@ function FileBar({ extras, tabs, onAdd, onDelete }) {
 // Reads the source files by path, never the active file. With the spec open in
 // a second tab, useActiveCode() returns the spec — and this would have saved
 // the test file over the solution the moment you looked at it.
-function SaveCode({ name, editable, defaults }) {
+function SaveCode({ name, editable, onServer }) {
   const { sandpack } = useSandpack()
   // Every editable file, not just the ones the challenge shipped — a file you
   // added is work too. A string, so the effect compares by content rather than
   // by a fresh object every render.
   const snapshot = JSON.stringify(
-    Object.fromEntries(
-      editable.map((p) => [p, sandpack.files[p]?.code ?? '']),
-    ),
+    Object.fromEntries(editable.map((p) => [p, sandpack.files[p]?.code ?? ''])),
   )
 
+  // What the row holds, as far as this page knows: the loaded value, then
+  // whatever we last wrote. Comparing against the stub instead meant deleting
+  // your way back to it saved nothing — the row kept the last thing you typed
+  // and handed it back on reload, undoing your deletion.
+  const written = useRef(onServer)
+
   useEffect(() => {
-    const files = JSON.parse(snapshot)
-    const paths = Object.keys(files)
-    // Trimmed, or a stray newline makes the stub look like work and overwrites
-    // a real solution with it. That has already cost one.
-    const untouched =
-      paths.length === Object.keys(defaults).length &&
-      paths.every((p) => (files[p] ?? '').trim() === (defaults[p] ?? '').trim())
-    if (untouched) return
+    written.current = onServer
+  }, [onServer])
+
+  useEffect(() => {
+    if (snapshot === written.current) return
 
     const timer = setTimeout(
       () =>
-        saveCode(name, files).catch((error) =>
-          toast.error('Your code did not save', {
-            description: error.message,
-          }),
-        ),
+        saveCode(name, JSON.parse(snapshot))
+          .then(() => {
+            written.current = snapshot
+          })
+          .catch((error) =>
+            toast.error('Your code did not save', {
+              description: error.message,
+            }),
+          ),
       1000,
     )
     return () => clearTimeout(timer)
-  }, [name, snapshot, defaults])
+  }, [name, snapshot])
 
   return null
 }
@@ -673,12 +678,16 @@ export default function Challenge({ challenge }) {
     }
   }, [files, saved, stub, spec, baseline])
 
-  // The state a fresh challenge is in. The save guard compares against this,
-  // so an untouched editor never writes and an added file always does.
-  const defaults = useMemo(
-    () => Object.fromEntries(baseline.map((p) => [p, files[p] ?? blank(p)])),
-    [baseline, files],
-  )
+  // What the row holds right now, in the shape SaveCode snapshots. No row means
+  // the untouched challenge, which is what stops merely opening one writing.
+  const onServer = useMemo(() => {
+    const mine = saved ? decodeFiles(saved.code, stub) : {}
+    return JSON.stringify(
+      Object.fromEntries(
+        editable.map((p) => [p, mine[p] ?? files[p] ?? blank(p)]),
+      ),
+    )
+  }, [saved, stub, editable, files])
 
   // Built from the baseline, not the live set. Sandpack re-applies `activeFile`
   // whenever this object changes, so deriving it from a list that grew on every
@@ -876,7 +885,7 @@ export default function Challenge({ challenge }) {
         </span>
       </header>
 
-      <SaveCode name={name} editable={editable} defaults={defaults} />
+      <SaveCode name={name} editable={editable} onServer={onServer} />
       <NoPaste />
 
       <SandpackLayout>
