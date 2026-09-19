@@ -3,7 +3,7 @@
 const font = {
   body: "'Lexend Variable', ui-sans-serif, sans-serif",
   mono: "'JetBrains Mono Variable', ui-monospace, monospace",
-  size: '13px',
+  size: '14px',
   lineHeight: '1.7',
 }
 

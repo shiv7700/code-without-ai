@@ -20,6 +20,8 @@ import {
   useSandpack,
   useSandpackPreviewProgress,
 } from '@codesandbox/sandpack-react'
+import { codeFolding, foldEffect } from '@codemirror/language'
+import { EditorView, ViewPlugin } from '@codemirror/view'
 import { toast } from 'sonner'
 import {
   decodeFiles,
@@ -53,6 +55,29 @@ import { Separator } from '@/components/ui/separator'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 const SETUP = { dependencies: DEPS }
+
+// The doc comment is the brief and it is long — on a bigger stub the code
+// started below the fold, and the rules read twice now that the spec panel
+// lists them. So it opens folded: the first line still shows, and the arrow in
+// the gutter puts it back. Nothing is removed from the file.
+const foldTheBrief = ViewPlugin.define((view) => {
+  const text = view.state.doc.toString()
+  const close = text.indexOf('*/')
+  if (text.startsWith('/**') && close > 0) {
+    const from = view.state.doc.line(1).to
+    // Dispatching inside the constructor is not allowed; this is the first
+    // moment after the view exists.
+    if (close + 2 > from)
+      queueMicrotask(() =>
+        view.dispatch({ effects: foldEffect.of({ from, to: close + 2 }) }),
+      )
+  }
+  return {}
+})
+
+// Wrapped, because a one-line solution scrolled sideways and the tail of it
+// was simply not on screen.
+const EDITOR_EXTENSIONS = [codeFolding(), foldTheBrief, EditorView.lineWrapping]
 
 // An editor, a spec list and a test runner do not fit on a phone, and pretending
 // otherwise gave a header that overlapped itself and two panes side by side at
@@ -862,7 +887,11 @@ export default function Challenge({ challenge }) {
             onAdd={(p) => setAdded((list) => [...list, p])}
             onDelete={(p) => setRemoved((list) => [...list, p])}
           />
-          <SandpackCodeEditor showLineNumbers style={{ height: '100%' }} />
+          <SandpackCodeEditor
+            showLineNumbers
+            extensions={EDITOR_EXTENSIONS}
+            style={{ height: '100%' }}
+          />
         </div>
 
         <div
