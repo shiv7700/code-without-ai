@@ -1,13 +1,20 @@
-import { describe, expect, test } from 'vitest'
+import { beforeEach, describe, expect, test } from 'vitest'
 import { initialState, selectVisible, todoReducer } from './todoReducer'
 
 const run = (actions, state = initialState) => actions.reduce(todoReducer, state)
 
-const seeded = run([
-  { type: 'added', id: 1, text: 'write code' },
-  { type: 'added', id: 2, text: 'ship it' },
-  { type: 'toggled', id: 1 },
-])
+// Built per test, not once at module load. At load the stub still throws, and
+// the throw took the whole file with it — twelve tests that never registered,
+// so the runner reported a suite error instead of twelve honest failures.
+// A fresh object per test also keeps "never mutates" meaning what it says.
+let seeded
+beforeEach(() => {
+  seeded = run([
+    { type: 'added', id: 1, text: 'write code' },
+    { type: 'added', id: 2, text: 'ship it' },
+    { type: 'toggled', id: 1 },
+  ])
+})
 
 describe('todoReducer', () => {
   test('added appends a todo that is not done', () => {

@@ -290,12 +290,10 @@ Not enforced, but true:
 - 31 of the challenge tests pass against an empty stub. They are negative
   assertions (`renders nothing when closed` and friends) — not a bug, and not
   progress.
-- **`todo-reducer`'s spec does not collect.** Line 6 calls `run(...)` at module
-  top level, so the stub throws before any test is registered and all twelve
-  of its tests vanish: the challenge page lists twelve specs, and pressing Run
-  reports a suite error instead of twelve red lines. 2,073 tests are written,
-  2,061 actually run. The fix is to make `seeded` lazy, but that is an edit to
-  a spec file, so it waits to be asked for.
+- A spec must not call the stub at module level. `todo-reducer` did — line 6
+  built its fixture there — so the stub's throw took the file down before a
+  single test registered: twelve listed on the page, a suite error on Run, and
+  nothing to say which. It seeds in `beforeEach` now. All 311 specs collect.
 
 ## Where the tests live
 
